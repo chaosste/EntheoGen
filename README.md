@@ -1,20 +1,68 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# NTT (eNtheogenic Trepidation Tutor)
 
-# Run and deploy your AI Studio app
+NTT is a ceremonial psychedelic interaction guidance app adapted from SeshGuard.
 
-This contains everything you need to run your app locally.
+## What changed
 
-View your app in AI Studio: https://ai.studio/apps/c37751af-e2dd-4b55-a699-f3ce82263b0e
+- Rebranded to `NTT`.
+- Data model remapped to ceremonial interactions and medication classes.
+- Interaction output is now evidence-grounded and rule-based (not speculative free-text AI).
+- Added explicit confidence and source traceability in pair readouts.
+- Added transparent privacy wording (local favorites vs provider/network processing).
 
-## Run Locally
+## Antigravity Front-End Handover
 
-**Prerequisites:**  Node.js
+If Antigravity is taking the UI pass, this is the safe contract to preserve:
 
+1. Keep the risk engine deterministic.
+   - `src/data/drugData.ts` and the `getInteractionEvidence()` lookup are the source of truth.
+   - Do not replace risk outputs with free-form generated predictions.
+2. Keep unknowns explicit.
+   - `UNK` is intentional and safer than guessed classifications.
+3. Preserve medical-safety language.
+   - Avoid wording that implies clinical advice or certainty of outcomes.
+4. Preserve privacy honesty.
+   - Do not claim absolute non-storage unless infra policy and logs are verified.
+5. Keep source traceability visible.
+   - `confidence` and `sources` should remain exposed in the readout.
+
+### UI freedom (safe to change)
+
+- Visual identity, layout, animation, iconography, interaction flow, typography.
+- Navigation patterns and component structure.
+- Color system, as long as risk levels remain visually distinguishable and accessible.
+
+### High-risk pitfalls to avoid
+
+- Making the app sound prescriptive ("this will happen to you").
+- Reintroducing speculative combined-effect prose as if it were evidence.
+- Hiding uncertainty states (especially `UNK`).
+- Dropping urgent-risk guidance for `DAN/UNS` classes.
+
+### Post-design review gate
+
+After Antigravity's redesign, run a functional safety check:
+
+1. Pair selection still resolves via `getInteractionEvidence()`.
+2. Ayahuasca + SSRIs still resolves to contraindicated posture.
+3. Unknown pairs still resolve to `UNK`.
+4. Privacy disclaimer remains transparent.
+5. Build passes with `npm run build`.
+
+## Run locally
 
 1. Install dependencies:
    `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
+2. Start development:
    `npm run dev`
+3. Build:
+   `npm run build`
+
+## Data posture
+
+- If evidence is explicit in the curated dataset, NTT returns a concrete risk classification.
+- If evidence is missing, NTT returns `Unknown/Insufficient Data` instead of guessing.
+
+## Safety posture
+
+Educational harm-reduction guidance only; not medical advice.

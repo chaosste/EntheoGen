@@ -26,7 +26,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import Markdown from 'react-markdown';
-import { DRUGS, LEGEND, INTERACTIONS, Drug } from './data/drugData';
+import { DRUGS, LEGEND, getInteractionEvidence } from './data/drugData';
 import { getInteractionExplanation, getDrugSummary } from './services/geminiService';
 
 // --- Components ---
@@ -159,10 +159,12 @@ export default function App() {
     localStorage.setItem('seshguard_favorites', JSON.stringify(favorites));
   }, [favorites]);
 
-  const interactionCode = useMemo(() => {
+  const interactionEvidence = useMemo(() => {
     if (!drug1 || !drug2) return null;
-    return INTERACTIONS[drug1]?.[drug2] || INTERACTIONS[drug2]?.[drug1] || null;
+    return getInteractionEvidence(drug1, drug2);
   }, [drug1, drug2]);
+
+  const interactionCode = interactionEvidence?.code || null;
 
   const interaction = useMemo(() => {
     if (!interactionCode) return null;
@@ -176,7 +178,7 @@ export default function App() {
   }, [drug1, drug2, favorites]);
 
   const toggleFavorite = () => {
-    if (!drug1 || !drug2 || !interactionCode) return;
+    if (!drug1 || !drug2 || !interactionCode || interactionCode === 'SELF') return;
     const id = [drug1, drug2].sort().join('-');
     
     if (isFavorited) {
@@ -206,31 +208,35 @@ export default function App() {
     const d2Name = d2Obj?.name || drug2;
     
     try {
-      // Fetch Interaction Explanation if 2 drugs are selected
-      if (drug1 && drug2 && interaction) {
-        getInteractionExplanation(d1Name, d2Name, interaction.label, interaction.description)
-          .then(setExplanation)
-          .catch(err => console.error("Exp error:", err))
-          .finally(() => setIsLoadingExplanation(false));
-      } else {
-        setIsLoadingExplanation(false);
+      // Evidence-grounded interaction explanation for paired selections.
+      if (drug1 && drug2 && interaction && interactionEvidence) {
+        const interactionReadout = await getInteractionExplanation(
+          d1Name,
+          d2Name,
+          interaction.label,
+          interactionEvidence.summary,
+          {
+            confidence: interactionEvidence.confidence,
+            sources: interactionEvidence.sources,
+            riskScale: interaction.riskScale
+          }
+        );
+        setExplanation(interactionReadout);
       }
+      setIsLoadingExplanation(false);
 
-      // Fetch Detailed Summary (Single or Combined)
+      // Rule-based summary (single or combined).
       const targetDrug1 = drug1 ? d1Name : d2Name;
       const targetDrug2 = (drug1 && drug2) ? d2Name : undefined;
-      
-      const drugSummary = await getDrugSummary(targetDrug1, targetDrug2);
-      setSummary(drugSummary);
-    } catch (err: any) {
-      console.error("Fetch error:", err);
-      if (err.message === "API_KEY_MISSING") {
-        setError("AI features are currently unavailable (API key missing).");
-      } else if (err.message === "QUOTA_EXCEEDED") {
-        setError("AI usage limit reached. Please try again later.");
-      } else {
-        setError("We couldn't generate a custom summary right now. Please rely on authoritative harm reduction resources.");
-      }
+      const profile = await getDrugSummary(targetDrug1, targetDrug2, {
+        confidence: interactionEvidence?.confidence,
+        sources: interactionEvidence?.sources,
+        riskScale: interaction?.riskScale
+      });
+      setSummary(profile);
+    } catch (err) {
+      console.error("Readout error:", err);
+      setError("We couldn't render the interaction readout. Please retry.");
     }
     setIsLoadingSummary(false);
   };
@@ -252,6 +258,7 @@ export default function App() {
       case 'WARN': return <AlertTriangle className="w-8 h-8" />;
       case 'HEART': return <Heart className="w-8 h-8" />;
       case 'X': return <XCircle className="w-8 h-8" />;
+      case 'INFO': return <Info className="w-8 h-8" />;
       default: return <Sparkles className="w-8 h-8" />;
     }
   };
@@ -261,8 +268,8 @@ export default function App() {
       {/* Navigation */}
       <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-black/5 px-6 py-4 flex justify-between items-center">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-[#274F13] rounded-lg flex items-center justify-center text-white font-bold">S</div>
-          <span className="text-xl font-bold tracking-tight">SeshGuard</span>
+          <div className="w-8 h-8 bg-[#274F13] rounded-lg flex items-center justify-center text-white font-bold">N</div>
+          <span className="text-xl font-bold tracking-tight">NTT</span>
         </div>
         <div className="flex items-center gap-2">
           {favorites.length > 0 && (
@@ -293,7 +300,7 @@ export default function App() {
             animate={{ opacity: 1, y: 0 }}
             className="text-4xl md:text-5xl font-bold mb-4 tracking-tight"
           >
-            Drug Interaction Guide
+            NTT: eNtheogenic Trepidation Tutor
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
@@ -301,25 +308,25 @@ export default function App() {
             transition={{ delay: 0.1 }}
             className="text-muted-foreground italic text-lg"
           >
-            We do not record or store your data
+            Local browser storage is used for favorites only. Third-party hosting/providers may still process network logs.
           </motion.p>
         </header>
 
         <section className="space-y-8">
           <div className="grid md:grid-cols-2 gap-6">
             <SearchableSelect 
-              label="Choose the first drug"
+              label="Choose first substance/class"
               value={drug1}
               onChange={setDrug1}
               disabled={showResult}
-              placeholder="Select substance..."
+              placeholder="Select ceremonial substance or medication class..."
             />
             <SearchableSelect 
-              label="Choose the second drug"
+              label="Choose second substance/class"
               value={drug2}
               onChange={setDrug2}
               disabled={showResult}
-              placeholder="Select substance..."
+              placeholder="Select ceremonial substance or medication class..."
             />
           </div>
 
@@ -406,7 +413,7 @@ export default function App() {
                   <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center gap-2 text-indigo-600">
                       <Sparkles className={`w-5 h-5 ${isLoadingExplanation ? 'animate-pulse' : ''}`} />
-                      <span className="text-sm font-bold uppercase tracking-widest">Interaction Insight</span>
+                      <span className="text-sm font-bold uppercase tracking-widest">Evidence Snapshot</span>
                     </div>
                     {isLoadingExplanation && (
                       <div className="flex gap-1">
@@ -440,7 +447,7 @@ export default function App() {
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-2 text-emerald-600">
                     <Info className={`w-5 h-5 ${isLoadingSummary ? 'animate-pulse' : ''}`} />
-                    <span className="text-sm font-bold uppercase tracking-widest">Substance Profile</span>
+                    <span className="text-sm font-bold uppercase tracking-widest">Rule-Based Context</span>
                   </div>
                   {isLoadingSummary && (
                     <div className="flex gap-1">
@@ -482,15 +489,26 @@ export default function App() {
         </AnimatePresence>
 
         <footer className="mt-20 pt-12 border-t border-black/5 text-center">
-          <a 
-            href="https://www.newpsychonaut.com" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-indigo-600 font-semibold hover:underline"
-          >
-            www.newpsychonaut.com
-            <ExternalLink className="w-4 h-4" />
-          </a>
+          <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8">
+            <a 
+              href="https://www.newpsychonaut.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-indigo-600 font-semibold hover:underline"
+            >
+              NewPsychonaut (NeuroPhenom + research projects)
+              <ExternalLink className="w-4 h-4" />
+            </a>
+            <a 
+              href="https://www.newpsychonaut.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-indigo-600 font-semibold hover:underline"
+            >
+              Citizen science pathway (self-report + future wearable data)
+              <ExternalLink className="w-4 h-4" />
+            </a>
+          </div>
         </footer>
       </main>
 
@@ -577,9 +595,10 @@ export default function App() {
                     <h3 className="text-xl font-bold uppercase tracking-tight">Important!</h3>
                   </div>
                   <div className="space-y-4 text-black/70 leading-relaxed">
-                    <p className="font-bold text-black">This app is compiled from authoritative sources.</p>
-                    <p>However it should not be taken as clinical medical advice.</p>
-                    <p>If in any doubt whatsoever seek professional medical help.</p>
+                    <p className="font-bold text-black">This app is educational harm-reduction guidance, not medical advice.</p>
+                    <p>Interaction ratings are sourced from the curated ceremonial dataset and can include unknown gaps.</p>
+                    <p>Favorites are saved in your browser. Hosting, CDN, and AI providers may process technical metadata and logs.</p>
+                    <p>If you suspect toxicity, serotonin syndrome, or hypertensive crisis, seek urgent medical help.</p>
                   </div>
                 </section>
 
@@ -608,7 +627,7 @@ export default function App() {
 
                 <section className="pt-8 border-t border-black/5">
                   <p className="text-xs text-black/40 text-center">
-                    SeshGuard v1.1 • Harm Reduction First
+                    NTT v0.1 • Ceremonial Interaction Guidance
                   </p>
                 </section>
               </div>
