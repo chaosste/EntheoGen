@@ -1,10 +1,10 @@
-# NTT (eNtheogenic Trepidation Tutor)
+# EntheoGen
 
-NTT is a ceremonial psychedelic interaction guidance app adapted from SeshGuard.
+EntheoGen is a ceremonial psychedelic interaction guidance app adapted from SeshGuard/NTT.
 
 ## What changed
 
-- Rebranded to `NTT`.
+- Rebranded to `EntheoGen`.
 - Data model remapped to ceremonial interactions and medication classes.
 - Interaction output is now evidence-grounded and rule-based (not speculative free-text AI).
 - Added explicit confidence and source traceability in pair readouts.
@@ -60,8 +60,8 @@ After Antigravity's redesign, run a functional safety check:
 
 ## Data posture
 
-- If evidence is explicit in the curated dataset, NTT returns a concrete risk classification.
-- If evidence is missing, NTT returns `Unknown/Insufficient Data` instead of guessing.
+- If evidence is explicit in the curated dataset, EntheoGen returns a concrete risk classification.
+- If evidence is missing, EntheoGen returns `Unknown/Insufficient Data` instead of guessing.
 
 ## Safety posture
 

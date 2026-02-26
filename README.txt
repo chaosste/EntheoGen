@@ -1,9 +1,9 @@
-NTT HANDOVER NOTES
-==================
+ENTHEOGEN HANDOVER NOTES
+========================
 
 Project rename
 --------------
-- SeshGuard -> NTT (eNtheogenic Trepidation Tutor)
+- SeshGuard -> NTT -> EntheoGen
 
 Core behavior changes
 ---------------------
