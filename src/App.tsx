@@ -564,6 +564,15 @@ export default function App() {
               <span className="border-b border-transparent group-hover:border-white/30 transition-colors pb-0.5">Citizen science pathway</span>
               <ExternalLink className="w-3.5 h-3.5 opacity-50 group-hover:opacity-100 transition-opacity" />
             </a>
+            <a
+              href="https://x.com/newpsychonaut"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center gap-2 text-sm text-[var(--text-muted)] hover:text-white transition-colors"
+            >
+              <span className="border-b border-transparent group-hover:border-white/30 transition-colors pb-0.5">@newpsychonaut on X</span>
+              <ExternalLink className="w-3.5 h-3.5 opacity-50 group-hover:opacity-100 transition-opacity" />
+            </a>
           </div>
         </footer>
       </main>
@@ -665,7 +674,8 @@ export default function App() {
                       { name: 'Crisis Help UK', url: 'https://thatsmental.co.uk/crisis' },
                       { name: 'Drug Science', url: 'https://www.drugscience.org.uk/' },
                       { name: 'PsyCare', url: 'https://www.psycareuk.org/psychedelic-support' },
-                      { name: 'Zendo Project', url: 'https://zendoproject.org/' }
+                      { name: 'Zendo Project', url: 'https://zendoproject.org/' },
+                      { name: '@newpsychonaut on X', url: 'https://x.com/newpsychonaut' }
                     ].map(link => (
                       <a
                         key={link.name}
