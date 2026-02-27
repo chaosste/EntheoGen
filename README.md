@@ -1,68 +1,89 @@
-# EntheoGen
+<div align="center">
 
-EntheoGen is a ceremonial psychedelic interaction guidance app adapted from SeshGuard/NTT.
+# 🌿 EntheoGen Mixed Modality Guide
 
-## What changed
+**Ceremonial Psychedelic Interaction Guidance**
 
-- Rebranded to `EntheoGen`.
-- Data model remapped to ceremonial interactions and medication classes.
-- Interaction output is now evidence-grounded and rule-based (not speculative free-text AI).
-- Added explicit confidence and source traceability in pair readouts.
-- Added transparent privacy wording (local favorites vs provider/network processing).
+*Evidence-grounded risk engine and strict safety posture for pre-reflective exploration*
 
-## Antigravity Front-End Handover
+**Live demo:** [www.entheogen.newpsychonaut.com](https://www.entheogen.newpsychonaut.com/) · [entheogen.azurewebsites.net](https://entheogen.azurewebsites.net)
 
-If Antigravity is taking the UI pass, this is the safe contract to preserve:
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 
-1. Keep the risk engine deterministic.
-   - `src/data/drugData.ts` and the `getInteractionEvidence()` lookup are the source of truth.
-   - Do not replace risk outputs with free-form generated predictions.
-2. Keep unknowns explicit.
-   - `UNK` is intentional and safer than guessed classifications.
-3. Preserve medical-safety language.
-   - Avoid wording that implies clinical advice or certainty of outcomes.
-4. Preserve privacy honesty.
-   - Do not claim absolute non-storage unless infra policy and logs are verified.
-5. Keep source traceability visible.
-   - `confidence` and `sources` should remain exposed in the readout.
+<img src="docs/assets/entheogen-release-screen-1.png" width="900" alt="EntheoGen release interface screenshot" />
 
-### UI freedom (safe to change)
+</div>
 
-- Visual identity, layout, animation, iconography, interaction flow, typography.
-- Navigation patterns and component structure.
-- Color system, as long as risk levels remain visually distinguishable and accessible.
+---
 
-### High-risk pitfalls to avoid
+## What it is
 
-- Making the app sound prescriptive ("this will happen to you").
-- Reintroducing speculative combined-effect prose as if it were evidence.
-- Hiding uncertainty states (especially `UNK`).
-- Dropping urgent-risk guidance for `DAN/UNS` classes.
+EntheoGen Mixed Modality Guide (formerly NTT) is a ceremonial psychedelic interaction guidance app adapted from SeshGuard. Taking a rigorous approach to harm reduction, EntheoGen’s data model is mapped specifically to ceremonial substances and medication classes.
 
-### Post-design review gate
+Unlike purely generative AI tools, the interaction output here is strictly evidence-grounded and rule-based. It offers explicit confidence ratings and transparent source traceability. If pharmacological evidence is missing, the engine strictly returns `Unknown` rather than generating speculative predictions.
+## Why it is different
 
-After Antigravity's redesign, run a functional safety check:
+- ⚙️ **Evidence-Grounded Risk Engine** — deterministic output based on curated pharmacological rules
+- 🛡️ **Strict Safety Posture** — missing-data pairs explicitly resolve to `UNK` (Unknown) rather than guessing
+- 🔍 **Source Traceability** — readouts expose confidence and evidentiary source metadata
+- 💾 **Privacy Focused** — favorites are stored in local browser storage; hosting/CDN logs may still exist
+- 🖤 **Minimalist & Accessible** — clean UI with distinguishable risk levels and non-prescriptive language
 
-1. Pair selection still resolves via `getInteractionEvidence()`.
-2. Ayahuasca + SSRIs still resolves to contraindicated posture.
-3. Unknown pairs still resolve to `UNK`.
-4. Privacy disclaimer remains transparent.
-5. Build passes with `npm run build`.
+## Release Demo
 
-## Run locally
+<img src="docs/assets/entheogen-release-demo.gif" width="900" alt="EntheoGen release demo" />
 
-1. Install dependencies:
-   `npm install`
-2. Start development:
-   `npm run dev`
-3. Build:
-   `npm run build`
+## Tech Stack
 
-## Data posture
+| Layer | Technology |
+|-------|-----------|
+| Frontend | React + TypeScript + Vite |
+| Risk Engine | Deterministic rule-based assessor |
+| AI | Google Gemini API (explanatory summarization only) |
+| Design | Tailwind CSS, Lucide Icons |
+| Deployment | Azure App Service (Linux) |
 
-- If evidence is explicit in the curated dataset, EntheoGen returns a concrete risk classification.
-- If evidence is missing, EntheoGen returns `Unknown/Insufficient Data` instead of guessing.
+## Quickstart
 
-## Safety posture
+```bash
+# Clone the repository
+git clone https://github.com/chaosste/EntheoGen.git
+cd EntheoGen
 
-Educational harm-reduction guidance only; not medical advice.
+# Install dependencies
+npm install
+
+# Configure Gemini API key for explanatory text features
+cp .env.example .env.local
+# set GEMINI_API_KEY in .env.local
+
+# Run development server
+npm run dev
+
+# Build for production
+npm run build
+```
+
+## Related Projects
+
+- [SeshGuard](https://github.com/chaosste/SeshGuard) — broader interaction safety checker
+- [NeuroPhenom-AI](https://github.com/chaosste/NeuroPhenom-AI) — high-fidelity clinical interface for diachronic slicing and subjective reporting
+- [Anubis](https://github.com/chaosste/Anubis) — psychedelic trip-report interview system
+
+## Safety Posture & Disclaimer
+
+EntheoGen provides educational harm-reduction guidance only. It is **not** a substitute for professional medical, psychological, or therapeutic advice. If there is no explicit evidence for an interaction combination, EntheoGen classifies it as `Unknown/Insufficient Data`.
+
+In moments of clinical emergency, seek urgent professional medical help.
+
+---
+
+<div align="center">
+
+**Built by [Steve Beale](https://newpsychonaut.com)**
+
+[newpsychonaut.com](https://newpsychonaut.com)
+
+© 2026 Stephen Beale. MIT License.
+
+</div>
