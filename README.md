@@ -12,6 +12,8 @@
 
 <img src="docs/assets/entheogen-release-screen-1.png" width="900" alt="EntheoGen release interface screenshot" />
 
+<img src="docs/assets/entheogen-release-demo.gif" width="900" alt="EntheoGen release demo" />
+
 </div>
 
 ---
@@ -28,10 +30,6 @@ Unlike purely generative AI tools, the interaction output here is strictly evide
 - 🔍 **Source Traceability** — readouts expose confidence and evidentiary source metadata
 - 💾 **Privacy Focused** — favorites are stored in local browser storage; hosting/CDN logs may still exist
 - 🖤 **Minimalist & Accessible** — clean UI with distinguishable risk levels and non-prescriptive language
-
-## Release Demo
-
-<img src="docs/assets/entheogen-release-demo.gif" width="900" alt="EntheoGen release demo" />
 
 ## Tech Stack
 
