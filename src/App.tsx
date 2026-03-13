@@ -75,9 +75,9 @@ function SearchableSelect({ label, value, onChange, disabled, placeholder }: Sea
         type="button"
         disabled={disabled}
         onClick={() => !disabled && setIsOpen(!isOpen)}
-        className="w-full glass-panel rounded-2xl px-5 py-4 text-left flex justify-between items-center focus:outline-none focus:ring-1 focus:ring-white/20 transition-all disabled:opacity-50"
+        className="w-full glass-panel rounded-2xl px-4 sm:px-5 py-3.5 sm:py-4 text-left flex justify-between items-center gap-3 focus:outline-none focus:ring-1 focus:ring-white/20 transition-all disabled:opacity-50"
       >
-        <span className={selectedDrug ? 'text-[var(--text-primary)] font-medium' : 'text-[var(--text-muted)] italic'}>
+        <span className={`block flex-1 min-w-0 truncate ${selectedDrug ? 'text-[var(--text-primary)] font-medium' : 'text-[var(--text-muted)] italic'}`}>
           {selectedDrug ? selectedDrug.name : placeholder}
         </span>
         <ChevronDown className={`w-5 h-5 text-[var(--text-muted)] transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
@@ -233,7 +233,13 @@ export default function App() {
           {
             confidence: localEvidence.confidence,
             sources: localEvidence.sources,
-            riskScale: localInteraction.riskScale
+            riskScale: localInteraction.riskScale,
+            mechanism: localEvidence.mechanism,
+            practicalGuidance: localEvidence.practicalGuidance,
+            timing: localEvidence.timing,
+            evidenceGaps: localEvidence.evidenceGaps,
+            evidenceTier: localEvidence.evidenceTier,
+            fieldNotes: localEvidence.fieldNotes
           }
         );
         setExplanation(interactionReadout);
@@ -246,7 +252,13 @@ export default function App() {
       const profile = await getDrugSummary(targetDrug1, targetDrug2, {
         confidence: localEvidence?.confidence,
         sources: localEvidence?.sources,
-        riskScale: localInteraction?.riskScale
+        riskScale: localInteraction?.riskScale,
+        mechanism: localEvidence?.mechanism,
+        practicalGuidance: localEvidence?.practicalGuidance,
+        timing: localEvidence?.timing,
+        evidenceGaps: localEvidence?.evidenceGaps,
+        evidenceTier: localEvidence?.evidenceTier,
+        fieldNotes: localEvidence?.fieldNotes
       });
       setSummary(profile);
     } catch (err) {
@@ -320,13 +332,13 @@ export default function App() {
       </nav>
 
       {/* Main Content */}
-      <main className="max-w-2xl mx-auto px-6 pt-32 pb-20 relative z-10">
-        <header className="text-center mb-16">
+      <main className="max-w-2xl mx-auto px-6 pt-24 sm:pt-28 md:pt-32 pb-20 relative z-10">
+        <header className="text-center mb-10 sm:mb-16">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-md mb-8 text-xs font-medium tracking-widest uppercase text-[var(--text-muted)]"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-md mb-6 sm:mb-8 text-[11px] sm:text-xs font-medium tracking-[0.22em] uppercase text-[var(--text-muted)]"
           >
             <Sparkles className="w-3.5 h-3.5" />
             Entheogenic Interaction Guidance
@@ -334,7 +346,7 @@ export default function App() {
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-black mb-6 tracking-tighter leading-tight text-transparent bg-clip-text bg-gradient-to-br from-white via-white/90 to-white/40"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black mb-4 sm:mb-6 tracking-tighter leading-[0.95] sm:leading-tight text-transparent bg-clip-text bg-gradient-to-br from-white via-white/90 to-white/40"
           >
             EntheoGen<br />Ceremonial Safety Guide
           </motion.h1>
@@ -342,14 +354,14 @@ export default function App() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-muted-foreground italic text-lg"
+            className="mx-auto max-w-lg text-base sm:text-lg italic text-[var(--text-primary)]/80"
           >
             Local browser storage is used for favorites only. Third-party hosting/providers may still process network logs.
           </motion.p>
         </header>
 
-        <section className="space-y-8">
-          <div className="grid md:grid-cols-2 gap-6">
+        <section className="space-y-6 sm:space-y-8">
+          <div className="grid md:grid-cols-2 gap-5 sm:gap-6">
             <SearchableSelect
               label="Choose first substance/class"
               value={drug1}

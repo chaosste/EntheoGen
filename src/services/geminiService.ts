@@ -2,6 +2,12 @@ type EvidenceContext = {
   confidence?: string;
   sources?: string;
   riskScale?: number;
+  mechanism?: string;
+  practicalGuidance?: string;
+  timing?: string;
+  evidenceGaps?: string;
+  evidenceTier?: string;
+  fieldNotes?: string;
 };
 
 const RISK_ACTIONS: Record<number, string> = {
@@ -39,6 +45,12 @@ export async function getInteractionExplanation(
   const confidence = context?.confidence ?? "low";
   const action = RISK_ACTIONS[riskScale] ?? RISK_ACTIONS[0];
   const special = SPECIAL_PAIR_NOTES[pairLabel(drug1, drug2)];
+  const mechanism = context?.mechanism;
+  const practicalGuidance = context?.practicalGuidance;
+  const timing = context?.timing;
+  const evidenceGaps = context?.evidenceGaps;
+  const evidenceTier = context?.evidenceTier;
+  const fieldNotes = context?.fieldNotes;
 
   const lines = [
     `### Evidence-based interaction readout`,
@@ -49,7 +61,13 @@ export async function getInteractionExplanation(
     special ? `**Specific consensus note:** ${special}` : "",
     ``,
     `**Evidence confidence:** ${confidence.toUpperCase()}`,
-    `**Dataset sources:** ${sources}`
+    evidenceTier ? `**Evidence tier:** ${evidenceTier}` : "",
+    mechanism ? `#### Mechanism of concern\n${mechanism}` : "",
+    practicalGuidance ? `#### Practical guidance\n${practicalGuidance}` : "",
+    timing ? `#### Timing / spacing\n${timing}` : "",
+    fieldNotes ? `#### Lower-evidence field notes\n${fieldNotes}` : "",
+    evidenceGaps ? `#### Remaining uncertainty\n${evidenceGaps}` : "",
+    `#### Dataset sources\n${sources}`
   ].filter(Boolean);
 
   return lines.join("\n");
@@ -64,6 +82,12 @@ export async function getDrugSummary(
     const riskScale = context?.riskScale ?? 0;
     const action = RISK_ACTIONS[riskScale] ?? RISK_ACTIONS[0];
     const special = SPECIAL_PAIR_NOTES[pairLabel(drug1Name, drug2Name)];
+    const practicalGuidance = context?.practicalGuidance;
+    const timing = context?.timing;
+    const fieldNotes = context?.fieldNotes;
+    const evidenceGaps = context?.evidenceGaps;
+    const evidenceTier = context?.evidenceTier;
+    const sources = context?.sources ?? "source-gap";
 
     return [
       `### Combined-effects estimate (rule-based)`,
@@ -72,9 +96,17 @@ export async function getDrugSummary(
       `**Pair:** ${drug1Name} + ${drug2Name}`,
       `**Risk posture:** ${action}`,
       special ? `**Consensus note:** ${special}` : "",
+      evidenceTier ? `**Evidence tier:** ${evidenceTier}` : "",
       ``,
+      practicalGuidance ? `### Operational guidance\n${practicalGuidance}` : "",
+      timing ? `### Timing / washout\n${timing}` : "",
+      fieldNotes ? `### Field-use note\n${fieldNotes}` : "",
+      evidenceGaps ? `### What remains uncertain\n${evidenceGaps}` : "",
       `### Why this is limited`,
       `Subjective psychoactive effects vary by dose, route, physiology, medications, and context. This tool intentionally does not claim precise personal effect prediction.`,
+      ``,
+      `### Source basis`,
+      `${sources}`,
       ``,
       `### Safety boundary`,
       `This is educational harm-reduction information, not medical advice.`

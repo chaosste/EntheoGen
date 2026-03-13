@@ -1,11 +1,25 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
+import dotenv from 'dotenv';
 import path from 'path';
-import {defineConfig} from 'vite';
+import {defineConfig, loadEnv} from 'vite';
 
-export default defineConfig(() => {
+export default defineConfig(({mode}) => {
+  const sharedEnvPath = process.env.SHARED_ENV_PATH || '/Users/stephenbeale/Desktop/shared.env';
+  const sharedEnv = dotenv.config({ path: sharedEnvPath }).parsed ?? {};
+  const localEnv = loadEnv(mode, '.', '');
+  const geminiApiKey =
+    process.env.GEMINI_API_KEY ||
+    localEnv.GEMINI_API_KEY ||
+    sharedEnv.GEMINI_API_KEY ||
+    sharedEnv.GOOGLE_API_KEY ||
+    '';
+
   return {
     plugins: [react(), tailwindcss()],
+    define: {
+      'process.env.GEMINI_API_KEY': JSON.stringify(geminiApiKey),
+    },
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
