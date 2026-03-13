@@ -146,10 +146,10 @@ function SearchableSelect({
 
   return (
     <div className="space-y-2 relative" ref={containerRef}>
-      <label id={labelId} className="text-xs font-semibold uppercase tracking-wider text-black/50 ml-1">
+      <label id={labelId} className="ml-1 text-[11px] sm:text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]/95">
         {label}
       </label>
-      <div className="w-full glass-panel rounded-2xl px-4 sm:px-5 py-3.5 sm:py-4 flex items-center gap-3 focus-within:ring-1 focus-within:ring-white/20 transition-all disabled:opacity-50">
+      <div className="w-full glass-panel rounded-2xl px-4 sm:px-5 lg:px-4 py-3.5 sm:py-4 flex items-center gap-3 focus-within:ring-1 focus-within:ring-white/20 transition-all disabled:opacity-50">
         <input
           ref={inputRef}
           id={comboboxId}
@@ -174,7 +174,7 @@ function SearchableSelect({
           }}
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
-          className={`w-full min-w-0 bg-transparent border-none outline-none ${selectedDrug && !isOpen ? 'text-[var(--text-primary)] font-medium' : 'text-[var(--text-muted)] italic'}`}
+          className={`w-full min-w-0 bg-transparent border-none outline-none text-sm sm:text-base lg:text-[0.95rem] leading-tight placeholder:text-[var(--text-muted)] placeholder:italic placeholder:text-sm sm:placeholder:text-base lg:placeholder:text-[0.95rem] ${selectedDrug && !isOpen ? 'text-[var(--text-primary)] font-medium' : 'text-[var(--text-muted)] italic'}`}
         />
         <ChevronDown className={`w-5 h-5 text-[var(--text-muted)] transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
       </div>
@@ -425,8 +425,8 @@ export default function App() {
       </nav>
 
       {/* Main Content */}
-      <main className="max-w-2xl mx-auto px-6 pt-24 sm:pt-28 md:pt-32 pb-20 relative z-10">
-        <header className="text-center mb-10 sm:mb-16">
+      <main className="max-w-4xl mx-auto px-6 pt-24 sm:pt-28 md:pt-32 pb-20 relative z-10">
+        <header className="max-w-2xl mx-auto text-center mb-10 sm:mb-16">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -443,21 +443,13 @@ export default function App() {
           >
             EntheoGen<br />Plant Medicine<br />Interaction Guide
           </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="mx-auto max-w-lg text-base sm:text-lg italic text-[var(--text-primary)]/80"
-          >
-            Local browser storage is used for favorites only. Third-party hosting/providers may still process network logs.
-          </motion.p>
         </header>
 
-        <section className="space-y-6 sm:space-y-8">
-          <div className="grid md:grid-cols-2 gap-5 sm:gap-6">
+        <section className="max-w-4xl mx-auto space-y-6 sm:space-y-8">
+          <div className="grid 2xl:grid-cols-2 gap-5 sm:gap-6">
             <SearchableSelect
               labelId="drug1-label"
-              label="Choose first substance/class"
+              label="Choose first substance class"
               value={drug1}
               onChange={setDrug1}
               isOpen={openSelect === 'drug1'}
@@ -465,11 +457,11 @@ export default function App() {
                 setOpenSelect((current) => (isOpen ? 'drug1' : current === 'drug1' ? null : current))
               }
               disabled={showResult}
-              placeholder="Select ceremonial substance or medication class..."
+              placeholder="Select sacrament, substance, or medication."
             />
             <SearchableSelect
               labelId="drug2-label"
-              label="Choose second substance/class"
+              label="Choose second substance class"
               value={drug2}
               onChange={setDrug2}
               isOpen={openSelect === 'drug2'}
@@ -477,7 +469,7 @@ export default function App() {
                 setOpenSelect((current) => (isOpen ? 'drug2' : current === 'drug2' ? null : current))
               }
               disabled={showResult}
-              placeholder="Select ceremonial substance or medication class..."
+              placeholder="Select sacrament, substance, or medication."
             />
           </div>
 
@@ -519,7 +511,7 @@ export default function App() {
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="mt-12 space-y-8"
+              className="max-w-2xl mx-auto mt-12 space-y-8"
             >
               {interaction && (
                 <div
@@ -560,7 +552,7 @@ export default function App() {
                       >
                         <Star className={`w-4 h-4 ${isFavorited ? 'fill-yellow-400 text-yellow-400' : ''}`} />
                         <span className="text-xs font-bold uppercase tracking-[0.15em]">
-                          {isFavorited ? 'Saved to Favorites' : 'Add to Favorites'}
+                          {isFavorited ? 'Saved to Favourites' : 'Add to Favourites'}
                         </span>
                       </motion.button>
                     </div>
@@ -659,7 +651,11 @@ export default function App() {
           )}
         </AnimatePresence>
 
-        <footer className="mt-32 pt-12 border-t border-white/5 text-center relative z-10">
+        <p className="mx-auto mt-24 max-w-xl text-center text-sm sm:text-base italic text-[var(--text-primary)]/75">
+          Local browser storage is used for favourites only. Third-party hosting providers may still process network logs.
+        </p>
+
+        <footer className="max-w-2xl mx-auto mt-32 pt-12 border-t border-white/5 text-center relative z-10">
           <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12">
             <a
               href="https://www.newpsychonaut.com"
@@ -735,7 +731,7 @@ export default function App() {
                   <section className="space-y-6">
                     <div className="flex items-center gap-3 text-yellow-500/80 border-b border-white/5 pb-3">
                       <Star className="w-4 h-4 fill-current" />
-                      <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--text-muted)]">Favorite Interactions</h3>
+                      <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--text-muted)]">Favourite Interactions</h3>
                     </div>
                     <div className="grid gap-3">
                       {favorites.map(fav => {
