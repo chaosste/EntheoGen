@@ -6,7 +6,10 @@
 
 *Evidence-grounded risk engine and strict safety posture for pre-reflective exploration*
 
-**Live demo:** [www.entheogen.newpsychonaut.com](https://www.entheogen.newpsychonaut.com/) · [entheogen.azurewebsites.net](https://entheogen.azurewebsites.net)
+**Live demo:** 
+[www.entheogen.newpsychonaut.com](https://www.entheogen.newpsychonaut.com/) 
+· 
+[entheogen.azurewebsites.net](https://entheogen.azurewebsites.net)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 
@@ -16,11 +19,36 @@
 
 ---
 
-## What it is
+## What is EntheoGen?
 
-EntheoGen Mixed Modality Guide (formerly NTT) is a ceremonial psychedelic interaction guidance app adapted from SeshGuard. Taking a rigorous approach to harm reduction, EntheoGen’s data model is mapped specifically to ceremonial substances and medication classes.
+EntheoGen is a substance interaction guidance app focussed on intentional use of psychedelics. 
 
-Unlike purely generative AI tools, the interaction output here is strictly evidence-grounded and rule-based. It offers explicit confidence ratings and transparent source traceability. If pharmacological evidence is missing, the engine strictly returns `Unknown` rather than generating speculative predictions.
+The web application estimates the effects of mixing the two substances entered into the drop-down menus. 
+
+Data is personal and not stored remotely (i.e., not recorded or held by us). 
+
+EntheoGen's data model is mapped specifically to sacramental substances often used in psychedelic ceremonies, medication classes, and commonly used consciousness-altering substances.
+
+## Help! Please contribute your entheogenic knowledge
+
+Unlike purely generative AI tools, the interaction output here is intended to strictly evidence-grounded and rule-based. 
+
+EntheoGen is trained on peer-reviewed academic literature. 
+
+However, study is light especially in areas such as interactions between less commonly used entheogenic substances.
+
+# Beta test EntheoGen and leave your comments in our [<Discussions>](https://github.com/chaosste/EntheoGen/discussions/1)!
+
+It attempts to offer explicit confidence ratings and transparent source traceability, (although it can currently refer directly to source note pdfs we compiled, and requires tweaking). 
+
+If pharmacological evidence is missing, the engine should return `Unknown` rather than generating speculative predictions. 
+
+# Recent Updates
+
+EntheoGen sometimes now defers to expertise if academic literature is unavailable.
+
+Extended explanations provide database detail for beta test analysis.
+
 ## Why it is different
 
 - ⚙️ **Evidence-Grounded Risk Engine** — deterministic output based on curated pharmacological rules
