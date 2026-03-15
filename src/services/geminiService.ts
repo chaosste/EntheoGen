@@ -1,6 +1,5 @@
 type EvidenceContext = {
   confidence?: string;
-  sources?: string;
   riskScale?: number;
   mechanism?: string;
   practicalGuidance?: string;
@@ -41,7 +40,6 @@ export async function getInteractionExplanation(
   context?: EvidenceContext
 ) {
   const riskScale = context?.riskScale ?? 0;
-  const sources = context?.sources ?? "source-gap";
   const confidence = context?.confidence ?? "low";
   const action = RISK_ACTIONS[riskScale] ?? RISK_ACTIONS[0];
   const special = SPECIAL_PAIR_NOTES[pairLabel(drug1, drug2)];
@@ -66,8 +64,7 @@ export async function getInteractionExplanation(
     practicalGuidance ? `#### Practical guidance\n${practicalGuidance}` : "",
     timing ? `#### Timing / spacing\n${timing}` : "",
     fieldNotes ? `#### Lower-evidence field notes\n${fieldNotes}` : "",
-    evidenceGaps ? `#### Remaining uncertainty\n${evidenceGaps}` : "",
-    `#### Dataset sources\n${sources}`
+    evidenceGaps ? `#### Remaining uncertainty\n${evidenceGaps}` : ""
   ].filter(Boolean);
 
   return lines.join("\n");
@@ -87,7 +84,6 @@ export async function getDrugSummary(
     const fieldNotes = context?.fieldNotes;
     const evidenceGaps = context?.evidenceGaps;
     const evidenceTier = context?.evidenceTier;
-    const sources = context?.sources ?? "source-gap";
 
     return [
       `### Combined-effects estimate (rule-based)`,
@@ -104,9 +100,6 @@ export async function getDrugSummary(
       evidenceGaps ? `### What remains uncertain\n${evidenceGaps}` : "",
       `### Why this is limited`,
       `Subjective psychoactive effects vary by dose, route, physiology, medications, and context. This tool intentionally does not claim precise personal effect prediction.`,
-      ``,
-      `### Source basis`,
-      `${sources}`,
       ``,
       `### Safety boundary`,
       `This is educational harm-reduction information, not medical advice.`

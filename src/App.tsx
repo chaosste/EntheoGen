@@ -324,7 +324,6 @@ export default function App() {
           localEvidence.summary,
           {
             confidence: localEvidence.confidence,
-            sources: localEvidence.sources,
             riskScale: localInteraction.riskScale,
             mechanism: localEvidence.mechanism,
             practicalGuidance: localEvidence.practicalGuidance,
@@ -343,7 +342,6 @@ export default function App() {
       const targetDrug2 = (selectedDrug1 && selectedDrug2) ? d2Name : undefined;
       const profile = await getDrugSummary(targetDrug1, targetDrug2, {
         confidence: localEvidence?.confidence,
-        sources: localEvidence?.sources,
         riskScale: localInteraction?.riskScale,
         mechanism: localEvidence?.mechanism,
         practicalGuidance: localEvidence?.practicalGuidance,
