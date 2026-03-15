@@ -39,7 +39,7 @@ However, study is light especially in areas such as interactions between less co
 
 # Beta test EntheoGen 
 
-Please leave feedback in [Discussions](https://github.com/chaosste/EntheoGen/discussions/1)!
+For now please leave feedback in [Discussions](https://github.com/chaosste/EntheoGen/discussions/1)
 
 EntheoGen attempts to offer explicit confidence ratings and transparent source traceability, (although it can currently refer directly to source note pdfs we compiled, and requires tweaking). 
 
