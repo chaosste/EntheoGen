@@ -226,7 +226,7 @@ https://github.com/chaosste/EntheoGen/discussions/1
 | Evaluation Harness | Local fixture/scoring framework |
 | AI | Google Gemini API (explanatory summarization only) |
 | Design | Tailwind CSS, Lucide Icons |
-| Deployment | Azure App Service (Linux) |
+| Deployment | Azure App Service (Linux, Node 22) |
 
 # Quickstart
 ```
