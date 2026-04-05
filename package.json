@@ -11,7 +11,7 @@
     "lint": "tsc --noEmit"
   },
   "dependencies": {
-    "@entheogen/shared-dataset": "file:../EntheoGen-Shared-Dataset",
+    "@entheogen/shared-dataset": "github:chaosste/EntheoGen-Shared-Dataset#34610af2c2ecf7df04945b7eee2728406a551eca",
     "@google/genai": "^1.29.0",
     "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.1.14",
