@@ -1,7 +1,7 @@
 import {
   interactionPairs,
   type InteractionPair as SharedInteractionPair
-} from '@entheogen/shared-dataset';
+} from './interactionDataset';
 
 export interface Drug {
   id: string;
