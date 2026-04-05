@@ -1,4 +1,7 @@
-import interactionPairs from '../exports/interaction_pairs.json';
+import {
+  interactionPairs,
+  type InteractionPair as SharedInteractionPair
+} from '@entheogen/shared-dataset';
 
 export interface Drug {
   id: string;
@@ -53,20 +56,17 @@ export interface ResolvedInteraction {
 }
 
 type ExportedInteractionPair = {
-  pair_key: string;
-  origin: RuleOrigin;
-  interaction_code: string;
-  summary: string;
-  confidence: string;
-  mechanism: string | null;
-  timing: string | null;
-  evidence_gaps: string | null;
-  evidence_tier: string | null;
-  field_notes: string | null;
-  sources: string;
+  pair_key: SharedInteractionPair['pair_key'];
+  interaction_code: SharedInteractionPair['interaction_code'];
+  summary: SharedInteractionPair['summary'];
+  confidence: SharedInteractionPair['confidence'];
+  mechanism: SharedInteractionPair['mechanism'];
+  timing: SharedInteractionPair['timing'];
+  evidence_gaps: SharedInteractionPair['evidence_gaps'];
+  evidence_tier: SharedInteractionPair['evidence_tier'];
+  field_notes: SharedInteractionPair['field_notes'];
+  sources: SharedInteractionPair['sources'];
 };
-
-import interactionPairs from '../exports/interaction_pairs.json';
 
 export function classifyMechanismCategory(
   mechanism?: string
