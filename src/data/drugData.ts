@@ -1,3 +1,5 @@
+import interactionPairs from '../exports/interaction_pairs.json';
+
 export interface Drug {
   id: string;
   name: string;
@@ -50,13 +52,28 @@ export interface ResolvedInteraction {
   pairKey: string;
 }
 
+type ExportedInteractionPair = {
+  pair_key: string;
+  origin: RuleOrigin;
+  interaction_code: string;
+  summary: string;
+  confidence: string;
+  mechanism: string | null;
+  timing: string | null;
+  evidence_gaps: string | null;
+  evidence_tier: string | null;
+  field_notes: string | null;
+  sources: string;
+};
+
+import interactionPairs from '../exports/interaction_pairs.json';
+
 export function classifyMechanismCategory(
   mechanism?: string
 ): MechanismCategory {
   if (!mechanism) {
     return 'unknown';
   }
-
   const normalizedMechanism = mechanism.toLowerCase();
 
   if (normalizedMechanism.includes('serotonin')) {
@@ -401,6 +418,23 @@ export const LEGEND: Record<string, InteractionMetadata> = {
     riskScale: -1
   },
 };
+
+const DATASET_INTERACTION_RULES: Record<string, InteractionEvidence> = Object.fromEntries(
+  (interactionPairs as ExportedInteractionPair[]).map((pair) => [
+    pair.pair_key,
+    {
+      code: pair.interaction_code,
+      summary: pair.summary,
+      confidence: pair.confidence,
+      sources: pair.sources,
+      mechanism: pair.mechanism ?? undefined,
+      timing: pair.timing ?? undefined,
+      evidenceGaps: pair.evidence_gaps ?? undefined,
+      evidenceTier: pair.evidence_tier ?? undefined,
+      fieldNotes: pair.field_notes ?? undefined
+    }
+  ])
+);
 
 const INTERACTION_RULES: Record<string, InteractionEvidence> = {
   'alcohol|ayahuasca': {
@@ -806,7 +840,7 @@ export const resolveInteraction = (drug1: string, drug2: string): ResolvedIntera
     };
   }
 
-  const explicitEvidence = INTERACTION_RULES[canonicalPairKey];
+  const explicitEvidence = DATASET_INTERACTION_RULES[canonicalPairKey] ?? INTERACTION_RULES[canonicalPairKey];
   if (explicitEvidence) {
     return {
       pairKey: canonicalPairKey,
