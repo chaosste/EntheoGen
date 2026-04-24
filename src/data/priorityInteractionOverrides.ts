@@ -41,7 +41,7 @@ export const PRIORITY_INTERACTION_RULES: Record<string, InteractionEvidence> = {
     evidenceTier: 'decidable-by-case-data'
   },
 
-  'tobacco_rape|serotonergic_opioids': {
+  'serotonergic_opioids|tobacco_rape': {
     code: 'UNK',
     summary: 'No data on emetic/vagal responses combined with opioid sedation.',
     confidence: 'low',
@@ -61,7 +61,7 @@ export const PRIORITY_INTERACTION_RULES: Record<string, InteractionEvidence> = {
     evidenceTier: 'decidable-by-case-data'
   },
 
-  'mdma_2cx_dox_nbome|ketamine': {
+  'ketamine|mdma_2cx_dox_nbome': {
     code: 'UNK',
     summary: 'No systematic data on combining dissociation with strong serotonergic stimulation.',
     confidence: 'low',
@@ -71,7 +71,7 @@ export const PRIORITY_INTERACTION_RULES: Record<string, InteractionEvidence> = {
     evidenceTier: 'decidable-by-case-data'
   },
 
-  'psilocybin|ketamine': {
+  'ketamine|psilocybin': {
     code: 'UNK',
     summary: 'Limited data on combined psychological and autonomic effects.',
     confidence: 'low',
@@ -81,7 +81,7 @@ export const PRIORITY_INTERACTION_RULES: Record<string, InteractionEvidence> = {
     evidenceTier: 'decidable-by-case-data'
   },
 
-  'psilocybin|beta_blockers_ccb': {
+  'beta_blockers_ccb|psilocybin': {
     code: 'UNK',
     summary: 'Little data on hemodynamic effects when cardiovascular response is pharmacologically blunted.',
     confidence: 'low',
@@ -91,7 +91,7 @@ export const PRIORITY_INTERACTION_RULES: Record<string, InteractionEvidence> = {
     evidenceTier: 'decidable-by-case-data'
   },
 
-  'psilocybin|clonidine_guanfacine': {
+  'clonidine_guanfacine|psilocybin': {
     code: 'UNK',
     summary: 'No data on altered states combined with central sympathetic suppression.',
     confidence: 'low',
