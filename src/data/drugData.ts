@@ -2,6 +2,7 @@ import {
   interactionPairs,
   type InteractionPair as SharedInteractionPair
 } from './interactionDataset';
+import { PRIORITY_INTERACTION_RULES } from './priorityInteractionOverrides';
 
 export interface Drug {
   id: string;
@@ -840,7 +841,7 @@ export const resolveInteraction = (drug1: string, drug2: string): ResolvedIntera
     };
   }
 
-  const explicitEvidence = DATASET_INTERACTION_RULES[canonicalPairKey] ?? INTERACTION_RULES[canonicalPairKey];
+  const explicitEvidence = PRIORITY_INTERACTION_RULES[canonicalPairKey] ?? DATASET_INTERACTION_RULES[canonicalPairKey] ?? INTERACTION_RULES[canonicalPairKey];
   if (explicitEvidence) {
     return {
       pairKey: canonicalPairKey,
