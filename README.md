@@ -74,25 +74,28 @@ EntheoGen's data model is mapped specifically to sacramental substances often us
 
 ⸻
 
+> ⚠️ **Dataset Status**
+>
+> - Validation: ✅ Clean (0 errors)
+> - Coverage: ⚠️ High unknown / low-confidence proportion
+> - Interpretation: Epistemically explicit, not clinically exhaustive
+
+⸻
+
 # Version 2.1 Release April 25 2026
 
 ## v2.1 introduces a fully normalized, schema-driven dataset with an additive (non-breaking) migration from v1 → v2.
 
 ⸻
 
-Key Features
+## Key Features
 
-* Graph-based interaction model (substances ↔ interactions ↔ sources)
-* Explicit separation of:
-    * risk classification
-    * mechanism
-    * evidence
-    * provenance
-    * audit / validation
-* Canonical pair keys (a|b, sorted)
-* Multi-label mechanism classification
-* Built-in validation + reporting pipeline
-* v1 compatibility preserved
+- Graph-based interaction model (substances ↔ interactions ↔ sources).
+- Explicit separation of: risk classification, mechanism, evidence, provenance, audit / validation.
+- Canonical pair keys (a|b, sorted).
+- Multi-label mechanism classification.
+- Built-in validation + reporting pipeline.
+- v1 compatibility preserved.
 
 ⸻
 
@@ -169,7 +172,33 @@ flowchart LR
   REP --> OUT2["low-confidence.csv"]
   REP --> OUT3["missing-evidence.csv"]
 ```
+
+---
+
+## 3. Interaction Object Structure
+
+```mermaid
+graph TD
+
+I[Interaction Pair]
+
+I --> A[pair]
+I --> B[classification]
+I --> C[clinical_summary]
+I --> D[mechanism]
+I --> E[evidence]
+I --> F[provenance]
+I --> G[audit]
+```
 ⸻
+
+## 4. Risk Scale Visual
+
+```mermaid
+graph LR
+
+A[SELF -1] --> B[UNKNOWN 0] --> C[LOW 1] --> D[LOW_MOD 2] --> E[CAUTION 3] --> F[UNSAFE 4] --> G[DANGEROUS 5]
+```
 
 ## Quick Start
 
