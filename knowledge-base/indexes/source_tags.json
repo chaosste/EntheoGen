@@ -1,4 +1,27 @@
 {
   "version": "kb_v1",
-  "source_tags": []
+  "source_tags": [
+    {
+      "source_id": "Halman-et-al-2023-Drug-drug-interactions-involving-classic-psychedelics-a-systematic-review",
+      "tags": [
+        "academic_paper",
+        "contraindicated",
+        "contraindication",
+        "interaction",
+        "mechanism",
+        "none"
+      ]
+    },
+    {
+      "source_id": "Ruffell-et-al-2020-The Pharmacological-interaction-of-compounds-in-ayahuasca-a-systemic-review",
+      "tags": [
+        "academic_paper",
+        "contraindicated",
+        "contraindication",
+        "interaction",
+        "mechanism",
+        "none"
+      ]
+    }
+  ]
 }

@@ -1,4 +1,19 @@
 {
   "version": "kb_v1",
-  "citations": []
+  "citations": [
+    {
+      "source_id": "Halman-et-al-2023-Drug-drug-interactions-involving-classic-psychedelics-a-systematic-review",
+      "citation": "Halman Et Al 2023 Drug Drug Interactions Involving Classic Psychedelics A Systematic Review (n.d.)",
+      "title": "Halman Et Al 2023 Drug Drug Interactions Involving Classic Psychedelics A Systematic Review",
+      "source_type": "academic_paper",
+      "url_or_path": "sources/academic-papers/Halman-et-al-2023-Drug-drug-interactions-involving-classic-psychedelics-a-systematic-review.md"
+    },
+    {
+      "source_id": "Ruffell-et-al-2020-The Pharmacological-interaction-of-compounds-in-ayahuasca-a-systemic-review",
+      "citation": "Ruffell Et Al 2020 The Pharmacological Interaction Of Compounds In Ayahuasca A Systemic Review (n.d.)",
+      "title": "Ruffell Et Al 2020 The Pharmacological Interaction Of Compounds In Ayahuasca A Systemic Review",
+      "source_type": "academic_paper",
+      "url_or_path": "sources/academic-papers/Ruffell-et-al-2020-The Pharmacological-interaction-of-compounds-in-ayahuasca-a-systemic-review.md"
+    }
+  ]
 }
