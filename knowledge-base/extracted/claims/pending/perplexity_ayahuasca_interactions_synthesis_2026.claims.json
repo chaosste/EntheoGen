@@ -22,6 +22,7 @@
       "claim": "Avoid combining ayahuasca with serotonergic medications",
       "claim_type": "contraindication",
       "entities": [
+        "ayahuasca"
       ],
       "mechanism": [
         "serotonergic_toxicity"
