@@ -26,7 +26,50 @@
       "confidence": "low",
       "clinical_actionability": "none",
       "review_state": "machine_extracted",
-      "notes": "Extracted from gillman_2005_maoi_opioid_serotonin_toxicity using rule-based keyword matching."
+      "notes": "Extracted from gillman_2005_maoi_opioid_serotonin_toxicity using rule-based keyword matching.",
+      "supports_pairs": [
+        [
+          "maoi_pharma",
+          "ssri"
+        ],
+        [
+          "maoi_pharma",
+          "snri"
+        ],
+        [
+          "maoi_pharma",
+          "tricyclic_ad"
+        ],
+        [
+          "maoi_pharma",
+          "serotonergic_opioids"
+        ],
+        [
+          "maoi_pharma",
+          "mdma_2cx_dox_nbome"
+        ],
+        [
+          "linezolid",
+          "maoi_pharma"
+        ],
+        [
+          "maoi_pharma",
+          "moclobemide"
+        ]
+      ],
+      "provenance": {
+        "requires_verification": false,
+        "cited_sources": [
+          {
+            "title": "Monoamine oxidase inhibitors, opioid analgesics and serotonin toxicity",
+            "url": "https://doi.org/10.1093/bja/aei210",
+            "doi": "10.1093/bja/aei210",
+            "authors": "Gillman PK",
+            "year": 2005,
+            "citation_text": "Gillman PK. Monoamine oxidase inhibitors, opioid analgesics and serotonin toxicity. British Journal of Anaesthesia. 2005. doi:10.1093/bja/aei210."
+          }
+        ]
+      }
     },
     {
       "claim_id": "gillman_2005_maoi_opioid_serotonin_toxicity_8_059de5e2fd",
@@ -52,7 +95,50 @@
       "confidence": "low",
       "clinical_actionability": "none",
       "review_state": "machine_extracted",
-      "notes": "Extracted from gillman_2005_maoi_opioid_serotonin_toxicity using rule-based keyword matching."
+      "notes": "Extracted from gillman_2005_maoi_opioid_serotonin_toxicity using rule-based keyword matching.",
+      "supports_pairs": [
+        [
+          "maoi_pharma",
+          "ssri"
+        ],
+        [
+          "maoi_pharma",
+          "snri"
+        ],
+        [
+          "maoi_pharma",
+          "tricyclic_ad"
+        ],
+        [
+          "maoi_pharma",
+          "serotonergic_opioids"
+        ],
+        [
+          "maoi_pharma",
+          "mdma_2cx_dox_nbome"
+        ],
+        [
+          "linezolid",
+          "maoi_pharma"
+        ],
+        [
+          "maoi_pharma",
+          "moclobemide"
+        ]
+      ],
+      "provenance": {
+        "requires_verification": false,
+        "cited_sources": [
+          {
+            "title": "Monoamine oxidase inhibitors, opioid analgesics and serotonin toxicity",
+            "url": "https://doi.org/10.1093/bja/aei210",
+            "doi": "10.1093/bja/aei210",
+            "authors": "Gillman PK",
+            "year": 2005,
+            "citation_text": "Gillman PK. Monoamine oxidase inhibitors, opioid analgesics and serotonin toxicity. British Journal of Anaesthesia. 2005. doi:10.1093/bja/aei210."
+          }
+        ]
+      }
     },
     {
       "claim_id": "gillman_2005_maoi_opioid_serotonin_toxicity_9_df4af7045a",
@@ -78,7 +164,50 @@
       "confidence": "low",
       "clinical_actionability": "none",
       "review_state": "machine_extracted",
-      "notes": "Extracted from gillman_2005_maoi_opioid_serotonin_toxicity using rule-based keyword matching."
+      "notes": "Extracted from gillman_2005_maoi_opioid_serotonin_toxicity using rule-based keyword matching.",
+      "supports_pairs": [
+        [
+          "maoi_pharma",
+          "ssri"
+        ],
+        [
+          "maoi_pharma",
+          "snri"
+        ],
+        [
+          "maoi_pharma",
+          "tricyclic_ad"
+        ],
+        [
+          "maoi_pharma",
+          "serotonergic_opioids"
+        ],
+        [
+          "maoi_pharma",
+          "mdma_2cx_dox_nbome"
+        ],
+        [
+          "linezolid",
+          "maoi_pharma"
+        ],
+        [
+          "maoi_pharma",
+          "moclobemide"
+        ]
+      ],
+      "provenance": {
+        "requires_verification": false,
+        "cited_sources": [
+          {
+            "title": "Monoamine oxidase inhibitors, opioid analgesics and serotonin toxicity",
+            "url": "https://doi.org/10.1093/bja/aei210",
+            "doi": "10.1093/bja/aei210",
+            "authors": "Gillman PK",
+            "year": 2005,
+            "citation_text": "Gillman PK. Monoamine oxidase inhibitors, opioid analgesics and serotonin toxicity. British Journal of Anaesthesia. 2005. doi:10.1093/bja/aei210."
+          }
+        ]
+      }
     },
     {
       "claim_id": "gillman_2005_maoi_opioid_serotonin_toxicity_10_a5a80d8fa4",
@@ -103,7 +232,50 @@
       "confidence": "low",
       "clinical_actionability": "contraindicated",
       "review_state": "machine_extracted",
-      "notes": "Extracted from gillman_2005_maoi_opioid_serotonin_toxicity using rule-based keyword matching."
+      "notes": "Extracted from gillman_2005_maoi_opioid_serotonin_toxicity using rule-based keyword matching.",
+      "supports_pairs": [
+        [
+          "maoi_pharma",
+          "ssri"
+        ],
+        [
+          "maoi_pharma",
+          "snri"
+        ],
+        [
+          "maoi_pharma",
+          "tricyclic_ad"
+        ],
+        [
+          "maoi_pharma",
+          "serotonergic_opioids"
+        ],
+        [
+          "maoi_pharma",
+          "mdma_2cx_dox_nbome"
+        ],
+        [
+          "linezolid",
+          "maoi_pharma"
+        ],
+        [
+          "maoi_pharma",
+          "moclobemide"
+        ]
+      ],
+      "provenance": {
+        "requires_verification": false,
+        "cited_sources": [
+          {
+            "title": "Monoamine oxidase inhibitors, opioid analgesics and serotonin toxicity",
+            "url": "https://doi.org/10.1093/bja/aei210",
+            "doi": "10.1093/bja/aei210",
+            "authors": "Gillman PK",
+            "year": 2005,
+            "citation_text": "Gillman PK. Monoamine oxidase inhibitors, opioid analgesics and serotonin toxicity. British Journal of Anaesthesia. 2005. doi:10.1093/bja/aei210."
+          }
+        ]
+      }
     },
     {
       "claim_id": "gillman_2005_maoi_opioid_serotonin_toxicity_11_3ddd6c307a",
@@ -128,7 +300,50 @@
       "confidence": "low",
       "clinical_actionability": "none",
       "review_state": "machine_extracted",
-      "notes": "Extracted from gillman_2005_maoi_opioid_serotonin_toxicity using rule-based keyword matching."
+      "notes": "Extracted from gillman_2005_maoi_opioid_serotonin_toxicity using rule-based keyword matching.",
+      "supports_pairs": [
+        [
+          "maoi_pharma",
+          "ssri"
+        ],
+        [
+          "maoi_pharma",
+          "snri"
+        ],
+        [
+          "maoi_pharma",
+          "tricyclic_ad"
+        ],
+        [
+          "maoi_pharma",
+          "serotonergic_opioids"
+        ],
+        [
+          "maoi_pharma",
+          "mdma_2cx_dox_nbome"
+        ],
+        [
+          "linezolid",
+          "maoi_pharma"
+        ],
+        [
+          "maoi_pharma",
+          "moclobemide"
+        ]
+      ],
+      "provenance": {
+        "requires_verification": false,
+        "cited_sources": [
+          {
+            "title": "Monoamine oxidase inhibitors, opioid analgesics and serotonin toxicity",
+            "url": "https://doi.org/10.1093/bja/aei210",
+            "doi": "10.1093/bja/aei210",
+            "authors": "Gillman PK",
+            "year": 2005,
+            "citation_text": "Gillman PK. Monoamine oxidase inhibitors, opioid analgesics and serotonin toxicity. British Journal of Anaesthesia. 2005. doi:10.1093/bja/aei210."
+          }
+        ]
+      }
     },
     {
       "claim_id": "gillman_2005_maoi_opioid_serotonin_toxicity_12_bae5234e1a",
@@ -153,7 +368,50 @@
       "confidence": "low",
       "clinical_actionability": "contraindicated",
       "review_state": "machine_extracted",
-      "notes": "Extracted from gillman_2005_maoi_opioid_serotonin_toxicity using rule-based keyword matching."
+      "notes": "Extracted from gillman_2005_maoi_opioid_serotonin_toxicity using rule-based keyword matching.",
+      "supports_pairs": [
+        [
+          "maoi_pharma",
+          "ssri"
+        ],
+        [
+          "maoi_pharma",
+          "snri"
+        ],
+        [
+          "maoi_pharma",
+          "tricyclic_ad"
+        ],
+        [
+          "maoi_pharma",
+          "serotonergic_opioids"
+        ],
+        [
+          "maoi_pharma",
+          "mdma_2cx_dox_nbome"
+        ],
+        [
+          "linezolid",
+          "maoi_pharma"
+        ],
+        [
+          "maoi_pharma",
+          "moclobemide"
+        ]
+      ],
+      "provenance": {
+        "requires_verification": false,
+        "cited_sources": [
+          {
+            "title": "Monoamine oxidase inhibitors, opioid analgesics and serotonin toxicity",
+            "url": "https://doi.org/10.1093/bja/aei210",
+            "doi": "10.1093/bja/aei210",
+            "authors": "Gillman PK",
+            "year": 2005,
+            "citation_text": "Gillman PK. Monoamine oxidase inhibitors, opioid analgesics and serotonin toxicity. British Journal of Anaesthesia. 2005. doi:10.1093/bja/aei210."
+          }
+        ]
+      }
     }
   ]
 }

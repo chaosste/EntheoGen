@@ -27,7 +27,62 @@
       "confidence": "low",
       "clinical_actionability": "none",
       "review_state": "machine_extracted",
-      "notes": "Extracted from Halman-et-al-2023-Drug-drug-interactions-involving-classic-psychedelics-a-systematic-review using rule-based keyword matching."
+      "notes": "Extracted from Halman-et-al-2023-Drug-drug-interactions-involving-classic-psychedelics-a-systematic-review using rule-based keyword matching.",
+      "supports_pairs": [
+        [
+          "ayahuasca",
+          "maoi_pharma"
+        ],
+        [
+          "ayahuasca",
+          "ssri"
+        ],
+        [
+          "ayahuasca",
+          "snri"
+        ],
+        [
+          "ayahuasca",
+          "tricyclic_ad"
+        ],
+        [
+          "ayahuasca",
+          "serotonergic_opioids"
+        ],
+        [
+          "antipsychotics",
+          "ayahuasca"
+        ],
+        [
+          "ayahuasca",
+          "ketamine"
+        ],
+        [
+          "ayahuasca",
+          "lamotrigine"
+        ],
+        [
+          "ayahuasca",
+          "lithium"
+        ],
+        [
+          "ayahuasca",
+          "clonidine_guanfacine"
+        ]
+      ],
+      "provenance": {
+        "requires_verification": false,
+        "cited_sources": [
+          {
+            "title": "Drug-drug interactions involving classic psychedelics: A systematic review",
+            "url": "https://journals.sagepub.com/doi/10.1177/02698811231211219",
+            "doi": "10.1177/02698811231211219",
+            "authors": "Halman A, Kong G, Sarris J, Perkins D",
+            "year": 2024,
+            "citation_text": "Halman A, Kong G, Sarris J, Perkins D. Drug-drug interactions involving classic psychedelics: A systematic review. Journal of Psychopharmacology. 2024. doi:10.1177/02698811231211219."
+          }
+        ]
+      }
     },
     {
       "claim_id": "Halman-et-al-2023-Drug-drug-interactions-involving-classic-psychedelics-a-systematic-review_3_ef10d74a97",
@@ -53,7 +108,62 @@
       "confidence": "low",
       "clinical_actionability": "none",
       "review_state": "machine_extracted",
-      "notes": "Extracted from Halman-et-al-2023-Drug-drug-interactions-involving-classic-psychedelics-a-systematic-review using rule-based keyword matching."
+      "notes": "Extracted from Halman-et-al-2023-Drug-drug-interactions-involving-classic-psychedelics-a-systematic-review using rule-based keyword matching.",
+      "supports_pairs": [
+        [
+          "ayahuasca",
+          "maoi_pharma"
+        ],
+        [
+          "ayahuasca",
+          "ssri"
+        ],
+        [
+          "ayahuasca",
+          "snri"
+        ],
+        [
+          "ayahuasca",
+          "tricyclic_ad"
+        ],
+        [
+          "ayahuasca",
+          "serotonergic_opioids"
+        ],
+        [
+          "antipsychotics",
+          "ayahuasca"
+        ],
+        [
+          "ayahuasca",
+          "ketamine"
+        ],
+        [
+          "ayahuasca",
+          "lamotrigine"
+        ],
+        [
+          "ayahuasca",
+          "lithium"
+        ],
+        [
+          "ayahuasca",
+          "clonidine_guanfacine"
+        ]
+      ],
+      "provenance": {
+        "requires_verification": false,
+        "cited_sources": [
+          {
+            "title": "Drug-drug interactions involving classic psychedelics: A systematic review",
+            "url": "https://journals.sagepub.com/doi/10.1177/02698811231211219",
+            "doi": "10.1177/02698811231211219",
+            "authors": "Halman A, Kong G, Sarris J, Perkins D",
+            "year": 2024,
+            "citation_text": "Halman A, Kong G, Sarris J, Perkins D. Drug-drug interactions involving classic psychedelics: A systematic review. Journal of Psychopharmacology. 2024. doi:10.1177/02698811231211219."
+          }
+        ]
+      }
     },
     {
       "claim_id": "Halman-et-al-2023-Drug-drug-interactions-involving-classic-psychedelics-a-systematic-review_5_cd2f3a1aee",
@@ -79,7 +189,62 @@
       "confidence": "low",
       "clinical_actionability": "none",
       "review_state": "machine_extracted",
-      "notes": "Extracted from Halman-et-al-2023-Drug-drug-interactions-involving-classic-psychedelics-a-systematic-review using rule-based keyword matching."
+      "notes": "Extracted from Halman-et-al-2023-Drug-drug-interactions-involving-classic-psychedelics-a-systematic-review using rule-based keyword matching.",
+      "supports_pairs": [
+        [
+          "ayahuasca",
+          "maoi_pharma"
+        ],
+        [
+          "ayahuasca",
+          "ssri"
+        ],
+        [
+          "ayahuasca",
+          "snri"
+        ],
+        [
+          "ayahuasca",
+          "tricyclic_ad"
+        ],
+        [
+          "ayahuasca",
+          "serotonergic_opioids"
+        ],
+        [
+          "antipsychotics",
+          "ayahuasca"
+        ],
+        [
+          "ayahuasca",
+          "ketamine"
+        ],
+        [
+          "ayahuasca",
+          "lamotrigine"
+        ],
+        [
+          "ayahuasca",
+          "lithium"
+        ],
+        [
+          "ayahuasca",
+          "clonidine_guanfacine"
+        ]
+      ],
+      "provenance": {
+        "requires_verification": false,
+        "cited_sources": [
+          {
+            "title": "Drug-drug interactions involving classic psychedelics: A systematic review",
+            "url": "https://journals.sagepub.com/doi/10.1177/02698811231211219",
+            "doi": "10.1177/02698811231211219",
+            "authors": "Halman A, Kong G, Sarris J, Perkins D",
+            "year": 2024,
+            "citation_text": "Halman A, Kong G, Sarris J, Perkins D. Drug-drug interactions involving classic psychedelics: A systematic review. Journal of Psychopharmacology. 2024. doi:10.1177/02698811231211219."
+          }
+        ]
+      }
     },
     {
       "claim_id": "Halman-et-al-2023-Drug-drug-interactions-involving-classic-psychedelics-a-systematic-review_6_4f73b68e98",
@@ -105,7 +270,62 @@
       "confidence": "low",
       "clinical_actionability": "none",
       "review_state": "machine_extracted",
-      "notes": "Extracted from Halman-et-al-2023-Drug-drug-interactions-involving-classic-psychedelics-a-systematic-review using rule-based keyword matching."
+      "notes": "Extracted from Halman-et-al-2023-Drug-drug-interactions-involving-classic-psychedelics-a-systematic-review using rule-based keyword matching.",
+      "supports_pairs": [
+        [
+          "ayahuasca",
+          "maoi_pharma"
+        ],
+        [
+          "ayahuasca",
+          "ssri"
+        ],
+        [
+          "ayahuasca",
+          "snri"
+        ],
+        [
+          "ayahuasca",
+          "tricyclic_ad"
+        ],
+        [
+          "ayahuasca",
+          "serotonergic_opioids"
+        ],
+        [
+          "antipsychotics",
+          "ayahuasca"
+        ],
+        [
+          "ayahuasca",
+          "ketamine"
+        ],
+        [
+          "ayahuasca",
+          "lamotrigine"
+        ],
+        [
+          "ayahuasca",
+          "lithium"
+        ],
+        [
+          "ayahuasca",
+          "clonidine_guanfacine"
+        ]
+      ],
+      "provenance": {
+        "requires_verification": false,
+        "cited_sources": [
+          {
+            "title": "Drug-drug interactions involving classic psychedelics: A systematic review",
+            "url": "https://journals.sagepub.com/doi/10.1177/02698811231211219",
+            "doi": "10.1177/02698811231211219",
+            "authors": "Halman A, Kong G, Sarris J, Perkins D",
+            "year": 2024,
+            "citation_text": "Halman A, Kong G, Sarris J, Perkins D. Drug-drug interactions involving classic psychedelics: A systematic review. Journal of Psychopharmacology. 2024. doi:10.1177/02698811231211219."
+          }
+        ]
+      }
     },
     {
       "claim_id": "Halman-et-al-2023-Drug-drug-interactions-involving-classic-psychedelics-a-systematic-review_9_0f0be52621",
@@ -132,7 +352,62 @@
       "confidence": "low",
       "clinical_actionability": "none",
       "review_state": "machine_extracted",
-      "notes": "Extracted from Halman-et-al-2023-Drug-drug-interactions-involving-classic-psychedelics-a-systematic-review using rule-based keyword matching."
+      "notes": "Extracted from Halman-et-al-2023-Drug-drug-interactions-involving-classic-psychedelics-a-systematic-review using rule-based keyword matching.",
+      "supports_pairs": [
+        [
+          "ayahuasca",
+          "maoi_pharma"
+        ],
+        [
+          "ayahuasca",
+          "ssri"
+        ],
+        [
+          "ayahuasca",
+          "snri"
+        ],
+        [
+          "ayahuasca",
+          "tricyclic_ad"
+        ],
+        [
+          "ayahuasca",
+          "serotonergic_opioids"
+        ],
+        [
+          "antipsychotics",
+          "ayahuasca"
+        ],
+        [
+          "ayahuasca",
+          "ketamine"
+        ],
+        [
+          "ayahuasca",
+          "lamotrigine"
+        ],
+        [
+          "ayahuasca",
+          "lithium"
+        ],
+        [
+          "ayahuasca",
+          "clonidine_guanfacine"
+        ]
+      ],
+      "provenance": {
+        "requires_verification": false,
+        "cited_sources": [
+          {
+            "title": "Drug-drug interactions involving classic psychedelics: A systematic review",
+            "url": "https://journals.sagepub.com/doi/10.1177/02698811231211219",
+            "doi": "10.1177/02698811231211219",
+            "authors": "Halman A, Kong G, Sarris J, Perkins D",
+            "year": 2024,
+            "citation_text": "Halman A, Kong G, Sarris J, Perkins D. Drug-drug interactions involving classic psychedelics: A systematic review. Journal of Psychopharmacology. 2024. doi:10.1177/02698811231211219."
+          }
+        ]
+      }
     },
     {
       "claim_id": "Halman-et-al-2023-Drug-drug-interactions-involving-classic-psychedelics-a-systematic-review_10_8b65128c55",
@@ -159,7 +434,62 @@
       "confidence": "low",
       "clinical_actionability": "none",
       "review_state": "machine_extracted",
-      "notes": "Extracted from Halman-et-al-2023-Drug-drug-interactions-involving-classic-psychedelics-a-systematic-review using rule-based keyword matching."
+      "notes": "Extracted from Halman-et-al-2023-Drug-drug-interactions-involving-classic-psychedelics-a-systematic-review using rule-based keyword matching.",
+      "supports_pairs": [
+        [
+          "ayahuasca",
+          "maoi_pharma"
+        ],
+        [
+          "ayahuasca",
+          "ssri"
+        ],
+        [
+          "ayahuasca",
+          "snri"
+        ],
+        [
+          "ayahuasca",
+          "tricyclic_ad"
+        ],
+        [
+          "ayahuasca",
+          "serotonergic_opioids"
+        ],
+        [
+          "antipsychotics",
+          "ayahuasca"
+        ],
+        [
+          "ayahuasca",
+          "ketamine"
+        ],
+        [
+          "ayahuasca",
+          "lamotrigine"
+        ],
+        [
+          "ayahuasca",
+          "lithium"
+        ],
+        [
+          "ayahuasca",
+          "clonidine_guanfacine"
+        ]
+      ],
+      "provenance": {
+        "requires_verification": false,
+        "cited_sources": [
+          {
+            "title": "Drug-drug interactions involving classic psychedelics: A systematic review",
+            "url": "https://journals.sagepub.com/doi/10.1177/02698811231211219",
+            "doi": "10.1177/02698811231211219",
+            "authors": "Halman A, Kong G, Sarris J, Perkins D",
+            "year": 2024,
+            "citation_text": "Halman A, Kong G, Sarris J, Perkins D. Drug-drug interactions involving classic psychedelics: A systematic review. Journal of Psychopharmacology. 2024. doi:10.1177/02698811231211219."
+          }
+        ]
+      }
     },
     {
       "claim_id": "Halman-et-al-2023-Drug-drug-interactions-involving-classic-psychedelics-a-systematic-review_11_d626745fec",
@@ -185,7 +515,62 @@
       "confidence": "low",
       "clinical_actionability": "contraindicated",
       "review_state": "machine_extracted",
-      "notes": "Extracted from Halman-et-al-2023-Drug-drug-interactions-involving-classic-psychedelics-a-systematic-review using rule-based keyword matching."
+      "notes": "Extracted from Halman-et-al-2023-Drug-drug-interactions-involving-classic-psychedelics-a-systematic-review using rule-based keyword matching.",
+      "supports_pairs": [
+        [
+          "ayahuasca",
+          "maoi_pharma"
+        ],
+        [
+          "ayahuasca",
+          "ssri"
+        ],
+        [
+          "ayahuasca",
+          "snri"
+        ],
+        [
+          "ayahuasca",
+          "tricyclic_ad"
+        ],
+        [
+          "ayahuasca",
+          "serotonergic_opioids"
+        ],
+        [
+          "antipsychotics",
+          "ayahuasca"
+        ],
+        [
+          "ayahuasca",
+          "ketamine"
+        ],
+        [
+          "ayahuasca",
+          "lamotrigine"
+        ],
+        [
+          "ayahuasca",
+          "lithium"
+        ],
+        [
+          "ayahuasca",
+          "clonidine_guanfacine"
+        ]
+      ],
+      "provenance": {
+        "requires_verification": false,
+        "cited_sources": [
+          {
+            "title": "Drug-drug interactions involving classic psychedelics: A systematic review",
+            "url": "https://journals.sagepub.com/doi/10.1177/02698811231211219",
+            "doi": "10.1177/02698811231211219",
+            "authors": "Halman A, Kong G, Sarris J, Perkins D",
+            "year": 2024,
+            "citation_text": "Halman A, Kong G, Sarris J, Perkins D. Drug-drug interactions involving classic psychedelics: A systematic review. Journal of Psychopharmacology. 2024. doi:10.1177/02698811231211219."
+          }
+        ]
+      }
     },
     {
       "claim_id": "Halman-et-al-2023-Drug-drug-interactions-involving-classic-psychedelics-a-systematic-review_12_e33a8ac90c",
@@ -211,7 +596,62 @@
       "confidence": "low",
       "clinical_actionability": "none",
       "review_state": "machine_extracted",
-      "notes": "Extracted from Halman-et-al-2023-Drug-drug-interactions-involving-classic-psychedelics-a-systematic-review using rule-based keyword matching."
+      "notes": "Extracted from Halman-et-al-2023-Drug-drug-interactions-involving-classic-psychedelics-a-systematic-review using rule-based keyword matching.",
+      "supports_pairs": [
+        [
+          "ayahuasca",
+          "maoi_pharma"
+        ],
+        [
+          "ayahuasca",
+          "ssri"
+        ],
+        [
+          "ayahuasca",
+          "snri"
+        ],
+        [
+          "ayahuasca",
+          "tricyclic_ad"
+        ],
+        [
+          "ayahuasca",
+          "serotonergic_opioids"
+        ],
+        [
+          "antipsychotics",
+          "ayahuasca"
+        ],
+        [
+          "ayahuasca",
+          "ketamine"
+        ],
+        [
+          "ayahuasca",
+          "lamotrigine"
+        ],
+        [
+          "ayahuasca",
+          "lithium"
+        ],
+        [
+          "ayahuasca",
+          "clonidine_guanfacine"
+        ]
+      ],
+      "provenance": {
+        "requires_verification": false,
+        "cited_sources": [
+          {
+            "title": "Drug-drug interactions involving classic psychedelics: A systematic review",
+            "url": "https://journals.sagepub.com/doi/10.1177/02698811231211219",
+            "doi": "10.1177/02698811231211219",
+            "authors": "Halman A, Kong G, Sarris J, Perkins D",
+            "year": 2024,
+            "citation_text": "Halman A, Kong G, Sarris J, Perkins D. Drug-drug interactions involving classic psychedelics: A systematic review. Journal of Psychopharmacology. 2024. doi:10.1177/02698811231211219."
+          }
+        ]
+      }
     }
   ]
 }

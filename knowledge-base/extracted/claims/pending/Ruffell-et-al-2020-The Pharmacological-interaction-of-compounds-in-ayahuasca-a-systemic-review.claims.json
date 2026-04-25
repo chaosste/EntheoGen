@@ -31,7 +31,30 @@
       "confidence": "low",
       "clinical_actionability": "none",
       "review_state": "machine_extracted",
-      "notes": "Extracted from Ruffell-et-al-2020-The Pharmacological-interaction-of-compounds-in-ayahuasca-a-systemic-review using rule-based keyword matching."
+      "notes": "Extracted from Ruffell-et-al-2020-The Pharmacological-interaction-of-compounds-in-ayahuasca-a-systemic-review using rule-based keyword matching.",
+      "supports_pairs": [
+        [
+          "ayahuasca",
+          "nn_dmt"
+        ],
+        [
+          "ayahuasca",
+          "maoi_pharma"
+        ]
+      ],
+      "provenance": {
+        "requires_verification": false,
+        "cited_sources": [
+          {
+            "title": "The pharmacological interaction of compounds in ayahuasca: a systematic review",
+            "url": "https://doi.org/10.1590/1516-4446-2020-0884",
+            "doi": "10.1590/1516-4446-2020-0884",
+            "authors": "Ruffell S, Netzband N, Bird C, Young AH, Juruena MF",
+            "year": 2020,
+            "citation_text": "Ruffell S, Netzband N, Bird C, Young AH, Juruena MF. The pharmacological interaction of compounds in ayahuasca: a systematic review. Brazilian Journal of Psychiatry. 2020. doi:10.1590/1516-4446-2020-0884."
+          }
+        ]
+      }
     },
     {
       "claim_id": "Ruffell-et-al-2020-The Pharmacological-interaction-of-compounds-in-ayahuasca-a-systemic-review_3_d2e53f65c5",
@@ -61,7 +84,30 @@
       "confidence": "low",
       "clinical_actionability": "none",
       "review_state": "machine_extracted",
-      "notes": "Extracted from Ruffell-et-al-2020-The Pharmacological-interaction-of-compounds-in-ayahuasca-a-systemic-review using rule-based keyword matching."
+      "notes": "Extracted from Ruffell-et-al-2020-The Pharmacological-interaction-of-compounds-in-ayahuasca-a-systemic-review using rule-based keyword matching.",
+      "supports_pairs": [
+        [
+          "ayahuasca",
+          "nn_dmt"
+        ],
+        [
+          "ayahuasca",
+          "maoi_pharma"
+        ]
+      ],
+      "provenance": {
+        "requires_verification": false,
+        "cited_sources": [
+          {
+            "title": "The pharmacological interaction of compounds in ayahuasca: a systematic review",
+            "url": "https://doi.org/10.1590/1516-4446-2020-0884",
+            "doi": "10.1590/1516-4446-2020-0884",
+            "authors": "Ruffell S, Netzband N, Bird C, Young AH, Juruena MF",
+            "year": 2020,
+            "citation_text": "Ruffell S, Netzband N, Bird C, Young AH, Juruena MF. The pharmacological interaction of compounds in ayahuasca: a systematic review. Brazilian Journal of Psychiatry. 2020. doi:10.1590/1516-4446-2020-0884."
+          }
+        ]
+      }
     },
     {
       "claim_id": "Ruffell-et-al-2020-The Pharmacological-interaction-of-compounds-in-ayahuasca-a-systemic-review_5_6c2af4a531",
@@ -91,7 +137,30 @@
       "confidence": "low",
       "clinical_actionability": "none",
       "review_state": "machine_extracted",
-      "notes": "Extracted from Ruffell-et-al-2020-The Pharmacological-interaction-of-compounds-in-ayahuasca-a-systemic-review using rule-based keyword matching."
+      "notes": "Extracted from Ruffell-et-al-2020-The Pharmacological-interaction-of-compounds-in-ayahuasca-a-systemic-review using rule-based keyword matching.",
+      "supports_pairs": [
+        [
+          "ayahuasca",
+          "nn_dmt"
+        ],
+        [
+          "ayahuasca",
+          "maoi_pharma"
+        ]
+      ],
+      "provenance": {
+        "requires_verification": false,
+        "cited_sources": [
+          {
+            "title": "The pharmacological interaction of compounds in ayahuasca: a systematic review",
+            "url": "https://doi.org/10.1590/1516-4446-2020-0884",
+            "doi": "10.1590/1516-4446-2020-0884",
+            "authors": "Ruffell S, Netzband N, Bird C, Young AH, Juruena MF",
+            "year": 2020,
+            "citation_text": "Ruffell S, Netzband N, Bird C, Young AH, Juruena MF. The pharmacological interaction of compounds in ayahuasca: a systematic review. Brazilian Journal of Psychiatry. 2020. doi:10.1590/1516-4446-2020-0884."
+          }
+        ]
+      }
     },
     {
       "claim_id": "Ruffell-et-al-2020-The Pharmacological-interaction-of-compounds-in-ayahuasca-a-systemic-review_6_0485b9af7f",
@@ -122,7 +191,30 @@
       "confidence": "low",
       "clinical_actionability": "none",
       "review_state": "machine_extracted",
-      "notes": "Extracted from Ruffell-et-al-2020-The Pharmacological-interaction-of-compounds-in-ayahuasca-a-systemic-review using rule-based keyword matching."
+      "notes": "Extracted from Ruffell-et-al-2020-The Pharmacological-interaction-of-compounds-in-ayahuasca-a-systemic-review using rule-based keyword matching.",
+      "supports_pairs": [
+        [
+          "ayahuasca",
+          "nn_dmt"
+        ],
+        [
+          "ayahuasca",
+          "maoi_pharma"
+        ]
+      ],
+      "provenance": {
+        "requires_verification": false,
+        "cited_sources": [
+          {
+            "title": "The pharmacological interaction of compounds in ayahuasca: a systematic review",
+            "url": "https://doi.org/10.1590/1516-4446-2020-0884",
+            "doi": "10.1590/1516-4446-2020-0884",
+            "authors": "Ruffell S, Netzband N, Bird C, Young AH, Juruena MF",
+            "year": 2020,
+            "citation_text": "Ruffell S, Netzband N, Bird C, Young AH, Juruena MF. The pharmacological interaction of compounds in ayahuasca: a systematic review. Brazilian Journal of Psychiatry. 2020. doi:10.1590/1516-4446-2020-0884."
+          }
+        ]
+      }
     },
     {
       "claim_id": "Ruffell-et-al-2020-The Pharmacological-interaction-of-compounds-in-ayahuasca-a-systemic-review_7_4e34a8f02f",
@@ -152,7 +244,30 @@
       "confidence": "low",
       "clinical_actionability": "none",
       "review_state": "machine_extracted",
-      "notes": "Extracted from Ruffell-et-al-2020-The Pharmacological-interaction-of-compounds-in-ayahuasca-a-systemic-review using rule-based keyword matching."
+      "notes": "Extracted from Ruffell-et-al-2020-The Pharmacological-interaction-of-compounds-in-ayahuasca-a-systemic-review using rule-based keyword matching.",
+      "supports_pairs": [
+        [
+          "ayahuasca",
+          "nn_dmt"
+        ],
+        [
+          "ayahuasca",
+          "maoi_pharma"
+        ]
+      ],
+      "provenance": {
+        "requires_verification": false,
+        "cited_sources": [
+          {
+            "title": "The pharmacological interaction of compounds in ayahuasca: a systematic review",
+            "url": "https://doi.org/10.1590/1516-4446-2020-0884",
+            "doi": "10.1590/1516-4446-2020-0884",
+            "authors": "Ruffell S, Netzband N, Bird C, Young AH, Juruena MF",
+            "year": 2020,
+            "citation_text": "Ruffell S, Netzband N, Bird C, Young AH, Juruena MF. The pharmacological interaction of compounds in ayahuasca: a systematic review. Brazilian Journal of Psychiatry. 2020. doi:10.1590/1516-4446-2020-0884."
+          }
+        ]
+      }
     },
     {
       "claim_id": "Ruffell-et-al-2020-The Pharmacological-interaction-of-compounds-in-ayahuasca-a-systemic-review_8_299122e6bc",
@@ -182,7 +297,30 @@
       "confidence": "low",
       "clinical_actionability": "none",
       "review_state": "machine_extracted",
-      "notes": "Extracted from Ruffell-et-al-2020-The Pharmacological-interaction-of-compounds-in-ayahuasca-a-systemic-review using rule-based keyword matching."
+      "notes": "Extracted from Ruffell-et-al-2020-The Pharmacological-interaction-of-compounds-in-ayahuasca-a-systemic-review using rule-based keyword matching.",
+      "supports_pairs": [
+        [
+          "ayahuasca",
+          "nn_dmt"
+        ],
+        [
+          "ayahuasca",
+          "maoi_pharma"
+        ]
+      ],
+      "provenance": {
+        "requires_verification": false,
+        "cited_sources": [
+          {
+            "title": "The pharmacological interaction of compounds in ayahuasca: a systematic review",
+            "url": "https://doi.org/10.1590/1516-4446-2020-0884",
+            "doi": "10.1590/1516-4446-2020-0884",
+            "authors": "Ruffell S, Netzband N, Bird C, Young AH, Juruena MF",
+            "year": 2020,
+            "citation_text": "Ruffell S, Netzband N, Bird C, Young AH, Juruena MF. The pharmacological interaction of compounds in ayahuasca: a systematic review. Brazilian Journal of Psychiatry. 2020. doi:10.1590/1516-4446-2020-0884."
+          }
+        ]
+      }
     },
     {
       "claim_id": "Ruffell-et-al-2020-The Pharmacological-interaction-of-compounds-in-ayahuasca-a-systemic-review_9_9067ec7d7a",
@@ -212,7 +350,30 @@
       "confidence": "low",
       "clinical_actionability": "contraindicated",
       "review_state": "machine_extracted",
-      "notes": "Extracted from Ruffell-et-al-2020-The Pharmacological-interaction-of-compounds-in-ayahuasca-a-systemic-review using rule-based keyword matching."
+      "notes": "Extracted from Ruffell-et-al-2020-The Pharmacological-interaction-of-compounds-in-ayahuasca-a-systemic-review using rule-based keyword matching.",
+      "supports_pairs": [
+        [
+          "ayahuasca",
+          "nn_dmt"
+        ],
+        [
+          "ayahuasca",
+          "maoi_pharma"
+        ]
+      ],
+      "provenance": {
+        "requires_verification": false,
+        "cited_sources": [
+          {
+            "title": "The pharmacological interaction of compounds in ayahuasca: a systematic review",
+            "url": "https://doi.org/10.1590/1516-4446-2020-0884",
+            "doi": "10.1590/1516-4446-2020-0884",
+            "authors": "Ruffell S, Netzband N, Bird C, Young AH, Juruena MF",
+            "year": 2020,
+            "citation_text": "Ruffell S, Netzband N, Bird C, Young AH, Juruena MF. The pharmacological interaction of compounds in ayahuasca: a systematic review. Brazilian Journal of Psychiatry. 2020. doi:10.1590/1516-4446-2020-0884."
+          }
+        ]
+      }
     },
     {
       "claim_id": "Ruffell-et-al-2020-The Pharmacological-interaction-of-compounds-in-ayahuasca-a-systemic-review_10_81b6d30379",
@@ -242,7 +403,30 @@
       "confidence": "low",
       "clinical_actionability": "none",
       "review_state": "machine_extracted",
-      "notes": "Extracted from Ruffell-et-al-2020-The Pharmacological-interaction-of-compounds-in-ayahuasca-a-systemic-review using rule-based keyword matching."
+      "notes": "Extracted from Ruffell-et-al-2020-The Pharmacological-interaction-of-compounds-in-ayahuasca-a-systemic-review using rule-based keyword matching.",
+      "supports_pairs": [
+        [
+          "ayahuasca",
+          "nn_dmt"
+        ],
+        [
+          "ayahuasca",
+          "maoi_pharma"
+        ]
+      ],
+      "provenance": {
+        "requires_verification": false,
+        "cited_sources": [
+          {
+            "title": "The pharmacological interaction of compounds in ayahuasca: a systematic review",
+            "url": "https://doi.org/10.1590/1516-4446-2020-0884",
+            "doi": "10.1590/1516-4446-2020-0884",
+            "authors": "Ruffell S, Netzband N, Bird C, Young AH, Juruena MF",
+            "year": 2020,
+            "citation_text": "Ruffell S, Netzband N, Bird C, Young AH, Juruena MF. The pharmacological interaction of compounds in ayahuasca: a systematic review. Brazilian Journal of Psychiatry. 2020. doi:10.1590/1516-4446-2020-0884."
+          }
+        ]
+      }
     }
   ]
 }

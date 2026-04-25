@@ -27,7 +27,93 @@
       "confidence": "low",
       "clinical_actionability": "none",
       "review_state": "machine_extracted",
-      "notes": "Extracted from Benjamin-Malcolm-PharmD-MPH-2023-Ayahuasca-and-Drug-Interaction using rule-based keyword matching."
+      "notes": "Extracted from Benjamin-Malcolm-PharmD-MPH-2023-Ayahuasca-and-Drug-Interaction using rule-based keyword matching.",
+      "supports_pairs": [
+        [
+          "ayahuasca",
+          "maoi_pharma"
+        ],
+        [
+          "ayahuasca",
+          "ssri"
+        ],
+        [
+          "ayahuasca",
+          "snri"
+        ],
+        [
+          "ayahuasca",
+          "tricyclic_ad"
+        ],
+        [
+          "ayahuasca",
+          "serotonergic_opioids"
+        ],
+        [
+          "antipsychotics",
+          "ayahuasca"
+        ],
+        [
+          "ayahuasca",
+          "methylphenidate"
+        ],
+        [
+          "ayahuasca",
+          "cocaine"
+        ],
+        [
+          "ayahuasca",
+          "mdma_2cx_dox_nbome"
+        ],
+        [
+          "ayahuasca",
+          "clonidine_guanfacine"
+        ],
+        [
+          "ayahuasca",
+          "beta_blockers"
+        ],
+        [
+          "ayahuasca",
+          "calcium_channel_blockers"
+        ]
+      ],
+      "provenance": {
+        "requires_verification": true,
+        "cited_sources": [
+          {
+            "title": "Drug-drug interactions involving classic psychedelics: A systematic review",
+            "url": "https://journals.sagepub.com/doi/10.1177/02698811231211219",
+            "doi": "10.1177/02698811231211219",
+            "authors": "Halman A, Kong G, Sarris J, Perkins D",
+            "year": 2024,
+            "citation_text": "Halman A, Kong G, Sarris J, Perkins D. Drug-drug interactions involving classic psychedelics: A systematic review. Journal of Psychopharmacology. 2024. doi:10.1177/02698811231211219."
+          },
+          {
+            "title": "The pharmacological interaction of compounds in ayahuasca: a systematic review",
+            "url": "https://doi.org/10.1590/1516-4446-2020-0884",
+            "doi": "10.1590/1516-4446-2020-0884",
+            "authors": "Ruffell S, Netzband N, Bird C, Young AH, Juruena MF",
+            "year": 2020,
+            "citation_text": "Ruffell S, Netzband N, Bird C, Young AH, Juruena MF. The pharmacological interaction of compounds in ayahuasca: a systematic review. Brazilian Journal of Psychiatry. 2020. doi:10.1590/1516-4446-2020-0884."
+          },
+          {
+            "title": "Monoamine oxidase inhibitors, opioid analgesics and serotonin toxicity",
+            "url": "https://doi.org/10.1093/bja/aei210",
+            "doi": "10.1093/bja/aei210",
+            "authors": "Gillman PK",
+            "year": 2005,
+            "citation_text": "Gillman PK. Monoamine oxidase inhibitors, opioid analgesics and serotonin toxicity. British Journal of Anaesthesia. 2005. doi:10.1093/bja/aei210."
+          },
+          {
+            "title": "Ayahuasca and Drug Interaction: The Good, the Bad, and the Soul",
+            "url": "https://pharmacy.uconn.edu/wp-content/uploads/sites/2740/2022/01/HO-2-slides-per-page-Ayahuosca-1.pdf",
+            "authors": "Benjamin Malcolm",
+            "year": 2023,
+            "citation_text": "Malcolm B. Ayahuasca and Drug Interaction: The Good, the Bad, and the Soul. 2023."
+          }
+        ]
+      }
     },
     {
       "claim_id": "Benjamin-Malcolm-PharmD-MPH-2023-Ayahuasca-and-Drug-Interaction_3_5c24625e39",
@@ -53,7 +139,93 @@
       "confidence": "low",
       "clinical_actionability": "none",
       "review_state": "machine_extracted",
-      "notes": "Extracted from Benjamin-Malcolm-PharmD-MPH-2023-Ayahuasca-and-Drug-Interaction using rule-based keyword matching."
+      "notes": "Extracted from Benjamin-Malcolm-PharmD-MPH-2023-Ayahuasca-and-Drug-Interaction using rule-based keyword matching.",
+      "supports_pairs": [
+        [
+          "ayahuasca",
+          "maoi_pharma"
+        ],
+        [
+          "ayahuasca",
+          "ssri"
+        ],
+        [
+          "ayahuasca",
+          "snri"
+        ],
+        [
+          "ayahuasca",
+          "tricyclic_ad"
+        ],
+        [
+          "ayahuasca",
+          "serotonergic_opioids"
+        ],
+        [
+          "antipsychotics",
+          "ayahuasca"
+        ],
+        [
+          "ayahuasca",
+          "methylphenidate"
+        ],
+        [
+          "ayahuasca",
+          "cocaine"
+        ],
+        [
+          "ayahuasca",
+          "mdma_2cx_dox_nbome"
+        ],
+        [
+          "ayahuasca",
+          "clonidine_guanfacine"
+        ],
+        [
+          "ayahuasca",
+          "beta_blockers"
+        ],
+        [
+          "ayahuasca",
+          "calcium_channel_blockers"
+        ]
+      ],
+      "provenance": {
+        "requires_verification": true,
+        "cited_sources": [
+          {
+            "title": "Drug-drug interactions involving classic psychedelics: A systematic review",
+            "url": "https://journals.sagepub.com/doi/10.1177/02698811231211219",
+            "doi": "10.1177/02698811231211219",
+            "authors": "Halman A, Kong G, Sarris J, Perkins D",
+            "year": 2024,
+            "citation_text": "Halman A, Kong G, Sarris J, Perkins D. Drug-drug interactions involving classic psychedelics: A systematic review. Journal of Psychopharmacology. 2024. doi:10.1177/02698811231211219."
+          },
+          {
+            "title": "The pharmacological interaction of compounds in ayahuasca: a systematic review",
+            "url": "https://doi.org/10.1590/1516-4446-2020-0884",
+            "doi": "10.1590/1516-4446-2020-0884",
+            "authors": "Ruffell S, Netzband N, Bird C, Young AH, Juruena MF",
+            "year": 2020,
+            "citation_text": "Ruffell S, Netzband N, Bird C, Young AH, Juruena MF. The pharmacological interaction of compounds in ayahuasca: a systematic review. Brazilian Journal of Psychiatry. 2020. doi:10.1590/1516-4446-2020-0884."
+          },
+          {
+            "title": "Monoamine oxidase inhibitors, opioid analgesics and serotonin toxicity",
+            "url": "https://doi.org/10.1093/bja/aei210",
+            "doi": "10.1093/bja/aei210",
+            "authors": "Gillman PK",
+            "year": 2005,
+            "citation_text": "Gillman PK. Monoamine oxidase inhibitors, opioid analgesics and serotonin toxicity. British Journal of Anaesthesia. 2005. doi:10.1093/bja/aei210."
+          },
+          {
+            "title": "Ayahuasca and Drug Interaction: The Good, the Bad, and the Soul",
+            "url": "https://pharmacy.uconn.edu/wp-content/uploads/sites/2740/2022/01/HO-2-slides-per-page-Ayahuosca-1.pdf",
+            "authors": "Benjamin Malcolm",
+            "year": 2023,
+            "citation_text": "Malcolm B. Ayahuasca and Drug Interaction: The Good, the Bad, and the Soul. 2023."
+          }
+        ]
+      }
     },
     {
       "claim_id": "Benjamin-Malcolm-PharmD-MPH-2023-Ayahuasca-and-Drug-Interaction_4_6d9638f66a",
@@ -80,7 +252,93 @@
       "confidence": "low",
       "clinical_actionability": "none",
       "review_state": "machine_extracted",
-      "notes": "Extracted from Benjamin-Malcolm-PharmD-MPH-2023-Ayahuasca-and-Drug-Interaction using rule-based keyword matching."
+      "notes": "Extracted from Benjamin-Malcolm-PharmD-MPH-2023-Ayahuasca-and-Drug-Interaction using rule-based keyword matching.",
+      "supports_pairs": [
+        [
+          "ayahuasca",
+          "maoi_pharma"
+        ],
+        [
+          "ayahuasca",
+          "ssri"
+        ],
+        [
+          "ayahuasca",
+          "snri"
+        ],
+        [
+          "ayahuasca",
+          "tricyclic_ad"
+        ],
+        [
+          "ayahuasca",
+          "serotonergic_opioids"
+        ],
+        [
+          "antipsychotics",
+          "ayahuasca"
+        ],
+        [
+          "ayahuasca",
+          "methylphenidate"
+        ],
+        [
+          "ayahuasca",
+          "cocaine"
+        ],
+        [
+          "ayahuasca",
+          "mdma_2cx_dox_nbome"
+        ],
+        [
+          "ayahuasca",
+          "clonidine_guanfacine"
+        ],
+        [
+          "ayahuasca",
+          "beta_blockers"
+        ],
+        [
+          "ayahuasca",
+          "calcium_channel_blockers"
+        ]
+      ],
+      "provenance": {
+        "requires_verification": true,
+        "cited_sources": [
+          {
+            "title": "Drug-drug interactions involving classic psychedelics: A systematic review",
+            "url": "https://journals.sagepub.com/doi/10.1177/02698811231211219",
+            "doi": "10.1177/02698811231211219",
+            "authors": "Halman A, Kong G, Sarris J, Perkins D",
+            "year": 2024,
+            "citation_text": "Halman A, Kong G, Sarris J, Perkins D. Drug-drug interactions involving classic psychedelics: A systematic review. Journal of Psychopharmacology. 2024. doi:10.1177/02698811231211219."
+          },
+          {
+            "title": "The pharmacological interaction of compounds in ayahuasca: a systematic review",
+            "url": "https://doi.org/10.1590/1516-4446-2020-0884",
+            "doi": "10.1590/1516-4446-2020-0884",
+            "authors": "Ruffell S, Netzband N, Bird C, Young AH, Juruena MF",
+            "year": 2020,
+            "citation_text": "Ruffell S, Netzband N, Bird C, Young AH, Juruena MF. The pharmacological interaction of compounds in ayahuasca: a systematic review. Brazilian Journal of Psychiatry. 2020. doi:10.1590/1516-4446-2020-0884."
+          },
+          {
+            "title": "Monoamine oxidase inhibitors, opioid analgesics and serotonin toxicity",
+            "url": "https://doi.org/10.1093/bja/aei210",
+            "doi": "10.1093/bja/aei210",
+            "authors": "Gillman PK",
+            "year": 2005,
+            "citation_text": "Gillman PK. Monoamine oxidase inhibitors, opioid analgesics and serotonin toxicity. British Journal of Anaesthesia. 2005. doi:10.1093/bja/aei210."
+          },
+          {
+            "title": "Ayahuasca and Drug Interaction: The Good, the Bad, and the Soul",
+            "url": "https://pharmacy.uconn.edu/wp-content/uploads/sites/2740/2022/01/HO-2-slides-per-page-Ayahuosca-1.pdf",
+            "authors": "Benjamin Malcolm",
+            "year": 2023,
+            "citation_text": "Malcolm B. Ayahuasca and Drug Interaction: The Good, the Bad, and the Soul. 2023."
+          }
+        ]
+      }
     },
     {
       "claim_id": "Benjamin-Malcolm-PharmD-MPH-2023-Ayahuasca-and-Drug-Interaction_5_a59bb93f27",
@@ -106,7 +364,93 @@
       "confidence": "low",
       "clinical_actionability": "none",
       "review_state": "machine_extracted",
-      "notes": "Extracted from Benjamin-Malcolm-PharmD-MPH-2023-Ayahuasca-and-Drug-Interaction using rule-based keyword matching."
+      "notes": "Extracted from Benjamin-Malcolm-PharmD-MPH-2023-Ayahuasca-and-Drug-Interaction using rule-based keyword matching.",
+      "supports_pairs": [
+        [
+          "ayahuasca",
+          "maoi_pharma"
+        ],
+        [
+          "ayahuasca",
+          "ssri"
+        ],
+        [
+          "ayahuasca",
+          "snri"
+        ],
+        [
+          "ayahuasca",
+          "tricyclic_ad"
+        ],
+        [
+          "ayahuasca",
+          "serotonergic_opioids"
+        ],
+        [
+          "antipsychotics",
+          "ayahuasca"
+        ],
+        [
+          "ayahuasca",
+          "methylphenidate"
+        ],
+        [
+          "ayahuasca",
+          "cocaine"
+        ],
+        [
+          "ayahuasca",
+          "mdma_2cx_dox_nbome"
+        ],
+        [
+          "ayahuasca",
+          "clonidine_guanfacine"
+        ],
+        [
+          "ayahuasca",
+          "beta_blockers"
+        ],
+        [
+          "ayahuasca",
+          "calcium_channel_blockers"
+        ]
+      ],
+      "provenance": {
+        "requires_verification": true,
+        "cited_sources": [
+          {
+            "title": "Drug-drug interactions involving classic psychedelics: A systematic review",
+            "url": "https://journals.sagepub.com/doi/10.1177/02698811231211219",
+            "doi": "10.1177/02698811231211219",
+            "authors": "Halman A, Kong G, Sarris J, Perkins D",
+            "year": 2024,
+            "citation_text": "Halman A, Kong G, Sarris J, Perkins D. Drug-drug interactions involving classic psychedelics: A systematic review. Journal of Psychopharmacology. 2024. doi:10.1177/02698811231211219."
+          },
+          {
+            "title": "The pharmacological interaction of compounds in ayahuasca: a systematic review",
+            "url": "https://doi.org/10.1590/1516-4446-2020-0884",
+            "doi": "10.1590/1516-4446-2020-0884",
+            "authors": "Ruffell S, Netzband N, Bird C, Young AH, Juruena MF",
+            "year": 2020,
+            "citation_text": "Ruffell S, Netzband N, Bird C, Young AH, Juruena MF. The pharmacological interaction of compounds in ayahuasca: a systematic review. Brazilian Journal of Psychiatry. 2020. doi:10.1590/1516-4446-2020-0884."
+          },
+          {
+            "title": "Monoamine oxidase inhibitors, opioid analgesics and serotonin toxicity",
+            "url": "https://doi.org/10.1093/bja/aei210",
+            "doi": "10.1093/bja/aei210",
+            "authors": "Gillman PK",
+            "year": 2005,
+            "citation_text": "Gillman PK. Monoamine oxidase inhibitors, opioid analgesics and serotonin toxicity. British Journal of Anaesthesia. 2005. doi:10.1093/bja/aei210."
+          },
+          {
+            "title": "Ayahuasca and Drug Interaction: The Good, the Bad, and the Soul",
+            "url": "https://pharmacy.uconn.edu/wp-content/uploads/sites/2740/2022/01/HO-2-slides-per-page-Ayahuosca-1.pdf",
+            "authors": "Benjamin Malcolm",
+            "year": 2023,
+            "citation_text": "Malcolm B. Ayahuasca and Drug Interaction: The Good, the Bad, and the Soul. 2023."
+          }
+        ]
+      }
     },
     {
       "claim_id": "Benjamin-Malcolm-PharmD-MPH-2023-Ayahuasca-and-Drug-Interaction_7_9426e1f67b",
@@ -132,7 +476,93 @@
       "confidence": "low",
       "clinical_actionability": "contraindicated",
       "review_state": "machine_extracted",
-      "notes": "Extracted from Benjamin-Malcolm-PharmD-MPH-2023-Ayahuasca-and-Drug-Interaction using rule-based keyword matching."
+      "notes": "Extracted from Benjamin-Malcolm-PharmD-MPH-2023-Ayahuasca-and-Drug-Interaction using rule-based keyword matching.",
+      "supports_pairs": [
+        [
+          "ayahuasca",
+          "maoi_pharma"
+        ],
+        [
+          "ayahuasca",
+          "ssri"
+        ],
+        [
+          "ayahuasca",
+          "snri"
+        ],
+        [
+          "ayahuasca",
+          "tricyclic_ad"
+        ],
+        [
+          "ayahuasca",
+          "serotonergic_opioids"
+        ],
+        [
+          "antipsychotics",
+          "ayahuasca"
+        ],
+        [
+          "ayahuasca",
+          "methylphenidate"
+        ],
+        [
+          "ayahuasca",
+          "cocaine"
+        ],
+        [
+          "ayahuasca",
+          "mdma_2cx_dox_nbome"
+        ],
+        [
+          "ayahuasca",
+          "clonidine_guanfacine"
+        ],
+        [
+          "ayahuasca",
+          "beta_blockers"
+        ],
+        [
+          "ayahuasca",
+          "calcium_channel_blockers"
+        ]
+      ],
+      "provenance": {
+        "requires_verification": true,
+        "cited_sources": [
+          {
+            "title": "Drug-drug interactions involving classic psychedelics: A systematic review",
+            "url": "https://journals.sagepub.com/doi/10.1177/02698811231211219",
+            "doi": "10.1177/02698811231211219",
+            "authors": "Halman A, Kong G, Sarris J, Perkins D",
+            "year": 2024,
+            "citation_text": "Halman A, Kong G, Sarris J, Perkins D. Drug-drug interactions involving classic psychedelics: A systematic review. Journal of Psychopharmacology. 2024. doi:10.1177/02698811231211219."
+          },
+          {
+            "title": "The pharmacological interaction of compounds in ayahuasca: a systematic review",
+            "url": "https://doi.org/10.1590/1516-4446-2020-0884",
+            "doi": "10.1590/1516-4446-2020-0884",
+            "authors": "Ruffell S, Netzband N, Bird C, Young AH, Juruena MF",
+            "year": 2020,
+            "citation_text": "Ruffell S, Netzband N, Bird C, Young AH, Juruena MF. The pharmacological interaction of compounds in ayahuasca: a systematic review. Brazilian Journal of Psychiatry. 2020. doi:10.1590/1516-4446-2020-0884."
+          },
+          {
+            "title": "Monoamine oxidase inhibitors, opioid analgesics and serotonin toxicity",
+            "url": "https://doi.org/10.1093/bja/aei210",
+            "doi": "10.1093/bja/aei210",
+            "authors": "Gillman PK",
+            "year": 2005,
+            "citation_text": "Gillman PK. Monoamine oxidase inhibitors, opioid analgesics and serotonin toxicity. British Journal of Anaesthesia. 2005. doi:10.1093/bja/aei210."
+          },
+          {
+            "title": "Ayahuasca and Drug Interaction: The Good, the Bad, and the Soul",
+            "url": "https://pharmacy.uconn.edu/wp-content/uploads/sites/2740/2022/01/HO-2-slides-per-page-Ayahuosca-1.pdf",
+            "authors": "Benjamin Malcolm",
+            "year": 2023,
+            "citation_text": "Malcolm B. Ayahuasca and Drug Interaction: The Good, the Bad, and the Soul. 2023."
+          }
+        ]
+      }
     },
     {
       "claim_id": "Benjamin-Malcolm-PharmD-MPH-2023-Ayahuasca-and-Drug-Interaction_8_2ff96bd3d8",
@@ -158,7 +588,93 @@
       "confidence": "low",
       "clinical_actionability": "contraindicated",
       "review_state": "machine_extracted",
-      "notes": "Extracted from Benjamin-Malcolm-PharmD-MPH-2023-Ayahuasca-and-Drug-Interaction using rule-based keyword matching."
+      "notes": "Extracted from Benjamin-Malcolm-PharmD-MPH-2023-Ayahuasca-and-Drug-Interaction using rule-based keyword matching.",
+      "supports_pairs": [
+        [
+          "ayahuasca",
+          "maoi_pharma"
+        ],
+        [
+          "ayahuasca",
+          "ssri"
+        ],
+        [
+          "ayahuasca",
+          "snri"
+        ],
+        [
+          "ayahuasca",
+          "tricyclic_ad"
+        ],
+        [
+          "ayahuasca",
+          "serotonergic_opioids"
+        ],
+        [
+          "antipsychotics",
+          "ayahuasca"
+        ],
+        [
+          "ayahuasca",
+          "methylphenidate"
+        ],
+        [
+          "ayahuasca",
+          "cocaine"
+        ],
+        [
+          "ayahuasca",
+          "mdma_2cx_dox_nbome"
+        ],
+        [
+          "ayahuasca",
+          "clonidine_guanfacine"
+        ],
+        [
+          "ayahuasca",
+          "beta_blockers"
+        ],
+        [
+          "ayahuasca",
+          "calcium_channel_blockers"
+        ]
+      ],
+      "provenance": {
+        "requires_verification": true,
+        "cited_sources": [
+          {
+            "title": "Drug-drug interactions involving classic psychedelics: A systematic review",
+            "url": "https://journals.sagepub.com/doi/10.1177/02698811231211219",
+            "doi": "10.1177/02698811231211219",
+            "authors": "Halman A, Kong G, Sarris J, Perkins D",
+            "year": 2024,
+            "citation_text": "Halman A, Kong G, Sarris J, Perkins D. Drug-drug interactions involving classic psychedelics: A systematic review. Journal of Psychopharmacology. 2024. doi:10.1177/02698811231211219."
+          },
+          {
+            "title": "The pharmacological interaction of compounds in ayahuasca: a systematic review",
+            "url": "https://doi.org/10.1590/1516-4446-2020-0884",
+            "doi": "10.1590/1516-4446-2020-0884",
+            "authors": "Ruffell S, Netzband N, Bird C, Young AH, Juruena MF",
+            "year": 2020,
+            "citation_text": "Ruffell S, Netzband N, Bird C, Young AH, Juruena MF. The pharmacological interaction of compounds in ayahuasca: a systematic review. Brazilian Journal of Psychiatry. 2020. doi:10.1590/1516-4446-2020-0884."
+          },
+          {
+            "title": "Monoamine oxidase inhibitors, opioid analgesics and serotonin toxicity",
+            "url": "https://doi.org/10.1093/bja/aei210",
+            "doi": "10.1093/bja/aei210",
+            "authors": "Gillman PK",
+            "year": 2005,
+            "citation_text": "Gillman PK. Monoamine oxidase inhibitors, opioid analgesics and serotonin toxicity. British Journal of Anaesthesia. 2005. doi:10.1093/bja/aei210."
+          },
+          {
+            "title": "Ayahuasca and Drug Interaction: The Good, the Bad, and the Soul",
+            "url": "https://pharmacy.uconn.edu/wp-content/uploads/sites/2740/2022/01/HO-2-slides-per-page-Ayahuosca-1.pdf",
+            "authors": "Benjamin Malcolm",
+            "year": 2023,
+            "citation_text": "Malcolm B. Ayahuasca and Drug Interaction: The Good, the Bad, and the Soul. 2023."
+          }
+        ]
+      }
     },
     {
       "claim_id": "Benjamin-Malcolm-PharmD-MPH-2023-Ayahuasca-and-Drug-Interaction_9_4f756e3b9a",
@@ -184,7 +700,93 @@
       "confidence": "low",
       "clinical_actionability": "none",
       "review_state": "machine_extracted",
-      "notes": "Extracted from Benjamin-Malcolm-PharmD-MPH-2023-Ayahuasca-and-Drug-Interaction using rule-based keyword matching."
+      "notes": "Extracted from Benjamin-Malcolm-PharmD-MPH-2023-Ayahuasca-and-Drug-Interaction using rule-based keyword matching.",
+      "supports_pairs": [
+        [
+          "ayahuasca",
+          "maoi_pharma"
+        ],
+        [
+          "ayahuasca",
+          "ssri"
+        ],
+        [
+          "ayahuasca",
+          "snri"
+        ],
+        [
+          "ayahuasca",
+          "tricyclic_ad"
+        ],
+        [
+          "ayahuasca",
+          "serotonergic_opioids"
+        ],
+        [
+          "antipsychotics",
+          "ayahuasca"
+        ],
+        [
+          "ayahuasca",
+          "methylphenidate"
+        ],
+        [
+          "ayahuasca",
+          "cocaine"
+        ],
+        [
+          "ayahuasca",
+          "mdma_2cx_dox_nbome"
+        ],
+        [
+          "ayahuasca",
+          "clonidine_guanfacine"
+        ],
+        [
+          "ayahuasca",
+          "beta_blockers"
+        ],
+        [
+          "ayahuasca",
+          "calcium_channel_blockers"
+        ]
+      ],
+      "provenance": {
+        "requires_verification": true,
+        "cited_sources": [
+          {
+            "title": "Drug-drug interactions involving classic psychedelics: A systematic review",
+            "url": "https://journals.sagepub.com/doi/10.1177/02698811231211219",
+            "doi": "10.1177/02698811231211219",
+            "authors": "Halman A, Kong G, Sarris J, Perkins D",
+            "year": 2024,
+            "citation_text": "Halman A, Kong G, Sarris J, Perkins D. Drug-drug interactions involving classic psychedelics: A systematic review. Journal of Psychopharmacology. 2024. doi:10.1177/02698811231211219."
+          },
+          {
+            "title": "The pharmacological interaction of compounds in ayahuasca: a systematic review",
+            "url": "https://doi.org/10.1590/1516-4446-2020-0884",
+            "doi": "10.1590/1516-4446-2020-0884",
+            "authors": "Ruffell S, Netzband N, Bird C, Young AH, Juruena MF",
+            "year": 2020,
+            "citation_text": "Ruffell S, Netzband N, Bird C, Young AH, Juruena MF. The pharmacological interaction of compounds in ayahuasca: a systematic review. Brazilian Journal of Psychiatry. 2020. doi:10.1590/1516-4446-2020-0884."
+          },
+          {
+            "title": "Monoamine oxidase inhibitors, opioid analgesics and serotonin toxicity",
+            "url": "https://doi.org/10.1093/bja/aei210",
+            "doi": "10.1093/bja/aei210",
+            "authors": "Gillman PK",
+            "year": 2005,
+            "citation_text": "Gillman PK. Monoamine oxidase inhibitors, opioid analgesics and serotonin toxicity. British Journal of Anaesthesia. 2005. doi:10.1093/bja/aei210."
+          },
+          {
+            "title": "Ayahuasca and Drug Interaction: The Good, the Bad, and the Soul",
+            "url": "https://pharmacy.uconn.edu/wp-content/uploads/sites/2740/2022/01/HO-2-slides-per-page-Ayahuosca-1.pdf",
+            "authors": "Benjamin Malcolm",
+            "year": 2023,
+            "citation_text": "Malcolm B. Ayahuasca and Drug Interaction: The Good, the Bad, and the Soul. 2023."
+          }
+        ]
+      }
     }
   ]
 }

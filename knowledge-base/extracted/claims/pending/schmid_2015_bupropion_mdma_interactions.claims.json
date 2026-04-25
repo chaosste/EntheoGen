@@ -23,7 +23,26 @@
       "confidence": "low",
       "clinical_actionability": "none",
       "review_state": "machine_extracted",
-      "notes": "Extracted from schmid_2015_bupropion_mdma_interactions using rule-based keyword matching."
+      "notes": "Extracted from schmid_2015_bupropion_mdma_interactions using rule-based keyword matching.",
+      "supports_pairs": [
+        [
+          "mdma_2cx_dox_nbome",
+          "ndri_bupropion"
+        ]
+      ],
+      "provenance": {
+        "requires_verification": false,
+        "cited_sources": [
+          {
+            "title": "Interactions between bupropion and 3,4-Methylenedioxymethamphetamine in healthy subjects",
+            "url": "https://doi.org/10.1124/jpet.114.222356",
+            "doi": "10.1124/jpet.114.222356",
+            "authors": "Schmid Y, Hysek CM, Simmler LD, Crockett MG, Quednow BB, Liechti ME",
+            "year": 2015,
+            "citation_text": "Schmid Y, Hysek CM, Simmler LD, Crockett MG, Quednow BB, Liechti ME. Interactions between bupropion and 3,4-Methylenedioxymethamphetamine in healthy subjects. Journal of Pharmacology and Experimental Therapeutics. 2015. doi:10.1124/jpet.114.222356."
+          }
+        ]
+      }
     },
     {
       "claim_id": "schmid_2015_bupropion_mdma_interactions_2_e0ddea4e52",
@@ -45,7 +64,26 @@
       "confidence": "low",
       "clinical_actionability": "none",
       "review_state": "machine_extracted",
-      "notes": "Extracted from schmid_2015_bupropion_mdma_interactions using rule-based keyword matching."
+      "notes": "Extracted from schmid_2015_bupropion_mdma_interactions using rule-based keyword matching.",
+      "supports_pairs": [
+        [
+          "mdma_2cx_dox_nbome",
+          "ndri_bupropion"
+        ]
+      ],
+      "provenance": {
+        "requires_verification": false,
+        "cited_sources": [
+          {
+            "title": "Interactions between bupropion and 3,4-Methylenedioxymethamphetamine in healthy subjects",
+            "url": "https://doi.org/10.1124/jpet.114.222356",
+            "doi": "10.1124/jpet.114.222356",
+            "authors": "Schmid Y, Hysek CM, Simmler LD, Crockett MG, Quednow BB, Liechti ME",
+            "year": 2015,
+            "citation_text": "Schmid Y, Hysek CM, Simmler LD, Crockett MG, Quednow BB, Liechti ME. Interactions between bupropion and 3,4-Methylenedioxymethamphetamine in healthy subjects. Journal of Pharmacology and Experimental Therapeutics. 2015. doi:10.1124/jpet.114.222356."
+          }
+        ]
+      }
     },
     {
       "claim_id": "schmid_2015_bupropion_mdma_interactions_4_bf29a0d3ab",
@@ -67,7 +105,26 @@
       "confidence": "low",
       "clinical_actionability": "none",
       "review_state": "machine_extracted",
-      "notes": "Extracted from schmid_2015_bupropion_mdma_interactions using rule-based keyword matching."
+      "notes": "Extracted from schmid_2015_bupropion_mdma_interactions using rule-based keyword matching.",
+      "supports_pairs": [
+        [
+          "mdma_2cx_dox_nbome",
+          "ndri_bupropion"
+        ]
+      ],
+      "provenance": {
+        "requires_verification": false,
+        "cited_sources": [
+          {
+            "title": "Interactions between bupropion and 3,4-Methylenedioxymethamphetamine in healthy subjects",
+            "url": "https://doi.org/10.1124/jpet.114.222356",
+            "doi": "10.1124/jpet.114.222356",
+            "authors": "Schmid Y, Hysek CM, Simmler LD, Crockett MG, Quednow BB, Liechti ME",
+            "year": 2015,
+            "citation_text": "Schmid Y, Hysek CM, Simmler LD, Crockett MG, Quednow BB, Liechti ME. Interactions between bupropion and 3,4-Methylenedioxymethamphetamine in healthy subjects. Journal of Pharmacology and Experimental Therapeutics. 2015. doi:10.1124/jpet.114.222356."
+          }
+        ]
+      }
     },
     {
       "claim_id": "schmid_2015_bupropion_mdma_interactions_7_492dff19c4",
@@ -89,7 +146,26 @@
       "confidence": "low",
       "clinical_actionability": "none",
       "review_state": "machine_extracted",
-      "notes": "Extracted from schmid_2015_bupropion_mdma_interactions using rule-based keyword matching."
+      "notes": "Extracted from schmid_2015_bupropion_mdma_interactions using rule-based keyword matching.",
+      "supports_pairs": [
+        [
+          "mdma_2cx_dox_nbome",
+          "ndri_bupropion"
+        ]
+      ],
+      "provenance": {
+        "requires_verification": false,
+        "cited_sources": [
+          {
+            "title": "Interactions between bupropion and 3,4-Methylenedioxymethamphetamine in healthy subjects",
+            "url": "https://doi.org/10.1124/jpet.114.222356",
+            "doi": "10.1124/jpet.114.222356",
+            "authors": "Schmid Y, Hysek CM, Simmler LD, Crockett MG, Quednow BB, Liechti ME",
+            "year": 2015,
+            "citation_text": "Schmid Y, Hysek CM, Simmler LD, Crockett MG, Quednow BB, Liechti ME. Interactions between bupropion and 3,4-Methylenedioxymethamphetamine in healthy subjects. Journal of Pharmacology and Experimental Therapeutics. 2015. doi:10.1124/jpet.114.222356."
+          }
+        ]
+      }
     },
     {
       "claim_id": "schmid_2015_bupropion_mdma_interactions_8_4876d61f97",
@@ -111,7 +187,26 @@
       "confidence": "low",
       "clinical_actionability": "none",
       "review_state": "machine_extracted",
-      "notes": "Extracted from schmid_2015_bupropion_mdma_interactions using rule-based keyword matching."
+      "notes": "Extracted from schmid_2015_bupropion_mdma_interactions using rule-based keyword matching.",
+      "supports_pairs": [
+        [
+          "mdma_2cx_dox_nbome",
+          "ndri_bupropion"
+        ]
+      ],
+      "provenance": {
+        "requires_verification": false,
+        "cited_sources": [
+          {
+            "title": "Interactions between bupropion and 3,4-Methylenedioxymethamphetamine in healthy subjects",
+            "url": "https://doi.org/10.1124/jpet.114.222356",
+            "doi": "10.1124/jpet.114.222356",
+            "authors": "Schmid Y, Hysek CM, Simmler LD, Crockett MG, Quednow BB, Liechti ME",
+            "year": 2015,
+            "citation_text": "Schmid Y, Hysek CM, Simmler LD, Crockett MG, Quednow BB, Liechti ME. Interactions between bupropion and 3,4-Methylenedioxymethamphetamine in healthy subjects. Journal of Pharmacology and Experimental Therapeutics. 2015. doi:10.1124/jpet.114.222356."
+          }
+        ]
+      }
     },
     {
       "claim_id": "schmid_2015_bupropion_mdma_interactions_9_c714c90574",
@@ -133,7 +228,26 @@
       "confidence": "low",
       "clinical_actionability": "contraindicated",
       "review_state": "machine_extracted",
-      "notes": "Extracted from schmid_2015_bupropion_mdma_interactions using rule-based keyword matching."
+      "notes": "Extracted from schmid_2015_bupropion_mdma_interactions using rule-based keyword matching.",
+      "supports_pairs": [
+        [
+          "mdma_2cx_dox_nbome",
+          "ndri_bupropion"
+        ]
+      ],
+      "provenance": {
+        "requires_verification": false,
+        "cited_sources": [
+          {
+            "title": "Interactions between bupropion and 3,4-Methylenedioxymethamphetamine in healthy subjects",
+            "url": "https://doi.org/10.1124/jpet.114.222356",
+            "doi": "10.1124/jpet.114.222356",
+            "authors": "Schmid Y, Hysek CM, Simmler LD, Crockett MG, Quednow BB, Liechti ME",
+            "year": 2015,
+            "citation_text": "Schmid Y, Hysek CM, Simmler LD, Crockett MG, Quednow BB, Liechti ME. Interactions between bupropion and 3,4-Methylenedioxymethamphetamine in healthy subjects. Journal of Pharmacology and Experimental Therapeutics. 2015. doi:10.1124/jpet.114.222356."
+          }
+        ]
+      }
     },
     {
       "claim_id": "schmid_2015_bupropion_mdma_interactions_10_cf1f35b844",
@@ -156,7 +270,26 @@
       "confidence": "low",
       "clinical_actionability": "none",
       "review_state": "machine_extracted",
-      "notes": "Extracted from schmid_2015_bupropion_mdma_interactions using rule-based keyword matching."
+      "notes": "Extracted from schmid_2015_bupropion_mdma_interactions using rule-based keyword matching.",
+      "supports_pairs": [
+        [
+          "mdma_2cx_dox_nbome",
+          "ndri_bupropion"
+        ]
+      ],
+      "provenance": {
+        "requires_verification": false,
+        "cited_sources": [
+          {
+            "title": "Interactions between bupropion and 3,4-Methylenedioxymethamphetamine in healthy subjects",
+            "url": "https://doi.org/10.1124/jpet.114.222356",
+            "doi": "10.1124/jpet.114.222356",
+            "authors": "Schmid Y, Hysek CM, Simmler LD, Crockett MG, Quednow BB, Liechti ME",
+            "year": 2015,
+            "citation_text": "Schmid Y, Hysek CM, Simmler LD, Crockett MG, Quednow BB, Liechti ME. Interactions between bupropion and 3,4-Methylenedioxymethamphetamine in healthy subjects. Journal of Pharmacology and Experimental Therapeutics. 2015. doi:10.1124/jpet.114.222356."
+          }
+        ]
+      }
     }
   ]
 }
