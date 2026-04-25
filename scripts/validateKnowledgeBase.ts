@@ -66,6 +66,8 @@ const run = async (): Promise<void> => {
   const dataset = await readJson<InteractionDatasetV2>(datasetPath);
 
   const errors: string[] = [];
+  const warnings: string[] = [];
+  const sourceTypeById = new Map(manifest.sources.map((source) => [source.source_id, source.source_type] as const));
 
   for (const [index, source] of manifest.sources.entries()) {
     errors.push(...validateSchemaSubset(sourceSchema, source, `$.sources[${index}]`).map((issue) => `${issue.path}: ${issue.message}`));
@@ -83,6 +85,36 @@ const run = async (): Promise<void> => {
     for (const { file, packageRecord } of packages) {
       for (const claim of packageRecord.claims) {
         errors.push(...validateClaim(claim, claimSchema));
+        const sourceType = sourceTypeById.get(claim.source_id);
+        const isPerplexityClaim =
+          claim.provenance?.source_type === 'ai_synthesis' ||
+          sourceType === 'ai_synthesis' ||
+          claim.source_id.startsWith('perplexity_');
+
+        if (isPerplexityClaim) {
+          if (claim.provenance?.requires_verification !== true) {
+            errors.push(`Perplexity claim missing provenance.requires_verification: ${claim.claim_id}`);
+          }
+          if (claim.provenance?.ingestion_method !== 'perplexity_ingestion_v1') {
+            errors.push(`Perplexity claim missing provenance.ingestion_method: ${claim.claim_id}`);
+          }
+          if (claim.evidence_strength && claim.evidence_strength !== 'theoretical') {
+            errors.push(`Perplexity claim must remain theoretical until corroborated: ${claim.claim_id}`);
+          }
+          if (claim.confidence && claim.confidence !== 'low') {
+            errors.push(`Perplexity claim must remain low confidence until corroborated: ${claim.claim_id}`);
+          }
+          if (claim.review_state === 'machine_extracted') {
+            warnings.push(`Perplexity claim still machine_extracted instead of needs_verification: ${claim.claim_id}`);
+          }
+          if (claim.review_state === 'human_reviewed' && claim.provenance?.requires_verification === true) {
+            warnings.push(`Perplexity claim human_reviewed while still requiring verification: ${claim.claim_id}`);
+          }
+          if (claim.clinical_actionability === 'contraindicated') {
+            errors.push(`Perplexity claim may not auto-promote to contraindicated: ${claim.claim_id}`);
+          }
+        }
+
         if (!sourceIds.has(claim.source_id)) {
           errors.push(`unknown source_id in claim ${claim.claim_id}: ${claim.source_id}`);
         }
@@ -110,18 +142,35 @@ const run = async (): Promise<void> => {
         errors.push(`dataset source ref ${ref.source_id} is missing from dataset.sources in ${pair.key}`);
       }
     }
+    const aiRefs = pair.evidence.source_refs.filter((ref) => ref.match_type === 'ai_synthesis' || ref.source_type === 'ai_synthesis');
+    const onlyAiRefs = aiRefs.length > 0 && aiRefs.length === pair.evidence.source_refs.length;
+    if (onlyAiRefs && pair.classification.code === 'DETERMINISTIC') {
+      errors.push(`Perplexity-only evidence may not produce deterministic classification in ${pair.key}`);
+    }
+    if (onlyAiRefs && pair.evidence.status === 'supported') {
+      errors.push(`Perplexity-only evidence may not be marked supported in ${pair.key}`);
+    }
+    if (aiRefs.length > 0 && pair.evidence.support_type !== 'ai_synthesis' && onlyAiRefs) {
+      errors.push(`Perplexity-only evidence must retain ai_synthesis support type in ${pair.key}`);
+    }
   }
 
   if (errors.length > 0) {
     for (const error of errors) {
       console.error(`ERROR: ${error}`);
     }
+    for (const warning of warnings) {
+      console.warn(`WARN: ${warning}`);
+    }
     console.error(`KB validation failed with ${errors.length} error(s)`);
     process.exitCode = 1;
     return;
   }
 
-  console.log('KB validation complete. errors=0');
+  for (const warning of warnings) {
+    console.warn(`WARN: ${warning}`);
+  }
+  console.log(`KB validation complete. errors=0 warnings=${warnings.length}`);
 };
 
 run().catch((error) => {
