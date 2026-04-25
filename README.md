@@ -134,6 +134,41 @@ src/
     low-confidence.csv
     missing-evidence.csv
 ```
+
+## Architecture Diagram
+
+```mermaid
+graph TD
+
+A[Substances] --> B[Interaction Pairs]
+
+B --> C[Classification]
+B --> D[Mechanism]
+B --> E[Evidence]
+B --> F[Provenance]
+B --> G[Audit]
+
+E --> H[Sources]
+
+G --> I[Validation Flags]
+G --> J[Derived Reports]
+```
+
+---
+
+## 2. Data Flow (Migration Pipeline)
+```mermaid
+flowchart LR
+  V1["interaction_pairs.json v1"] --> M["migrateInteractionsToV2"]
+  M --> V2["interactionDatasetV2.json"]
+
+  V2 --> VAL["validateInteractionsV2"]
+  V2 --> REP["generateInteractionReports"]
+
+  REP --> OUT1["unknown.csv"]
+  REP --> OUT2["low-confidence.csv"]
+  REP --> OUT3["missing-evidence.csv"]
+```
 ⸻
 
 ## Quick Start
