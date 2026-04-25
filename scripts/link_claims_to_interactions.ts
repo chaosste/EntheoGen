@@ -19,9 +19,13 @@ import type { InteractionDatasetV2, InteractionPairV2, SourceV2 } from '../src/d
 type LinkedSourceRef = {
   source_id: string;
   claim_id: string;
-  match_type: 'direct_pair' | 'drug_class' | 'mechanism' | 'adjacent_domain';
+  match_type: 'direct_pair' | 'drug_class' | 'mechanism' | 'adjacent_domain' | 'ai_synthesis';
   evidence_strength: 'strong' | 'moderate' | 'weak' | 'theoretical';
+  confidence?: 'high' | 'medium' | 'low';
+  requires_verification?: boolean;
   review_state: 'human_reviewed';
+  source_type?: 'ai_synthesis' | 'primary_source' | 'secondary_source' | 'field_guidance' | 'internal_research_update' | 'generated_placeholder' | 'none';
+  notes?: string;
 };
 
 const mechanismHintMap = new Map<string, string[]>([
@@ -77,6 +81,9 @@ const determineMatchType = (claim: ClaimRecord, pair: InteractionPairV2): Linked
   return null;
 };
 
+const isAiSynthesisClaim = (claim: ClaimRecord, source?: SourceManifestEntry): boolean =>
+  source?.source_type === 'ai_synthesis' || claim.provenance?.source_type === 'ai_synthesis';
+
 const loadClaimPackages = async (dirPath: string): Promise<ClaimPackage[]> => {
   const entries = await (await import('node:fs/promises')).readdir(dirPath, { withFileTypes: true }).catch(() => []);
   const packages: ClaimPackage[] = [];
@@ -104,11 +111,14 @@ const upsertDatasetSource = (
 const applyClaimToPair = (
   pair: InteractionPairV2,
   claim: ClaimRecord,
-  matchType: LinkedSourceRef['match_type']
+  matchType: Exclude<LinkedSourceRef['match_type'], 'ai_synthesis'>,
+  source: SourceManifestEntry | undefined,
+  sourceType: LinkedSourceRef['source_type']
 ): boolean => {
   if (pair.classification.code === 'SELF') return false;
 
-  const evidenceStrength = claim.evidence_strength ?? 'weak';
+  const isAiSynthesis = isAiSynthesisClaim(claim, source);
+  const evidenceStrength = isAiSynthesis ? 'theoretical' : (claim.evidence_strength ?? 'weak');
   const newRank = sourceStrengthRank(evidenceStrength);
   const existingIndices = pair.evidence.source_refs
     .map((ref, index) => ({ ref, index }))
@@ -131,10 +141,19 @@ const applyClaimToPair = (
   pair.evidence.source_refs.push({
     source_id: claim.source_id,
     claim_id: claim.claim_id,
-    match_type: matchType,
+    match_type: isAiSynthesis ? 'ai_synthesis' : matchType,
     evidence_strength: evidenceStrength,
-    review_state: 'human_reviewed'
+    confidence: isAiSynthesis ? 'low' : claim.confidence,
+    requires_verification: isAiSynthesis ? true : undefined,
+    review_state: 'human_reviewed',
+    source_type: sourceType,
+    notes: isAiSynthesis ? `Perplexity claim linked via ${matchType}` : undefined
   });
+
+  if (isAiSynthesis && pair.evidence.status !== 'supported' && pair.evidence.status !== 'conflicting_evidence') {
+    pair.evidence.status = 'provisional_secondary';
+    pair.evidence.support_type = 'ai_synthesis';
+  }
   return true;
 };
 
@@ -159,6 +178,10 @@ const run = async (): Promise<void> => {
   for (const claimPackage of reviewedPackages) {
     for (const claim of claimPackage.claims) {
       if (claim.review_state !== 'human_reviewed') continue;
+      const source = sourceById.get(claim.source_id);
+      const sourceType = isAiSynthesisClaim(claim, source)
+        ? 'ai_synthesis'
+        : sourceManifestToDatasetSourceType(source?.source_type ?? 'pharmacology_reference');
 
       const matches = new Map<string, LinkedSourceRef['match_type']>();
       for (const pair of dataset.pairs) {
@@ -176,17 +199,17 @@ const run = async (): Promise<void> => {
         const pair = dataset.pairs.find((item) => item.key === pairKey);
         if (!pair) continue;
         if (pair.classification.code === 'SELF') continue;
-        upsertDatasetSource(dataset, sourceById.get(claim.source_id) ?? {
+        upsertDatasetSource(dataset, source ?? {
           source_id: claim.source_id,
           title: claim.source_id,
-          source_type: 'pharmacology_reference',
+          source_type: sourceType,
           authority_level: 'contextual',
           evidence_domain: 'pharmacological',
           url_or_path: claimPackage.source_path,
           file_refs: [claimPackage.source_path],
           review_state: 'validated'
         });
-        if (applyClaimToPair(pair, claim, matchType)) {
+        if (applyClaimToPair(pair, claim, matchType as Exclude<LinkedSourceRef['match_type'], 'ai_synthesis'>, source, sourceType)) {
           linkedCount += 1;
         }
       }
