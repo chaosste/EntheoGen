@@ -2,22 +2,28 @@
 	
 <!-- BADGES:START -->
 ![Schema Version](https://img.shields.io/badge/schema-v2.2.0-blue)
-![Interactions](https://img.shields.io/badge/interactions-561-informational)
-![Substances](https://img.shields.io/badge/substances-33-informational)
-![Validation](https://img.shields.io/badge/validation-tiered-brightgreen)
+![Interactions](https://img.shields.io/badge/interactions-708-informational)
+![Substances](https://img.shields.io/badge/substances-52-informational)
+![Validation](https://img.shields.io/badge/validation-strict-brightgreen)
 ![Build](https://img.shields.io/badge/typescript-compile%20pass-brightgreen)
-![Status](https://img.shields.io/badge/status-active%20development-orange)
-![Data Model](https://img.shields.io/badge/model-knowledge%20graph-purple)
+![Status](https://img.shields.io/badge/status-evidence%20gated-orange)
+![Evidence Gate](https://img.shields.io/badge/evidence-gated-red)
+![Review Pipeline](https://img.shields.io/badge/review-human--in--loop-blue)
+![Claims Status](https://img.shields.io/badge/claims-pending%20enriched-yellow)
+![Linking](https://img.shields.io/badge/linking-awaiting%20review-lightgrey)
+![Provenance](https://img.shields.io/badge/provenance-citation%20required-blue)
+![Sources](https://img.shields.io/badge/sources-peer--review%20preferred-green)
 ![Uncertainty](https://img.shields.io/badge/uncertainty-explicit-lightgrey)
-![Evidence Model](https://img.shields.io/badge/evidence-multistate-blueviolet)
-![Provenance](https://img.shields.io/badge/provenance-explicit-blue)
-![Sources](https://img.shields.io/badge/sources-linked-green)
 ![Inference](https://img.shields.io/badge/inference-mechanistic-yellow)
-![License](https://img.shields.io/badge/license-research%20use-lightgrey)
-![Deterministic](https://img.shields.io/badge/deterministic-2-blue)
-![Theoretical](https://img.shields.io/badge/theoretical-4-yellow)
-![Inferred](https://img.shields.io/badge/inferred-TBD-lightgrey)
-![Source Coverage](https://img.shields.io/badge/source--coverage->90%25-green)
+![Harm Reduction](https://img.shields.io/badge/harm--reduction-primary-critical)
+![Clinical Risk](https://img.shields.io/badge/risk-modelled-important)
+![Serotonin Toxicity](https://img.shields.io/badge/focus-serotonergic%20interactions-purple)
+![Data Model](https://img.shields.io/badge/model-knowledge%20graph-purple)
+![Deterministic](https://img.shields.io/badge/deterministic-enforced-blue)
+![Pair Matching](https://img.shields.io/badge/pair--matching-normalized-success)
+![Review Status](https://img.shields.io/badge/review-in%20progress-yellow)
+![Evidence Coverage](https://img.shields.io/badge/evidence-expanding-blue)
+![Knowledge State](https://img.shields.io/badge/state-validated%20%7C%20awaiting%20review-blueviolet)
 <!-- BADGES:END -->
 	
 # 🌿 EntheoGen Plant Medicine Interaction Guide
@@ -81,9 +87,19 @@ EntheoGen's data model is mapped specifically to sacramental substances often us
 
 ⸻
 
-[Full version release notes and more in project wiki](https://github.com/chaosste/EntheoGen/wiki).
+## EntheoGen v3 — Impact Statement
 
-⸻
+Transitions from a static dataset to a **strictly evidence-gated knowledge system**
+
+Enforces **human-reviewed, citation-backed claims** before any interaction is linked
+
+Introduces **deterministic validation + transparent audit pipelines** (no silent failures)
+
+Separates **mechanistic inference from verified evidence** to preserve harm-reduction integrity
+
+Establishes a foundation for **clinically and ceremonially credible interaction intelligence**
+
+[Full version release notes and more in project wiki](https://github.com/chaosste/EntheoGen/wiki).
 
 # We need YOUR entheogenic knowledge
 
