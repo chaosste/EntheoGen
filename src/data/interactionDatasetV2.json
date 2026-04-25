@@ -63858,6 +63858,76 @@
       "source_type": "secondary_source",
       "reliability": "unknown",
       "fingerprint": "9a6fca1a81b1db3abda63770c94372929430814b4401263e4f6c23f90f8c6600"
+    },
+    {
+      "id": "alma_ayahuasca_interactions_dataset",
+      "title": "Alma Healing Center Ayahuasca and Medication Interactions",
+      "source_type": "secondary_source",
+      "reliability": "unknown",
+      "fingerprint": "27eab972ac5e9571c98d380907e081cb460abd056373de3ab10f7e394cfff1d8"
+    },
+    {
+      "id": "Benjamin-Malcolm-PharmD-MPH-2023-Ayahuasca-and-Drug-Interaction",
+      "title": "Benjamin Malcolm PharmD MPH 2023 Ayahuasca And Drug Interaction",
+      "source_type": "field_guidance",
+      "reliability": "unknown",
+      "fingerprint": "e2dc62098c2cf74c0e52d56b5ca11d1af13966ad2c34841acabe5abfdcf74495"
+    },
+    {
+      "id": "gillman_2005_maoi_opioid_serotonin_toxicity",
+      "title": "Gillman 2005 Maoi Opioid Serotonin Toxicity",
+      "source_type": "primary_source",
+      "reliability": "unknown",
+      "fingerprint": "5c34b0840c36f49f637fca915334dc52461445284609b095cf8713977e6cb46a"
+    },
+    {
+      "id": "halman_psychedelic_ddi_2023",
+      "title": "Halman Et Al 2023 Drug Drug Interactions Involving Classic Psychedelics A Systematic Review",
+      "source_type": "primary_source",
+      "reliability": "unknown",
+      "fingerprint": "08f14cba34ecca28eb13f44aea77e638f99c3ddec88ac3b594c2557d88d13c7b"
+    },
+    {
+      "id": "Halman-et-al-2023-Drug-drug-interactions-involving-classic-psychedelics-a-systematic-review",
+      "title": "Halman Et Al 2023 Drug Drug Interactions Involving Classic Psychedelics A Systematic Review",
+      "source_type": "primary_source",
+      "reliability": "unknown",
+      "fingerprint": "ada3f1b049e1906b90173a7bdec3dbe0568f87084142996935af6869e4eb24cd"
+    },
+    {
+      "id": "malcolm_ayahuasca_drug_interactions_2023",
+      "title": "Benjamin Malcolm PharmD MPH 2023 Ayahuasca And Drug Interaction",
+      "source_type": "field_guidance",
+      "reliability": "unknown",
+      "fingerprint": "e29fe0b04ff0736fcabd36cd9af7c17662b36d54857ca78a5fb0b93c622b684c"
+    },
+    {
+      "id": "perplexity_ayahuasca_interactions_synthesis_2026",
+      "title": "Perplexity Ayahuasca Interactions Synthesis 2026",
+      "source_type": "field_guidance",
+      "reliability": "unknown",
+      "fingerprint": "82300322663139e0bc194e37972c0023b00ba326315772aca421ca5098c70f81"
+    },
+    {
+      "id": "ruffell_ayahuasca_interactions_2020",
+      "title": "Ruffell Et Al 2020 The Pharmacological Interaction Of Compounds In Ayahuasca A Systemic Review",
+      "source_type": "primary_source",
+      "reliability": "unknown",
+      "fingerprint": "5f86f690ac778031f0caf7af2ed10ced0053df94705834c0bc903862e307d87c"
+    },
+    {
+      "id": "Ruffell-et-al-2020-The Pharmacological-interaction-of-compounds-in-ayahuasca-a-systemic-review",
+      "title": "Ruffell Et Al 2020 The Pharmacological Interaction Of Compounds In Ayahuasca A Systemic Review",
+      "source_type": "primary_source",
+      "reliability": "unknown",
+      "fingerprint": "6cbfb674fc073ca0ac21a8f5f76ba2f865a7101428d8a1c3be94c71dd25e2650"
+    },
+    {
+      "id": "schmid_2015_bupropion_mdma_interactions",
+      "title": "Schmid 2015 Bupropion Mdma Interactions",
+      "source_type": "primary_source",
+      "reliability": "unknown",
+      "fingerprint": "29e7a36d5f10a41a1caab96aeab20ff402ec6e6677c0897e0becd9660461d5ef"
     }
   ]
 }
