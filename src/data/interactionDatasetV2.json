@@ -153,7 +153,7 @@
         "headline": "Same entity selected; this is not an interaction pair.",
         "mechanism": null,
         "timing_guidance": null,
-        "field_notes": null
+        "field_notes": "Avoid overlapping peak use. If ketamine is used within a few days of ayahuasca, do so only with medical screening and BP/HR monitoring in a setting prepared to manage airway compromise, seizures, hypertensive events, or severe agitation. Seek urgent care for serotonin-toxicity signs, severe headache, chest pain, shortness of breath, seizure activity, loss of consciousness, or repeated vomiting with reduced responsiveness."
       },
       "mechanism": {
         "primary_category": "unknown",
@@ -1899,23 +1899,25 @@
         "ketamine"
       ],
       "classification": {
-        "code": "UNSAFE",
+        "code": "CAUTION",
         "status": "low_confidence",
         "confidence": "low",
-        "risk_score": 4,
-        "label": "Unsafe / High Risk"
+        "risk_score": 3,
+        "label": "Caution / Moderate Risk"
       },
       "clinical_summary": {
-        "headline": "Same-session ayahuasca plus ketamine is a poor fit: dissociation, sedation, impaired mobility, and purge-related aspiration/fall risk outweigh any novelty value.",
-        "mechanism": "Ketamine adds dissociation and motor impairment rather than a clean serotonergic synergy. Ayahuasca adds vomiting, autonomic swings, and intense perceptual disruption, so the combination is operationally unsafe even without a known receptor-level crisis mechanism.",
-        "timing_guidance": null,
+        "headline": "Caution interaction with low confidence, driven by plausible additive blood-pressure/heart-rate load, serotonergic-stack concerns, and dissociation plus purge-related operational risk.",
+        "mechanism": "Ayahuasca combines DMT with reversible harmala MAO-A inhibition, creating serotonergic psychedelic effects, monoamine elevation, and moderate blood-pressure and heart-rate increases. Ketamine primarily acts as an NMDA antagonist but can acutely increase blood pressure and heart rate through sympathetic activation and monoaminergic effects. Ketamine plus pharmaceutical MAOIs has produced mostly mild transient BP/HR rises in small monitored clinical series, without clear serotonin-syndrome or hypertensive-crisis signals, but ayahuasca plus ketamine has not been directly studied. During overlapping effects, additive hemodynamic load, serotonergic polypharmacy risk, dissociation, vomiting, falls, aspiration, confusion, and impaired help-seeking are the main concerns.",
+        "timing_guidance": "Avoid ketamine for at least 2–3 days after ayahuasca as a conservative spacing heuristic, especially when other serotonergic drugs are present.",
         "field_notes": null
       },
       "mechanism": {
-        "primary_category": "glutamatergic_dissociation",
+        "primary_category": "cardiovascular_load",
         "categories": [
+          "cardiovascular_load",
+          "maoi_potentiation",
+          "serotonergic_toxicity",
           "glutamatergic_dissociation",
-          "dehydration_or_electrolyte_risk",
           "operational_or_behavioral_risk"
         ]
       },
@@ -1924,11 +1926,31 @@
         "support_type": "mechanistic",
         "source_refs": [
           {
-            "source_id": "entheogen_interactions_research_update",
+            "source_id": "ketamine_maoi_augmentation_safety_pubmed",
+            "support_type": "indirect"
+          },
+          {
+            "source_id": "ketamine_maoi_concurrent_use_pmc",
+            "support_type": "indirect"
+          },
+          {
+            "source_id": "ayahuasca_pharmacological_interaction_pmc",
             "support_type": "mechanistic"
+          },
+          {
+            "source_id": "ketamine_psychiatric_medication_interactions_ijnp",
+            "support_type": "indirect"
+          },
+          {
+            "source_id": "ketamine_norepinephrine_pmc",
+            "support_type": "mechanistic"
+          },
+          {
+            "source_id": "malcolm_ayahuasca_drug_interaction_2022",
+            "support_type": "indirect"
           }
         ],
-        "evidence_gaps": "No formal ketamine-ayahuasca interaction studies were identified; current guidance is mostly based on operational risk and scattered reports."
+        "evidence_gaps": "No direct human trials or case series specifically examining ayahuasca plus ketamine taken together were identified. Risk estimates are extrapolated from ayahuasca MAOI/serotonergic pharmacology, ketamine plus pharmaceutical MAOI reports, ketamine hemodynamic data, and general harm-reduction principles for dissociation during purging psychedelic states."
       },
       "source_text": "entheogen-interactions-research-update",
       "source_fingerprint": "8da8c85ff41da84cd1e40db9387a2d8021787792624a78383595bcd7bd0ea642",
@@ -1944,7 +1966,6 @@
       },
       "audit": {
         "validation_flags": [
-          "missing_timing",
           "low_confidence"
         ],
         "review_status": "needs_review"
@@ -33999,11 +34020,41 @@
       "fingerprint": "3825b5aace9f730eea9dd512b78d153b20bf45775ba43f8e63b8fe1ed1300109"
     },
     {
+      "id": "ayahuasca_pharmacological_interaction_pmc",
+      "title": "Ayahuasca Pharmacological Interaction",
+      "source_type": "primary_source",
+      "reliability": "unknown"
+    },
+    {
       "id": "entheogen_interactions_research_update",
       "title": "Entheogen Interactions Research Update",
       "source_type": "internal_research_update",
       "reliability": "unknown",
       "fingerprint": "d30fd2f7cad9a4c835af7fbc23d4f755108340eb81ecb22c09f9d6b77ee3aa1c"
+    },
+    {
+      "id": "ketamine_maoi_augmentation_safety_pubmed",
+      "title": "Ketamine MAOI Augmentation Safety",
+      "source_type": "primary_source",
+      "reliability": "unknown"
+    },
+    {
+      "id": "ketamine_maoi_concurrent_use_pmc",
+      "title": "Ketamine MAOI Concurrent Use",
+      "source_type": "primary_source",
+      "reliability": "unknown"
+    },
+    {
+      "id": "ketamine_norepinephrine_pmc",
+      "title": "Ketamine Norepinephrine",
+      "source_type": "primary_source",
+      "reliability": "unknown"
+    },
+    {
+      "id": "ketamine_psychiatric_medication_interactions_ijnp",
+      "title": "Ketamine Psychiatric Medication Interactions",
+      "source_type": "primary_source",
+      "reliability": "unknown"
     },
     {
       "id": "malcolm_ayahuasca_drug_interaction_2022",

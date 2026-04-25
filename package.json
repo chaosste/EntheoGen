@@ -12,6 +12,8 @@
     "migrate:interactions:v2": "tsx scripts/migrateInteractionsToV2.ts",
     "validate:interactions:v2": "tsx scripts/validateInteractionsV2.ts",
     "reports:interactions": "tsx scripts/generateInteractionReports.ts",
+    "reports:parse": "tsx scripts/parseInteractionReports.ts",
+    "updates:test-parser": "tsx scripts/testParseInteractionReports.ts",
     "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
