@@ -1,6 +1,19 @@
 <div align="center">
 	
 <!-- BADGES:START -->
+![Schema Version](https://img.shields.io/badge/schema-v2.2.0-blue)
+![Interactions](https://img.shields.io/badge/interactions-561-informational)
+![Substances](https://img.shields.io/badge/substances-33-informational)
+![Validation](https://img.shields.io/badge/validation-tiered-brightgreen)
+![Build](https://img.shields.io/badge/typescript-compile%20pass-brightgreen)
+![Status](https://img.shields.io/badge/status-active%20development-orange)
+![Data Model](https://img.shields.io/badge/model-knowledge%20graph-purple)
+![Uncertainty](https://img.shields.io/badge/uncertainty-explicit-lightgrey)
+![Evidence Model](https://img.shields.io/badge/evidence-multistate-blueviolet)
+![Provenance](https://img.shields.io/badge/provenance-explicit-blue)
+![Sources](https://img.shields.io/badge/sources-linked-green)
+![Inference](https://img.shields.io/badge/inference-mechanistic-yellow)
+![License](https://img.shields.io/badge/license-research%20use-lightgrey)
 <!-- BADGES:END -->
 	
 # 🌿 EntheoGen Plant Medicine Interaction Guide
