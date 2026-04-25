@@ -1,7 +1,9 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import type {
+import { DRUGS, LEGEND, classifyMechanismCategory, resolveInteraction } from '../src/data/drugData';
+import { isAggregateNodeId, splitAggregateNode, splitAggregatePair } from '../src/data/aggregateNodeDecomposition';
+import {
   ConfidenceLevel,
   DerivationType,
   EvidenceSupportType,
@@ -11,8 +13,18 @@ import type {
   InteractionStatus,
   MechanismCategoryV2,
   SourceKind,
-  ValidationFlagV2
+  ValidationFlagV2,
+  MECHANISM_CATEGORIES_V2,
+  type ValidationFlagsBySeverityV2,
+  type InteractionPairV2
 } from '../src/data/interactionSchemaV2';
+import {
+  groupValidationFlags,
+  inferEvidenceStatus,
+  inferReviewState,
+  isConflictingEvidenceText
+} from '../src/data/evidenceEpistemics';
+import { linkSourceRefsForPair } from '../src/data/sourceLinking';
 
 interface InteractionPairV1 {
   substance_a_id: string;
@@ -33,6 +45,7 @@ interface InteractionPairV1 {
   sources: string;
   source_refs: string[];
   source_fingerprint: string;
+  rationale?: string;
 }
 
 interface DrugRow {
@@ -51,11 +64,17 @@ const outputPath = path.join(root, 'src/data/interactionDatasetV2.json');
 const codeMap: Record<string, InteractionCodeV2> = {
   SELF: 'SELF',
   UNK: 'UNKNOWN',
+  UNKNOWN: 'UNKNOWN',
+  INFERRED: 'INFERRED',
+  THEORETICAL: 'THEORETICAL',
   LOW: 'LOW',
   LOW_MOD: 'LOW_MOD',
   CAU: 'CAUTION',
+  CAUTION: 'CAUTION',
   UNS: 'UNSAFE',
-  DAN: 'DANGEROUS'
+  UNSAFE: 'UNSAFE',
+  DAN: 'DANGEROUS',
+  DANGEROUS: 'DANGEROUS'
 };
 
 const derivationMap: Record<string, DerivationType> = {
@@ -65,9 +84,11 @@ const derivationMap: Record<string, DerivationType> = {
   unknown: 'generated_unknown'
 };
 
-const riskByCode: Record<InteractionCodeV2, number> = {
+const riskByCode: Record<string, number | null> = {
   SELF: -1,
   UNKNOWN: 0,
+  INFERRED: null,
+  THEORETICAL: 2,
   LOW: 1,
   LOW_MOD: 2,
   CAUTION: 3,
@@ -90,18 +111,96 @@ const mechanismKeywordRules: Array<{ category: MechanismCategoryV2; patterns: Re
   { category: 'maoi_potentiation', patterns: [/\bmao\b/i, /\bmaoi\b/i, /harmala/i, /harmine/i, /harmaline/i] },
   { category: 'serotonergic_toxicity', patterns: [/serotonin syndrome/i, /serotonergic crisis/i, /\bssri\b/i, /\bsnri\b/i, /5-ht/i] },
   { category: 'cardiovascular_load', patterns: [/blood pressure/i, /heart rate/i, /cardiovascular/i, /tachycardia/i, /hypertension/i] },
+  { category: 'hemodynamic_interaction', patterns: [/hemodynamic/i, /blood pressure/i, /heart rate/i] },
   { category: 'sympathomimetic_load', patterns: [/stimulant/i, /amphetamine/i, /cocaine/i, /methylphenidate/i, /catecholamine/i] },
   { category: 'seizure_threshold', patterns: [/seizure/i, /seizure threshold/i, /lithium/i, /bupropion/i] },
   { category: 'anticholinergic_delirium', patterns: [/anticholinergic/i, /atropine/i, /scopolamine/i, /hyoscyamine/i, /delirium/i] },
-  { category: 'glutamatergic_dissociation', patterns: [/ketamine/i, /dissociation/i, /\bnmda\b/i] },
+  { category: 'glutamatergic_dissociation', patterns: [/dissociation/i] },
+  { category: 'glutamate_modulation', patterns: [/\bnmda\b/i, /glutamate modulation/i, /ketamine/i] },
   { category: 'gabaergic_modulation', patterns: [/benzodiazepine/i, /\bgaba\b/i] },
   { category: 'dehydration_or_electrolyte_risk', patterns: [/dehydration/i, /electrolyte/i, /vomiting/i, /diarrhea/i, /purge/i] },
   { category: 'psychiatric_destabilization', patterns: [/panic/i, /psychosis/i, /mania/i, /destabilization/i] },
+  { category: 'pharmacodynamic_cns_depression', patterns: [/cns depressant/i, /sedation/i, /respiratory depression/i] },
+  { category: 'noradrenergic_suppression', patterns: [/alpha-2/i, /alpha 2/i, /sympathetic outflow/i] },
+  { category: 'ion_channel_modulation', patterns: [/ion channel/i, /sodium-channel/i, /sodium channel/i] },
   {
     category: 'operational_or_behavioral_risk',
     patterns: [/falls/i, /aspiration/i, /behavioral disorganization/i, /operational risk/i]
   }
 ];
+
+const mechanismCategorySet = new Set<MechanismCategoryV2>(MECHANISM_CATEGORIES_V2);
+
+const classicPsychedelicIds = new Set([
+  'ayahuasca',
+  'psilocybin',
+  'nn_dmt',
+  'five_meo_dmt',
+  'mescaline_peyote',
+  'yopo',
+  'lsd'
+]);
+
+const serotonergicPartnerIds = new Set([
+  'ssri',
+  'snri',
+  'tricyclic_ad',
+  'maoi_pharma',
+  'atypical_ad',
+  'serotonergic_opioids',
+  'mdma_2cx_dox_nbome'
+]);
+
+const hemodynamicPartnerIds = new Set([
+  'antihypertensives',
+  'beta_blockers',
+  'beta_blockers_ccb',
+  'calcium_channel_blockers',
+  'clonidine',
+  'clonidine_guanfacine',
+  'guanfacine'
+]);
+const stimulantPartnerIds = new Set(['amphetamine_stims', 'methylphenidate', 'cocaine', 'ndri_bupropion', 'mdma_2cx_dox_nbome']);
+
+const deriveMechanismCategoriesFromPair = (a: string, b: string, textCategories: string[]): MechanismCategoryV2[] => {
+  const ids = [a, b];
+  const normalizedTextCategories = textCategories
+    .map((category) => (mechanismCategorySet.has(category as MechanismCategoryV2) ? (category as MechanismCategoryV2) : null))
+    .filter((category): category is MechanismCategoryV2 => Boolean(category));
+  if (normalizedTextCategories.length) {
+    return normalizedTextCategories;
+  }
+
+  if (ids.includes('salvia') && ids.some((id) => classicPsychedelicIds.has(id))) {
+    return ['operational_or_behavioral_risk', 'psychiatric_destabilization'];
+  }
+
+  if (ids.includes('ayahuasca') && ids.includes('five_meo_dmt')) {
+    return ['maoi_potentiation', 'serotonergic_toxicity', 'psychedelic_intensification'];
+  }
+
+  if (ids.filter((id) => classicPsychedelicIds.has(id)).length > 1) {
+    return ['psychedelic_intensification', 'serotonergic_toxicity'];
+  }
+
+  if (ids.some((id) => classicPsychedelicIds.has(id)) && ids.some((id) => serotonergicPartnerIds.has(id))) {
+    return ['serotonergic_toxicity', 'psychedelic_intensification', 'cardiovascular_load'];
+  }
+
+  if (ids.some((id) => classicPsychedelicIds.has(id)) && ids.some((id) => stimulantPartnerIds.has(id))) {
+    return ['sympathomimetic_load', 'cardiovascular_load', 'psychiatric_destabilization'];
+  }
+
+  if (ids.some((id) => classicPsychedelicIds.has(id)) && ids.some((id) => hemodynamicPartnerIds.has(id))) {
+    return ['hemodynamic_interaction', 'cardiovascular_load'];
+  }
+
+  if (ids.some((id) => classicPsychedelicIds.has(id)) && ids.some((id) => id === 'ketamine')) {
+    return ['glutamate_modulation', 'psychedelic_intensification', 'operational_or_behavioral_risk'];
+  }
+
+  return ['psychiatric_destabilization', 'operational_or_behavioral_risk'];
+};
 
 const titleFromSourceId = (sourceId: string): string =>
   sourceId
@@ -113,6 +212,7 @@ const canonicalPairKey = (a: string, b: string): string => [a, b].sort().join('|
 
 const toEvidenceTier = (value: string | null): EvidenceTierV2 => {
   if (!value) return 'not_applicable';
+  if (value === 'theoretical' || value === 'low') return value;
   for (const [regex, mapped] of evidenceTierRules) {
     if (regex.test(value)) return mapped;
   }
@@ -122,7 +222,7 @@ const toEvidenceTier = (value: string | null): EvidenceTierV2 => {
 const toSupportType = (tier: EvidenceTierV2): EvidenceSupportType => {
   if (tier === 'direct_human_data' || tier === 'clinical_guideline') return 'direct';
   if (tier === 'case_report_or_series' || tier === 'observational_report') return 'indirect';
-  if (tier === 'mechanistic_inference') return 'mechanistic';
+  if (tier === 'mechanistic_inference' || tier === 'theoretical' || tier === 'low') return 'mechanistic';
   if (tier === 'field_consensus') return 'field_observation';
   if (tier === 'traditional_use_precedent') return 'traditional_context';
   if (tier === 'source_gap') return 'none';
@@ -131,6 +231,7 @@ const toSupportType = (tier: EvidenceTierV2): EvidenceSupportType => {
 
 const toStatus = (code: InteractionCodeV2, confidence: ConfidenceLevel, origin: DerivationType, evidenceTier: EvidenceTierV2): InteractionStatus => {
   if (code === 'SELF') return 'not_applicable';
+  if (code === 'INFERRED') return 'inferred';
   if (code === 'UNKNOWN') return 'unknown';
   if (confidence === 'low') return 'low_confidence';
   if (evidenceTier === 'source_gap' || evidenceTier === 'not_applicable') return 'missing_evidence';
@@ -162,20 +263,59 @@ const toSourceKind = (sourceId: string): SourceKind => {
   return 'secondary_source';
 };
 
+const deriveReviewNotes = (params: {
+  evidenceStatus: string;
+  reviewState: string;
+  provenanceSource: string;
+  sourceRefIds: string[];
+  summary: string;
+  fieldNotes?: string | null;
+  evidenceGaps?: string | null;
+  code: InteractionCodeV2;
+}): string => {
+  if (params.evidenceStatus === 'not_reviewed') {
+    return params.provenanceSource === 'generated_unknown' || params.sourceRefIds.includes('source_gap')
+      ? 'Generated placeholder or source gap; not yet reviewed.'
+      : 'Record has not been curated yet.';
+  }
+
+  if (params.evidenceStatus === 'no_data') {
+    return 'Reviewed record with no usable direct or indirect evidence.';
+  }
+
+  if (params.evidenceStatus === 'conflicting_evidence') {
+    return 'Evidence summaries indicate disagreement or mixed findings.';
+  }
+
+  if (params.evidenceStatus === 'mechanistic_inference' || params.code === 'THEORETICAL') {
+    return 'Mechanistic inference without direct clinical evidence.';
+  }
+
+  if (params.evidenceStatus === 'supported') {
+    return 'Direct or high-confidence evidence supports this interaction.';
+  }
+
+  if (params.reviewState === 'requires_review') {
+    return 'Ambiguous evidence requires human review.';
+  }
+
+  if (params.summary || params.fieldNotes || params.evidenceGaps) {
+    return 'Epistemic state inferred from existing record metadata.';
+  }
+
+  return 'Epistemic state assigned from migration heuristics.';
+};
+
 const run = async (): Promise<void> => {
   const raw = await readFile(pairsV1Path, 'utf8');
   const pairsV1 = JSON.parse(raw) as InteractionPairV1[];
 
-  let drugRows: DrugRow[] = [];
-  try {
-    const drugModule = await import('../src/data/drugData.ts');
-    drugRows = ((drugModule as { DRUGS?: DrugRow[] }).DRUGS ?? []).map((row) => ({ ...row }));
-  } catch {
-    // Assumption: fallback to ID-only substances when DRUGS cannot be imported in script execution context.
-  }
-
-  const allIds = Array.from(new Set(pairsV1.flatMap((row) => [row.substance_a_id, row.substance_b_id]))).sort();
-  const drugById = new Map(drugRows.map((row) => [row.id, row]));
+  const aggregateNodeIds = ['clonidine_guanfacine', 'beta_blockers_ccb'] as const;
+  const aggregateChildIds = aggregateNodeIds.flatMap((id) => splitAggregateNode(id));
+  const allIds = Array.from(
+    new Set([...pairsV1.flatMap((row) => [row.substance_a_id, row.substance_b_id]), ...aggregateChildIds])
+  ).sort();
+  const drugById = new Map(DRUGS.map((row) => [row.id, row] as const));
 
   const substances = allIds.map((id) => {
     const drug = drugById.get(id);
@@ -190,97 +330,306 @@ const run = async (): Promise<void> => {
 
   const sourceFingerprintById = new Map<string, string>();
   const discoveredSources = new Set<string>();
+  const pairRecords: InteractionPairV2[] = [];
+  const seenActivePairKeys = new Set<string>();
 
-  const pairs = pairsV1.map((row) => {
-    const key = canonicalPairKey(row.substance_a_id, row.substance_b_id);
-    const code = codeMap[row.interaction_code] ?? 'UNKNOWN';
-    const derivationType = derivationMap[row.origin] ?? 'generated_unknown';
-    const confidence = toConfidence(row.confidence);
-    const evidenceTier = toEvidenceTier(row.evidence_tier);
-
-    const mechanismScanText = `${row.mechanism ?? ''}\n${row.summary ?? ''}\n${row.evidence_tier ?? ''}`;
-    const inferredCategories = inferMechanismCategories(mechanismScanText);
-    const primaryCategory = inferredCategories[0] ?? 'unknown';
-
-    const sourceRefIds = (row.source_refs ?? []).filter(Boolean);
-    const sourceRefs = sourceRefIds.map((source_id) => ({
-      source_id,
-      support_type: toSupportType(evidenceTier)
-    }));
-
+  const registerSources = (row: InteractionPairV1, sourceRefIds: string[]) => {
     for (const sourceId of sourceRefIds) {
       discoveredSources.add(sourceId);
       if (!sourceFingerprintById.has(sourceId) && row.source_fingerprint) {
         sourceFingerprintById.set(sourceId, row.source_fingerprint);
       }
     }
+  };
+
+  const buildPairRecord = (
+    row: InteractionPairV1,
+    substanceA: string,
+    substanceB: string,
+    options: {
+      provenanceSource?: InteractionPairV2['provenance']['source'];
+      provenanceMethod?: string;
+      parentNode?: string;
+      parentNodes?: string[];
+      deprecated?: boolean;
+    } = {}
+  ): InteractionPairV2 => {
+    const key = canonicalPairKey(substanceA, substanceB);
+    const resolved = resolveInteraction(substanceA, substanceB);
+    const evidence = resolved.evidence;
+    const confidence = toConfidence(evidence.confidence);
+    const evidenceTier = toEvidenceTier(evidence.evidenceTier ?? row.evidence_tier);
+    let code: InteractionCodeV2 =
+      evidence.code === 'SELF'
+        ? 'SELF'
+        : evidence.code === 'INFERRED'
+          ? 'INFERRED'
+          : evidence.code === 'THEORETICAL'
+            ? 'THEORETICAL'
+            : (codeMap[evidence.code] ?? 'UNKNOWN');
+    if (code === 'UNKNOWN' && substanceA !== substanceB) {
+      code = 'INFERRED';
+    }
+    const mechanismScanText = [
+      evidence.mechanism,
+      evidence.summary,
+      evidence.evidenceTier,
+      evidence.fieldNotes,
+      evidence.riskAssessment?.rationale,
+      evidence.provenance?.rationale
+    ]
+      .filter(Boolean)
+      .join('\n');
+    const inferredCategories = Array.from(
+      new Set(
+        deriveMechanismCategoriesFromPair(
+          substanceA,
+          substanceB,
+          [
+            ...(evidence.mechanismCategory ? [evidence.mechanismCategory] : []),
+            ...(evidence.mechanismCategories ?? []),
+            ...inferMechanismCategories(mechanismScanText)
+          ]
+        )
+      )
+    );
+    const cleanedCategories = inferredCategories.filter((category) => category !== 'unknown');
+    if (!cleanedCategories.length && code !== 'SELF') {
+      cleanedCategories.push(code === 'THEORETICAL' ? 'psychiatric_destabilization' : 'psychiatric_destabilization');
+    }
+    const primaryCategory = cleanedCategories[0] ?? 'unknown';
+    const sourceRefIds = (row.source_refs ?? []).filter(Boolean);
+    const existingSourceRefs = sourceRefIds.map((source_id) => ({ source_id }));
+
+    registerSources(row, sourceRefIds.length ? sourceRefIds : ['source_gap']);
+
+    const provenanceSource =
+      options.provenanceSource ??
+      evidence.provenance?.source ??
+      (resolved.origin === 'self'
+        ? 'self_pair'
+        : code === 'THEORETICAL'
+          ? 'mechanistic_inference'
+          : resolved.origin === 'explicit'
+            ? 'deterministic_mapping_table'
+            : 'heuristic_fallback');
+    const provenanceSourceText = provenanceSource as string;
+    const provenanceConfidenceTier =
+      evidence.provenance?.confidenceTier ??
+      (resolved.origin === 'self'
+        ? 'low'
+        : confidence === 'high'
+          ? 'high'
+          : confidence === 'medium'
+            ? 'medium'
+            : 'low');
+    const derivationType: DerivationType =
+      options.provenanceSource === 'decomposition'
+        ? 'decomposition'
+        : resolved.origin === 'self'
+          ? 'self_pair'
+          : code === 'THEORETICAL'
+            ? 'curated_inference'
+            : resolved.origin === 'explicit'
+              ? 'explicit_source'
+              : 'fallback_rule';
+    const status = toStatus(code, confidence, derivationType, evidenceTier);
+    const riskScore =
+      code === 'SELF'
+        ? -1
+        : code === 'INFERRED'
+          ? null
+          : code === 'THEORETICAL'
+            ? 2
+            : (riskByCode[code] ?? null);
 
     const validationFlags = new Set<ValidationFlagV2>();
-    if (!row.mechanism) validationFlags.add('missing_mechanism');
-    if (!row.timing) validationFlags.add('missing_timing');
-    if (!row.evidence_tier) validationFlags.add('missing_evidence_tier');
-    if (!sourceRefIds.length) validationFlags.add('missing_source');
-    if (confidence === 'low') validationFlags.add('low_confidence');
-    if (code === 'UNKNOWN') validationFlags.add('unknown_classification');
-    if (primaryCategory === 'unknown') validationFlags.add('mechanism_category_unknown');
-    if (sourceRefIds.includes('source_gap')) validationFlags.add('source_gap');
+    if (code !== 'SELF') {
+      if (!evidence.timing && !row.timing) validationFlags.add('missing_timing');
+      if (!sourceRefIds.length) validationFlags.add('missing_source');
+      if (confidence === 'low') validationFlags.add('low_confidence');
+      if (sourceRefIds.includes('source_gap')) {
+        validationFlags.add('source_gap');
+        validationFlags.add('source_gap_unresolved');
+      }
+      if (code === 'THEORETICAL') validationFlags.add('theoretical_interaction');
+      if (code === 'INFERRED') validationFlags.add('inferred_mechanism_added');
+    }
+    if (options.deprecated) validationFlags.add('override_applied');
 
-    const reviewStatus: 'human_reviewed' | 'needs_review' =
-      derivationType === 'self_pair' ||
-      (derivationType === 'explicit_source' && confidence === 'high')
-        ? 'human_reviewed'
-        : 'needs_review';
-
-    const status = toStatus(code, confidence, derivationType, evidenceTier);
+    const sourceRefs = existingSourceRefs.map((ref) => ({
+      ...ref,
+      support_type: toSupportType(evidenceTier)
+    }));
+    const isGeneratedPlaceholder = provenanceSourceText === 'generated_unknown' || sourceRefIds.includes('source_gap');
+    const conflictingEvidence =
+      isConflictingEvidenceText(evidence.summary) ||
+      isConflictingEvidenceText(evidence.fieldNotes) ||
+      isConflictingEvidenceText(evidence.evidenceGaps) ||
+      isConflictingEvidenceText(row.rationale) ||
+      isConflictingEvidenceText(row.sources);
+    const reviewState = inferReviewState({
+      provenanceSource,
+      sourceRefs: sourceRefIds,
+      supportType: toSupportType(evidenceTier),
+      evidenceTier,
+      confidence,
+      code,
+      reviewed:
+        !isGeneratedPlaceholder &&
+        provenanceSourceText !== 'generated_unknown' &&
+        provenanceSource !== 'self_pair',
+      summary: evidence.summary,
+      fieldNotes: evidence.fieldNotes,
+      evidenceGaps: evidence.evidenceGaps,
+      mechanism: evidence.mechanism ?? row.mechanism,
+      explicitDeterministic: provenanceSource === 'deterministic_mapping_table' || derivationType === 'explicit_source',
+      isTheoretical: code === 'THEORETICAL' || evidenceTier === 'theoretical' || provenanceSource === 'mechanistic_inference',
+      isConflicting: conflictingEvidence,
+      isGeneratedPlaceholder,
+      deprecated: options.deprecated
+    });
+    const evidenceStatus = inferEvidenceStatus({
+      provenanceSource: provenanceSourceText,
+      sourceRefs: sourceRefIds,
+      supportType: toSupportType(evidenceTier),
+      evidenceTier,
+      confidence,
+      code,
+      reviewed: reviewState !== 'unreviewed',
+      reviewState,
+      summary: evidence.summary,
+      fieldNotes: evidence.fieldNotes,
+      evidenceGaps: evidence.evidenceGaps,
+      mechanism: evidence.mechanism ?? row.mechanism,
+      explicitDeterministic: provenanceSource === 'deterministic_mapping_table' || derivationType === 'explicit_source',
+      isTheoretical: code === 'THEORETICAL' || evidenceTier === 'theoretical' || provenanceSource === 'mechanistic_inference',
+      isConflicting: conflictingEvidence,
+      isGeneratedPlaceholder,
+      deprecated: options.deprecated
+    });
+    const reviewNotes = deriveReviewNotes({
+      evidenceStatus,
+      reviewState,
+      provenanceSource: provenanceSourceText,
+      sourceRefIds,
+      summary: evidence.summary,
+      fieldNotes: evidence.fieldNotes,
+      evidenceGaps: evidence.evidenceGaps,
+      code
+    });
+    const groupedValidation = groupValidationFlags(Array.from(validationFlags)) as ValidationFlagsBySeverityV2;
+    const auditReviewStatus: 'human_reviewed' | 'needs_review' =
+      reviewState === 'human_reviewed' ? 'human_reviewed' : 'needs_review';
 
     return {
       key,
-      substances: [key.split('|')[0], key.split('|')[1]] as [string, string],
+      substances: [substanceA, substanceB] as [string, string],
       classification: {
         code,
         status,
         confidence,
-        risk_score: riskByCode[code],
-        label: row.interaction_label
+        risk_score: riskScore,
+        label:
+          code === 'SELF'
+            ? LEGEND.SELF.label
+            : evidence.label ?? row.interaction_label ?? (code === 'THEORETICAL' ? LEGEND.THEORETICAL.label : undefined),
+        risk_assessment: evidence.riskAssessment
       },
       clinical_summary: {
-        headline: row.summary,
-        mechanism: row.mechanism,
-        timing_guidance: row.timing,
-        field_notes: row.field_notes
+        headline: evidence.summary,
+        mechanism: evidence.mechanism ?? row.mechanism,
+        timing_guidance: evidence.timing ?? row.timing,
+        field_notes: evidence.fieldNotes ?? row.field_notes
       },
       mechanism: {
         primary_category: primaryCategory,
-        categories: Array.from(new Set(inferredCategories))
+        categories: Array.from(new Set(cleanedCategories.length ? cleanedCategories : inferredCategories)) as MechanismCategoryV2[]
       },
       evidence: {
         tier: evidenceTier,
         support_type: toSupportType(evidenceTier),
         source_refs: sourceRefs,
-        evidence_gaps: row.evidence_gaps
+        status: evidenceStatus,
+        review_state: reviewState,
+        review_notes: reviewNotes,
+        evidence_gaps: evidence.evidenceGaps ?? row.evidence_gaps
       },
-      source_text: row.sources,
+      source_text: row.sources ?? evidence.sources,
       source_fingerprint: row.source_fingerprint,
       provenance: {
         derivation_type: derivationType,
         origin_value_v1: row.origin,
+        source: provenanceSource,
+        confidence_tier: provenanceConfidenceTier,
+        method: options.provenanceMethod ?? evidence.provenance?.method,
+        rationale: evidence.provenance?.rationale ?? row.rationale,
+        parent_node: options.parentNode,
+        parent_nodes: options.parentNodes,
+        deprecated: options.deprecated ? true : undefined,
         migrated_from_v1: true as const,
         migration_version: 'v1_to_v2' as const,
         migrated_at: new Date().toISOString()
       },
       override_metadata: {
-        // Assumption: overrides are not explicitly represented in v1 rows, so default false.
         applied: false
       },
       audit: {
         validation_flags: Array.from(validationFlags),
-        review_status: reviewStatus
+        review_status: auditReviewStatus
+      },
+      validation: {
+        flags: groupedValidation
       }
     };
-  });
+  };
+
+  const pushPairRecord = (record: InteractionPairV2, active: boolean) => {
+    if (active) {
+      if (seenActivePairKeys.has(record.key)) return;
+      seenActivePairKeys.add(record.key);
+    }
+    pairRecords.push(record);
+  };
+
+  for (const row of pairsV1) {
+    const aggregateIds = [row.substance_a_id, row.substance_b_id].filter(isAggregateNodeId);
+    const isAggregateRow = aggregateIds.length > 0;
+
+    if (isAggregateRow) {
+      const originalRecord = buildPairRecord(row, row.substance_a_id, row.substance_b_id, {
+        provenanceSource: 'decomposition',
+        provenanceMethod: 'aggregate_node_split_v1',
+        parentNode: aggregateIds.length === 1 ? aggregateIds[0] : undefined,
+        parentNodes: aggregateIds.length > 1 ? aggregateIds : undefined,
+        deprecated: true
+      });
+      pushPairRecord(originalRecord, false);
+
+      const expandedPairs =
+        row.substance_a_id === row.substance_b_id && isAggregateNodeId(row.substance_a_id)
+          ? splitAggregateNode(row.substance_a_id).map((id) => [id, id] as [string, string])
+          : splitAggregatePair(row.substance_a_id, row.substance_b_id);
+      for (const [left, right] of expandedPairs) {
+        const childAggregateIds = [left, right].filter(isAggregateNodeId);
+        const childRecord = buildPairRecord(row, left, right, {
+          provenanceSource: 'decomposition',
+          provenanceMethod: 'aggregate_node_split_v1',
+          parentNode: childAggregateIds.length === 1 ? childAggregateIds[0] : undefined,
+          parentNodes: childAggregateIds.length > 1 ? childAggregateIds : aggregateIds,
+          deprecated: false
+        });
+        pushPairRecord(childRecord, true);
+      }
+      continue;
+    }
+
+    const activeRecord = buildPairRecord(row, row.substance_a_id, row.substance_b_id);
+    pushPairRecord(activeRecord, true);
+  }
 
   // Preserve source text fallback semantics by adding source IDs parsed from source text when refs are absent.
-  for (const pair of pairs) {
+  for (const pair of pairRecords) {
     if (!pair.evidence.source_refs.length && pair.source_text) {
       const tokens = pair.source_text
         .split(/[;,]/)
@@ -308,16 +657,55 @@ const run = async (): Promise<void> => {
       fingerprint: sourceFingerprintById.get(id)
     }));
 
+  const sourceLibrary = sources;
+  for (const pair of pairRecords) {
+    const linkedSources = linkSourceRefsForPair({
+      substanceA: pair.substances[0],
+      substanceB: pair.substances[1],
+      mechanismCategories: pair.mechanism.categories,
+      code: pair.classification.code,
+      reviewState: pair.evidence.review_state,
+      sourceText: pair.source_text,
+      existingSourceRefs: pair.evidence.source_refs,
+      sourceLibrary
+    });
+
+    pair.evidence.source_refs = linkedSources.sourceRefs;
+    pair.evidence.support_type = linkedSources.supportType;
+    pair.evidence.evidence_strength = linkedSources.evidenceStrength;
+    pair.evidence.status = linkedSources.evidenceStatus;
+    pair.provenance.source_linking_method = linkedSources.sourceLinkingMethod;
+    pair.provenance.source_linking_confidence = linkedSources.sourceLinkingConfidence;
+    if (!linkedSources.unresolved && pair.evidence.review_state === 'unreviewed') {
+      pair.evidence.review_state = 'machine_inferred';
+      pair.evidence.review_notes = pair.evidence.review_notes ?? 'Source-linked from the existing curated library.';
+    }
+
+    const validationFlags = new Set(pair.audit.validation_flags);
+    validationFlags.delete('missing_source');
+    validationFlags.delete('source_gap');
+    validationFlags.delete('source_gap_unresolved');
+    if (linkedSources.unresolved) {
+      validationFlags.add('source_gap');
+      validationFlags.add('source_gap_unresolved');
+    }
+    pair.audit.validation_flags = Array.from(validationFlags);
+    pair.audit.review_status = pair.evidence.review_state === 'human_reviewed' ? 'human_reviewed' : 'needs_review';
+    pair.validation = {
+      flags: groupValidationFlags(pair.audit.validation_flags) as ValidationFlagsBySeverityV2
+    };
+  }
+
   const dataset: InteractionDatasetV2 = {
     schema_version: 'v2',
     generated_at: new Date().toISOString(),
     substances,
-    pairs,
+    pairs: pairRecords,
     sources
   };
 
   await writeFile(outputPath, `${JSON.stringify(dataset, null, 2)}\n`, 'utf8');
-  console.log(`Migrated ${pairs.length} interactions to ${path.relative(root, outputPath)}`);
+  console.log(`Migrated ${pairRecords.length} interactions to ${path.relative(root, outputPath)}`);
 };
 
 run().catch((error) => {

@@ -1,0 +1,388 @@
+[
+  {
+    "key": "ketamine|lamotrigine",
+    "substances": [
+      "ketamine",
+      "lamotrigine"
+    ],
+    "classification": {
+      "code": "LOW_MOD",
+      "status": "inferred",
+      "confidence": "low",
+      "risk_score": 2,
+      "label": "Low\u2013Moderate / Mechanistic Caution"
+    },
+    "clinical_summary": {
+      "headline": "Mechanistically plausible interaction: lamotrigine may attenuate some ketamine-related glutamatergic/dissociative effects; major acute toxicity is not strongly predicted, but monitor CNS effects and mood response.",
+      "mechanism": "Lamotrigine inhibits voltage-sensitive sodium channels and reduces presynaptic glutamate release, while ketamine produces NMDA antagonism with downstream glutamatergic signaling. The main concern is pharmacodynamic modulation of ketamine response rather than a clear additive toxicity signal.",
+      "timing_guidance": "Do not assume ketamine dose requirements from response alone. Monitor acute dissociation, sedation, blood pressure, and post-session mood response; medication changes should be clinician-directed because abrupt lamotrigine interruption can destabilize mood or seizure control.",
+      "field_notes": "Provisional inference only. Avoid interpreting a blunted ketamine experience as treatment failure without reviewing lamotrigine dose, indication, seizure history, and clinical objectives."
+    },
+    "mechanism": {
+      "primary_category": "glutamatergic_dissociation",
+      "categories": [
+        "glutamatergic_dissociation",
+        "cns_depression",
+        "psychiatric_destabilization"
+      ]
+    },
+    "evidence": {
+      "tier": "mechanistic_inference",
+      "support_type": "mechanistic",
+      "source_refs": [
+        {
+          "source_id": "ketamine_psychiatric_medication_interactions_ijnp",
+          "support_type": "indirect"
+        },
+        {
+          "source_id": "ketamine_norepinephrine_pmc",
+          "support_type": "mechanistic"
+        }
+      ],
+      "evidence_gaps": "No direct pair-specific safety classification was loaded in the source dataset; this entry is inferred from known pharmacology and should be reviewed against primary clinical literature."
+    },
+    "source_text": "provisional pharmacological inference: Lamotrigine inhibits voltage-sensitive sodium channels and reduces presynaptic glutamate release, while ketamine produces NMDA antagonism with downstream glutamatergic signaling. The main concern is pharmacodynamic modulation of ketamine response rather than a clear additive toxicity signal.",
+    "source_fingerprint": "e7d39d371ca4380e845451e542cb4083a9f944fa20084b768856cb36ec68d896",
+    "provenance": {
+      "derivation_type": "curated_inference",
+      "origin_value_v1": "unknown",
+      "migrated_from_v1": true,
+      "migration_version": "v1_to_v2",
+      "migrated_at": "2026-04-25T00:00:00.000Z"
+    },
+    "override_metadata": {
+      "applied": true,
+      "override_id": "provisional_pharmacology_fill_2026_04_25",
+      "reason": "Filled prior UNKNOWN/source_gap pair with mechanistic pharmacological inference and provisional risk grade."
+    },
+    "audit": {
+      "validation_flags": [
+        "low_confidence"
+      ],
+      "review_status": "needs_review",
+      "validation_notes": [
+        "Provisional inference; requires clinical/pharmacology review before production use."
+      ]
+    }
+  },
+  {
+    "key": "clonidine_guanfacine|lamotrigine",
+    "substances": [
+      "clonidine_guanfacine",
+      "lamotrigine"
+    ],
+    "classification": {
+      "code": "LOW_MOD",
+      "status": "inferred",
+      "confidence": "low",
+      "risk_score": 2,
+      "label": "Low\u2013Moderate / Additive CNS or BP Caution"
+    },
+    "clinical_summary": {
+      "headline": "Possible additive sedation, dizziness, cognitive slowing, and orthostatic effects; severe interaction is not strongly predicted from mechanism alone.",
+      "mechanism": "Clonidine and guanfacine are central alpha-2 agonists that reduce sympathetic outflow and can cause sedation, bradycardia, hypotension, and dizziness. Lamotrigine can contribute dizziness, somnolence, ataxia, or cognitive slowing in some patients, creating a plausible additive tolerability burden.",
+      "timing_guidance": "Use caution during initiation, titration, missed doses, or dose increases. Monitor blood pressure, heart rate, dizziness, sedation, falls risk, and functional impairment, especially with dehydration or other sedatives.",
+      "field_notes": "Risk is higher in patients with baseline hypotension/bradycardia, frailty, concurrent sedatives, or rapid alpha-2 agonist titration."
+    },
+    "mechanism": {
+      "primary_category": "cns_depression",
+      "categories": [
+        "cns_depression",
+        "cardiovascular_load",
+        "operational_or_behavioral_risk"
+      ]
+    },
+    "evidence": {
+      "tier": "mechanistic_inference",
+      "support_type": "mechanistic",
+      "source_refs": [
+        {
+          "source_id": "source_gap",
+          "support_type": "none"
+        }
+      ],
+      "evidence_gaps": "Pair-specific curated source absent; populated from class pharmacology and expected adverse-effect overlap."
+    },
+    "source_text": "provisional pharmacological inference: Clonidine and guanfacine are central alpha-2 agonists that reduce sympathetic outflow and can cause sedation, bradycardia, hypotension, and dizziness. Lamotrigine can contribute dizziness, somnolence, ataxia, or cognitive slowing in some patients, creating a plausible additive tolerability burden.",
+    "source_fingerprint": "17d9c7e1e51e424f469d063f2b4e1dd92af6efe271563845822dc53c62f5b87a",
+    "provenance": {
+      "derivation_type": "curated_inference",
+      "origin_value_v1": "unknown",
+      "migrated_from_v1": true,
+      "migration_version": "v1_to_v2",
+      "migrated_at": "2026-04-25T00:00:00.000Z"
+    },
+    "override_metadata": {
+      "applied": true,
+      "override_id": "provisional_pharmacology_fill_2026_04_25",
+      "reason": "Filled prior UNKNOWN/source_gap pair with mechanistic pharmacological inference and provisional risk grade."
+    },
+    "audit": {
+      "validation_flags": [
+        "low_confidence"
+      ],
+      "review_status": "needs_review",
+      "validation_notes": [
+        "Provisional inference; requires clinical/pharmacology review before production use."
+      ]
+    }
+  },
+  {
+    "key": "beta_blockers_ccb|lamotrigine",
+    "substances": [
+      "beta_blockers_ccb",
+      "lamotrigine"
+    ],
+    "classification": {
+      "code": "LOW_MOD",
+      "status": "inferred",
+      "confidence": "low",
+      "risk_score": 2,
+      "label": "Low\u2013Moderate / Cardiovascular and Dizziness Caution"
+    },
+    "clinical_summary": {
+      "headline": "Potential additive dizziness, fatigue, hypotension, bradycardia, or conduction-related symptoms depending on the beta-blocker or calcium-channel blocker involved.",
+      "mechanism": "Beta-blockers reduce heart rate and sympathetic cardiac drive; non-dihydropyridine calcium-channel blockers can reduce AV-node conduction, while dihydropyridines primarily vasodilate. Lamotrigine is not primarily cardiovascular, but dizziness, ataxia, and rare conduction concerns make additive tolerability monitoring prudent in susceptible patients.",
+      "timing_guidance": "Monitor BP/HR and symptoms after starting or increasing cardiovascular agents or lamotrigine. Use extra caution in known conduction disease, syncope history, electrolyte disturbance, older age, or polypharmacy.",
+      "field_notes": "This cluster is over-broad: beta-blockers, verapamil/diltiazem, and dihydropyridine CCBs should eventually be split because risk mechanisms differ."
+    },
+    "mechanism": {
+      "primary_category": "cardiovascular_load",
+      "categories": [
+        "cardiovascular_load",
+        "qt_or_arrhythmia_risk",
+        "cns_depression",
+        "operational_or_behavioral_risk"
+      ]
+    },
+    "evidence": {
+      "tier": "mechanistic_inference",
+      "support_type": "mechanistic",
+      "source_refs": [
+        {
+          "source_id": "beta_blockers_statpearls",
+          "support_type": "indirect"
+        }
+      ],
+      "evidence_gaps": "No pair-specific source was linked; inference is driven by cardiovascular class effects and lamotrigine tolerability profile."
+    },
+    "source_text": "provisional pharmacological inference: Beta-blockers reduce heart rate and sympathetic cardiac drive; non-dihydropyridine calcium-channel blockers can reduce AV-node conduction, while dihydropyridines primarily vasodilate. Lamotrigine is not primarily cardiovascular, but dizziness, ataxia, and rare conduction concerns make additive tolerability monitoring prudent in susceptible patients.",
+    "source_fingerprint": "be064889080e72fff1e2dc18d558e8e014fd0c65bad265bb54b4353ea66297bc",
+    "provenance": {
+      "derivation_type": "curated_inference",
+      "origin_value_v1": "unknown",
+      "migrated_from_v1": true,
+      "migration_version": "v1_to_v2",
+      "migrated_at": "2026-04-25T00:00:00.000Z"
+    },
+    "override_metadata": {
+      "applied": true,
+      "override_id": "provisional_pharmacology_fill_2026_04_25",
+      "reason": "Filled prior UNKNOWN/source_gap pair with mechanistic pharmacological inference and provisional risk grade."
+    },
+    "audit": {
+      "validation_flags": [
+        "low_confidence"
+      ],
+      "review_status": "needs_review",
+      "validation_notes": [
+        "Provisional inference; requires clinical/pharmacology review before production use."
+      ]
+    }
+  },
+  {
+    "key": "clonidine_guanfacine|ketamine",
+    "substances": [
+      "clonidine_guanfacine",
+      "ketamine"
+    ],
+    "classification": {
+      "code": "CAUTION",
+      "status": "inferred",
+      "confidence": "medium",
+      "risk_score": 3,
+      "label": "Caution / Hemodynamic and CNS Monitoring"
+    },
+    "clinical_summary": {
+      "headline": "Alpha-2 agonists may blunt ketamine-associated sympathetic activation but can add sedation, dizziness, bradycardia, hypotension, or rebound hypertension risk if interrupted.",
+      "mechanism": "Ketamine can increase blood pressure and heart rate through sympathetic/noradrenergic effects. Clonidine and guanfacine reduce central sympathetic outflow, which may counter some pressor response but also increases risk of oversedation, hypotension, bradycardia, or unstable hemodynamics around missed or withdrawn doses.",
+      "timing_guidance": "Check baseline BP/HR and monitor during ketamine exposure. Avoid abrupt discontinuation of clonidine/guanfacine before ketamine. Consider higher-acuity monitoring for cardiovascular disease, syncope history, high ketamine doses, or concurrent sedatives.",
+      "field_notes": "Potentially useful attenuation of sympathetic surge does not equal benign interaction; hemodynamic direction may vary by dose, tolerance, route, and setting."
+    },
+    "mechanism": {
+      "primary_category": "cardiovascular_load",
+      "categories": [
+        "cardiovascular_load",
+        "cns_depression",
+        "glutamatergic_dissociation",
+        "operational_or_behavioral_risk"
+      ]
+    },
+    "evidence": {
+      "tier": "mechanistic_inference",
+      "support_type": "mechanistic",
+      "source_refs": [
+        {
+          "source_id": "ketamine_norepinephrine_pmc",
+          "support_type": "mechanistic"
+        },
+        {
+          "source_id": "ketamine_psychiatric_medication_interactions_ijnp",
+          "support_type": "indirect"
+        }
+      ],
+      "evidence_gaps": "Direct pair-specific clinical evidence not curated; classification is based on opposing sympathetic effects plus additive CNS tolerability concerns."
+    },
+    "source_text": "provisional pharmacological inference: Ketamine can increase blood pressure and heart rate through sympathetic/noradrenergic effects. Clonidine and guanfacine reduce central sympathetic outflow, which may counter some pressor response but also increases risk of oversedation, hypotension, bradycardia, or unstable hemodynamics around missed or withdrawn doses.",
+    "source_fingerprint": "eabdfe38b4b0fd98974a79e7fdcbe5ea7c3d9db415860de2104db1cc5e09a40b",
+    "provenance": {
+      "derivation_type": "curated_inference",
+      "origin_value_v1": "unknown",
+      "migrated_from_v1": true,
+      "migration_version": "v1_to_v2",
+      "migrated_at": "2026-04-25T00:00:00.000Z"
+    },
+    "override_metadata": {
+      "applied": true,
+      "override_id": "provisional_pharmacology_fill_2026_04_25",
+      "reason": "Filled prior UNKNOWN/source_gap pair with mechanistic pharmacological inference and provisional risk grade."
+    },
+    "audit": {
+      "validation_flags": [],
+      "review_status": "needs_review",
+      "validation_notes": [
+        "Provisional inference; requires clinical/pharmacology review before production use."
+      ]
+    }
+  },
+  {
+    "key": "beta_blockers_ccb|ketamine",
+    "substances": [
+      "beta_blockers_ccb",
+      "ketamine"
+    ],
+    "classification": {
+      "code": "CAUTION",
+      "status": "inferred",
+      "confidence": "medium",
+      "risk_score": 3,
+      "label": "Caution / Hemodynamic Monitoring"
+    },
+    "clinical_summary": {
+      "headline": "Ketamine can raise BP/HR, while beta-blockers or CCBs may blunt compensation or expose bradycardia, hypotension, conduction effects, or inadequately controlled hypertension.",
+      "mechanism": "Ketamine has sympathomimetic/noradrenergic cardiovascular effects. Beta-blockers reduce chronotropic/inotropic responses; non-dihydropyridine CCBs affect AV-node conduction and contractility; dihydropyridine CCBs vasodilate. The interaction is hemodynamic rather than metabolic and depends strongly on the specific agent.",
+      "timing_guidance": "Screen for uncontrolled hypertension, arrhythmia, structural heart disease, syncope, and conduction disease. Monitor BP/HR during ketamine exposure; avoid unsupervised dose changes to cardiovascular medications around ketamine sessions.",
+      "field_notes": "Split this node into beta-blockers, non-dihydropyridine CCBs, and dihydropyridine CCBs for more accurate risk grading."
+    },
+    "mechanism": {
+      "primary_category": "cardiovascular_load",
+      "categories": [
+        "cardiovascular_load",
+        "qt_or_arrhythmia_risk",
+        "glutamatergic_dissociation",
+        "operational_or_behavioral_risk"
+      ]
+    },
+    "evidence": {
+      "tier": "mechanistic_inference",
+      "support_type": "mechanistic",
+      "source_refs": [
+        {
+          "source_id": "ketamine_norepinephrine_pmc",
+          "support_type": "mechanistic"
+        },
+        {
+          "source_id": "beta_blockers_statpearls",
+          "support_type": "indirect"
+        },
+        {
+          "source_id": "cardiovascular_safety_psychedelic_medicine_2023",
+          "support_type": "indirect"
+        }
+      ],
+      "evidence_gaps": "Specific risk differs materially by cardiovascular agent; current cluster prevents precise classification."
+    },
+    "source_text": "provisional pharmacological inference: Ketamine has sympathomimetic/noradrenergic cardiovascular effects. Beta-blockers reduce chronotropic/inotropic responses; non-dihydropyridine CCBs affect AV-node conduction and contractility; dihydropyridine CCBs vasodilate. The interaction is hemodynamic rather than metabolic and depends strongly on the specific agent.",
+    "source_fingerprint": "e18098a4b61f59da8682116d6631d45730bf03601cdfff8ea1c5220d84abcaff",
+    "provenance": {
+      "derivation_type": "curated_inference",
+      "origin_value_v1": "unknown",
+      "migrated_from_v1": true,
+      "migration_version": "v1_to_v2",
+      "migrated_at": "2026-04-25T00:00:00.000Z"
+    },
+    "override_metadata": {
+      "applied": true,
+      "override_id": "provisional_pharmacology_fill_2026_04_25",
+      "reason": "Filled prior UNKNOWN/source_gap pair with mechanistic pharmacological inference and provisional risk grade."
+    },
+    "audit": {
+      "validation_flags": [],
+      "review_status": "needs_review",
+      "validation_notes": [
+        "Provisional inference; requires clinical/pharmacology review before production use."
+      ]
+    }
+  },
+  {
+    "key": "beta_blockers_ccb|clonidine_guanfacine",
+    "substances": [
+      "beta_blockers_ccb",
+      "clonidine_guanfacine"
+    ],
+    "classification": {
+      "code": "CAUTION",
+      "status": "inferred",
+      "confidence": "medium",
+      "risk_score": 3,
+      "label": "Caution / Bradycardia-Hypotension and Withdrawal Risk"
+    },
+    "clinical_summary": {
+      "headline": "Clinically plausible additive bradycardia, hypotension, dizziness, fatigue, and conduction risk; clonidine withdrawal while on beta-blockade may worsen rebound hypertension.",
+      "mechanism": "Alpha-2 agonists reduce sympathetic outflow and can lower heart rate and blood pressure. Beta-blockers reduce cardiac sympathetic response; non-dihydropyridine CCBs can further slow AV conduction. Combined use can produce excessive bradycardia/hypotension, and abrupt alpha-2 agonist withdrawal can create rebound sympathetic activation that may be harder to compensate for under beta-blockade.",
+      "timing_guidance": "Monitor BP/HR during co-initiation and titration. Avoid abrupt clonidine/guanfacine discontinuation. Use extra caution in conduction disease, baseline bradycardia, syncope, frailty, dehydration, or multiple antihypertensives.",
+      "field_notes": "This should be upgraded to a more specific rule once clonidine, guanfacine, beta-blockers, diltiazem/verapamil, and dihydropyridine CCBs are represented separately."
+    },
+    "mechanism": {
+      "primary_category": "cardiovascular_load",
+      "categories": [
+        "cardiovascular_load",
+        "qt_or_arrhythmia_risk",
+        "cns_depression",
+        "operational_or_behavioral_risk"
+      ]
+    },
+    "evidence": {
+      "tier": "mechanistic_inference",
+      "support_type": "mechanistic",
+      "source_refs": [
+        {
+          "source_id": "beta_blockers_statpearls",
+          "support_type": "indirect"
+        }
+      ],
+      "evidence_gaps": "Cluster-level inference only; direct classification should be split by individual cardiovascular agent and alpha-2 agonist."
+    },
+    "source_text": "provisional pharmacological inference: Alpha-2 agonists reduce sympathetic outflow and can lower heart rate and blood pressure. Beta-blockers reduce cardiac sympathetic response; non-dihydropyridine CCBs can further slow AV conduction. Combined use can produce excessive bradycardia/hypotension, and abrupt alpha-2 agonist withdrawal can create rebound sympathetic activation that may be harder to compensate for under beta-blockade.",
+    "source_fingerprint": "ef4818f5eeb1bcd15e054addb392a5b6c6f1b7454c2db960a8c75cc80493bebe",
+    "provenance": {
+      "derivation_type": "curated_inference",
+      "origin_value_v1": "unknown",
+      "migrated_from_v1": true,
+      "migration_version": "v1_to_v2",
+      "migrated_at": "2026-04-25T00:00:00.000Z"
+    },
+    "override_metadata": {
+      "applied": true,
+      "override_id": "provisional_pharmacology_fill_2026_04_25",
+      "reason": "Filled prior UNKNOWN/source_gap pair with mechanistic pharmacological inference and provisional risk grade."
+    },
+    "audit": {
+      "validation_flags": [],
+      "review_status": "needs_review",
+      "validation_notes": [
+        "Provisional inference; requires clinical/pharmacology review before production use."
+      ]
+    }
+  }
+]

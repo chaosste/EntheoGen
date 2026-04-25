@@ -11,6 +11,7 @@
     "lint": "tsc --noEmit",
     "migrate:interactions:v2": "tsx scripts/migrateInteractionsToV2.ts",
     "validate:interactions:v2": "tsx scripts/validateInteractionsV2.ts",
+    "test:interactions:v2": "tsx scripts/testInteractionClassification.ts",
     "reports:interactions": "tsx scripts/generateInteractionReports.ts",
     "reports:parse": "tsx scripts/parseInteractionReports.ts",
     "updates:test-parser": "tsx scripts/testParseInteractionReports.ts",

@@ -69,8 +69,9 @@ function SearchableSelect({
 
   const filteredDrugs = useMemo(() => {
     return DRUGS.filter(drug =>
-      drug.name.toLowerCase().includes(search.toLowerCase()) ||
-      drug.class.toLowerCase().includes(search.toLowerCase())
+      !drug.deprecated &&
+      (drug.name.toLowerCase().includes(search.toLowerCase()) ||
+        drug.class.toLowerCase().includes(search.toLowerCase()))
     );
   }, [search]);
 
@@ -254,8 +255,8 @@ function SearchableSelect({
 
 const ORIGIN_LABELS: Record<RuleOrigin, string> = {
   self: 'Same selection',
-  explicit: 'Curated pair rule',
-  fallback: 'Fallback rule',
+  explicit: 'Deterministic mapping table',
+  fallback: 'Heuristic fallback',
   unknown: 'Source gap'
 };
 
@@ -265,13 +266,18 @@ const MECHANISM_FAMILY_LABELS: Partial<Record<MechanismCategory, string>> = {
   qt_prolongation: 'QT / rhythm load',
   sympathomimetic: 'Sympathomimetic',
   cns_depressant: 'CNS depressant',
+  pharmacodynamic_cns_depression: 'Pharmacodynamic CNS depression',
   anticholinergic: 'Anticholinergic',
   dopaminergic: 'Dopaminergic',
   glutamatergic: 'Glutamatergic',
+  glutamate_modulation: 'Glutamate modulation',
   gabaergic: 'GABAergic',
   stimulant_stack: 'Stimulant stack',
   psychedelic_potentiation: 'Psychedelic potentiation',
-  cardiovascular_load: 'Cardiovascular load'
+  cardiovascular_load: 'Cardiovascular load',
+  hemodynamic_interaction: 'Hemodynamic interaction',
+  noradrenergic_suppression: 'Noradrenergic suppression',
+  ion_channel_modulation: 'Ion-channel modulation'
 };
 
 const getMechanismFamilyLabel = (
@@ -405,6 +411,8 @@ export default function App() {
             mechanism: localEvidence.mechanism,
             mechanismCategory: localMechanismCategory,
             origin: localOrigin,
+            provenanceSource: localEvidence.provenance?.source,
+            provenanceConfidenceTier: localEvidence.provenance?.confidenceTier,
             practicalGuidance: localEvidence.practicalGuidance,
             timing: localEvidence.timing,
             evidenceGaps: localEvidence.evidenceGaps,
@@ -425,6 +433,8 @@ export default function App() {
         mechanism: localEvidence?.mechanism,
         mechanismCategory: localMechanismCategory,
         origin: localOrigin,
+        provenanceSource: localEvidence?.provenance?.source,
+        provenanceConfidenceTier: localEvidence?.provenance?.confidenceTier,
         practicalGuidance: localEvidence?.practicalGuidance,
         timing: localEvidence?.timing,
         evidenceGaps: localEvidence?.evidenceGaps,
@@ -673,6 +683,16 @@ export default function App() {
                     {interactionOrigin && (
                       <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--text-muted)]">
                         Dataset basis: {ORIGIN_LABELS[interactionOrigin]}
+                      </span>
+                    )}
+                    {interactionEvidence?.provenance?.source && (
+                      <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--text-muted)]">
+                        Provenance: {interactionEvidence.provenance.source.replace(/_/g, ' ')}
+                      </span>
+                    )}
+                    {interactionEvidence?.provenance?.confidenceTier && (
+                      <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--text-muted)]">
+                        Provenance confidence: {interactionEvidence.provenance.confidenceTier.toUpperCase()}
                       </span>
                     )}
                     {mechanismFamilyLabel && (
