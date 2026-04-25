@@ -16,7 +16,7 @@
 ![License](https://img.shields.io/badge/license-research%20use-lightgrey)
 ![Deterministic](https://img.shields.io/badge/deterministic-2-blue)
 ![Theoretical](https://img.shields.io/badge/theoretical-4-yellow)
-![Inferred](https://img.shields.io/badge/inferred-?--dynamic-lightgrey)
+![Inferred](https://img.shields.io/badge/inferred-TBD-lightgrey)
 ![Source Coverage](https://img.shields.io/badge/source--coverage->90%25-green)
 <!-- BADGES:END -->
 	
