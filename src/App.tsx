@@ -181,7 +181,7 @@ function SearchableSelect({
           aria-autocomplete="list"
           aria-haspopup="listbox"
           autoComplete="off"
-        disabled={disabled}
+          disabled={disabled}
           value={inputValue}
           onFocus={() => {
             if (!isOpen) openDropdown();
