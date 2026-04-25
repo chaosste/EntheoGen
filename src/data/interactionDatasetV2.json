@@ -3603,39 +3603,41 @@
         "psilocybin"
       ],
       "classification": {
-        "code": "UNKNOWN",
-        "status": "unknown",
-        "confidence": "low",
-        "risk_score": 0,
-        "label": "Unknown/Insufficient Data"
+        "code": "CAUTION",
+        "status": "inferred",
+        "confidence": "medium",
+        "risk_score": 3,
+        "label": "Caution / Moderate Risk"
       },
       "clinical_summary": {
-        "headline": "No explicit interaction classification is loaded for this pair in the current curated dataset.",
-        "mechanism": null,
-        "timing_guidance": null,
-        "field_notes": null
+        "headline": "Manageable but requires cardiovascular screening and monitoring",
+        "mechanism": "Psilocybin can transiently increase blood pressure and heart rate through serotonergic and sympathomimetic effects. Standard antihypertensives lower blood pressure through RAAS modulation, calcium-channel blockade, beta-adrenergic blockade, or central alpha-2 agonism. The combination may blunt or complicate acute cardiovascular responses, with possible early BP/HR elevation and later hypotension, bradycardia, dizziness, or syncope.",
+        "timing_guidance": "Monitor for transient blood pressure and heart-rate elevation during onset and peak psychedelic effects, followed by possible postural hypotension, bradycardia, dizziness, or syncope later in the session or post-acute period.",
+        "field_notes": "Do not abruptly stop prescribed antihypertensives before psychedelic use. People with hypertension, cardiovascular disease, or multi-drug antihypertensive regimens should have cardiovascular screening and BP/HR monitoring."
       },
       "mechanism": {
-        "primary_category": "unknown",
+        "primary_category": "cardiovascular_load",
         "categories": [
-          "unknown"
+          "cardiovascular_load",
+          "sympathomimetic_load",
+          "operational_or_behavioral_risk"
         ]
       },
       "evidence": {
-        "tier": "not_applicable",
-        "support_type": "none",
+        "tier": "mechanistic_inference",
+        "support_type": "indirect",
         "source_refs": [
           {
             "source_id": "source_gap",
             "support_type": "none"
           }
         ],
-        "evidence_gaps": null
+        "evidence_gaps": "No large focused datasets evaluate specific antihypertensive-psychedelic pairs such as psilocybin plus amlodipine or beta-blocker combinations. Trials often exclude people with significant cardiovascular disease or uncontrolled hypertension, so real-world risk in hypertensive patients on multi-drug regimens remains poorly quantified."
       },
       "source_text": "source-gap",
       "source_fingerprint": "e4fd07eea0d0220c7a90d6b6991b1a4eec24a8003b5d526b5e4f0d2b9ecbba26",
       "provenance": {
-        "derivation_type": "generated_unknown",
+        "derivation_type": "curated_inference",
         "origin_value_v1": "unknown",
         "migrated_from_v1": true,
         "migration_version": "v1_to_v2",
@@ -3646,12 +3648,6 @@
       },
       "audit": {
         "validation_flags": [
-          "missing_mechanism",
-          "missing_timing",
-          "missing_evidence_tier",
-          "low_confidence",
-          "unknown_classification",
-          "mechanism_category_unknown",
           "source_gap"
         ],
         "review_status": "needs_review"
@@ -9020,39 +9016,41 @@
         "mescaline_peyote"
       ],
       "classification": {
-        "code": "UNKNOWN",
-        "status": "unknown",
-        "confidence": "low",
-        "risk_score": 0,
-        "label": "Unknown/Insufficient Data"
+        "code": "CAUTION",
+        "status": "inferred",
+        "confidence": "medium",
+        "risk_score": 3,
+        "label": "Caution / Moderate Risk"
       },
       "clinical_summary": {
-        "headline": "No explicit interaction classification is loaded for this pair in the current curated dataset.",
-        "mechanism": null,
-        "timing_guidance": null,
-        "field_notes": null
+        "headline": "Manageable but requires cardiovascular screening and monitoring",
+        "mechanism": "Mescaline can transiently increase blood pressure and heart rate through serotonergic and sympathomimetic effects. Standard antihypertensives lower blood pressure through RAAS modulation, calcium-channel blockade, beta-adrenergic blockade, or central alpha-2 agonism. The combination may blunt or complicate acute cardiovascular responses, with possible early BP/HR elevation and later hypotension, bradycardia, dizziness, or syncope.",
+        "timing_guidance": "Monitor for transient blood pressure and heart-rate elevation during onset and peak psychedelic effects, followed by possible postural hypotension, bradycardia, dizziness, or syncope later in the session or post-acute period.",
+        "field_notes": "Do not abruptly stop prescribed antihypertensives before psychedelic use. People with hypertension, cardiovascular disease, or multi-drug antihypertensive regimens should have cardiovascular screening and BP/HR monitoring."
       },
       "mechanism": {
-        "primary_category": "unknown",
+        "primary_category": "cardiovascular_load",
         "categories": [
-          "unknown"
+          "cardiovascular_load",
+          "sympathomimetic_load",
+          "operational_or_behavioral_risk"
         ]
       },
       "evidence": {
-        "tier": "not_applicable",
-        "support_type": "none",
+        "tier": "mechanistic_inference",
+        "support_type": "indirect",
         "source_refs": [
           {
             "source_id": "source_gap",
             "support_type": "none"
           }
         ],
-        "evidence_gaps": null
+        "evidence_gaps": "No large focused datasets evaluate specific antihypertensive-psychedelic pairs such as mescaline plus amlodipine or beta-blocker combinations. Trials often exclude people with significant cardiovascular disease or uncontrolled hypertension, so real-world risk in hypertensive patients on multi-drug regimens remains poorly quantified."
       },
       "source_text": "source-gap",
       "source_fingerprint": "e4fd07eea0d0220c7a90d6b6991b1a4eec24a8003b5d526b5e4f0d2b9ecbba26",
       "provenance": {
-        "derivation_type": "generated_unknown",
+        "derivation_type": "curated_inference",
         "origin_value_v1": "unknown",
         "migrated_from_v1": true,
         "migration_version": "v1_to_v2",
@@ -9063,12 +9061,6 @@
       },
       "audit": {
         "validation_flags": [
-          "missing_mechanism",
-          "missing_timing",
-          "missing_evidence_tier",
-          "low_confidence",
-          "unknown_classification",
-          "mechanism_category_unknown",
           "source_gap"
         ],
         "review_status": "needs_review"
@@ -12333,39 +12325,41 @@
         "lsd"
       ],
       "classification": {
-        "code": "UNKNOWN",
-        "status": "unknown",
-        "confidence": "low",
-        "risk_score": 0,
-        "label": "Unknown/Insufficient Data"
+        "code": "CAUTION",
+        "status": "inferred",
+        "confidence": "medium",
+        "risk_score": 3,
+        "label": "Caution / Moderate Risk"
       },
       "clinical_summary": {
-        "headline": "No explicit interaction classification is loaded for this pair in the current curated dataset.",
-        "mechanism": null,
-        "timing_guidance": null,
-        "field_notes": null
+        "headline": "Manageable but requires cardiovascular screening and monitoring",
+        "mechanism": "LSD can transiently increase blood pressure and heart rate through serotonergic and sympathomimetic effects. Standard antihypertensives lower blood pressure through RAAS modulation, calcium-channel blockade, beta-adrenergic blockade, or central alpha-2 agonism. The combination may blunt or complicate acute cardiovascular responses, with possible early BP/HR elevation and later hypotension, bradycardia, dizziness, or syncope.",
+        "timing_guidance": "Monitor for transient blood pressure and heart-rate elevation during onset and peak psychedelic effects, followed by possible postural hypotension, bradycardia, dizziness, or syncope later in the session or post-acute period.",
+        "field_notes": "Do not abruptly stop prescribed antihypertensives before psychedelic use. People with hypertension, cardiovascular disease, or multi-drug antihypertensive regimens should have cardiovascular screening and BP/HR monitoring."
       },
       "mechanism": {
-        "primary_category": "unknown",
+        "primary_category": "cardiovascular_load",
         "categories": [
-          "unknown"
+          "cardiovascular_load",
+          "sympathomimetic_load",
+          "operational_or_behavioral_risk"
         ]
       },
       "evidence": {
-        "tier": "not_applicable",
-        "support_type": "none",
+        "tier": "mechanistic_inference",
+        "support_type": "indirect",
         "source_refs": [
           {
             "source_id": "source_gap",
             "support_type": "none"
           }
         ],
-        "evidence_gaps": null
+        "evidence_gaps": "No large focused datasets evaluate specific antihypertensive-psychedelic pairs such as LSD plus amlodipine or beta-blocker combinations. Trials often exclude people with significant cardiovascular disease or uncontrolled hypertension, so real-world risk in hypertensive patients on multi-drug regimens remains poorly quantified."
       },
       "source_text": "source-gap",
       "source_fingerprint": "e4fd07eea0d0220c7a90d6b6991b1a4eec24a8003b5d526b5e4f0d2b9ecbba26",
       "provenance": {
-        "derivation_type": "generated_unknown",
+        "derivation_type": "curated_inference",
         "origin_value_v1": "unknown",
         "migrated_from_v1": true,
         "migration_version": "v1_to_v2",
@@ -12376,12 +12370,6 @@
       },
       "audit": {
         "validation_flags": [
-          "missing_mechanism",
-          "missing_timing",
-          "missing_evidence_tier",
-          "low_confidence",
-          "unknown_classification",
-          "mechanism_category_unknown",
           "source_gap"
         ],
         "review_status": "needs_review"
@@ -17879,39 +17867,42 @@
         "ndri_bupropion"
       ],
       "classification": {
-        "code": "UNKNOWN",
-        "status": "unknown",
+        "code": "DANGEROUS",
+        "status": "inferred",
         "confidence": "low",
-        "risk_score": 0,
-        "label": "Unknown/Insufficient Data"
+        "risk_score": 5,
+        "label": "Dangerous / Contraindicated"
       },
       "clinical_summary": {
-        "headline": "No explicit interaction classification is loaded for this pair in the current curated dataset.",
-        "mechanism": null,
-        "timing_guidance": null,
-        "field_notes": null
+        "headline": "Avoid due to compounded seizure and cardiovascular risk",
+        "mechanism": "Bupropion lowers seizure threshold and can cause seizures, cardiotoxicity, cardiogenic shock, and malignant arrhythmias in high-risk settings. Kambo can cause violent vomiting, diarrhoea, hypovolemia, ADH-like water retention, rapid hyponatremia, cerebral edema, seizures, hypotension, tachycardia, and autonomic stress. Together, electrolyte disturbance and autonomic strain may amplify bupropion-related seizure and cardiovascular risk.",
+        "timing_guidance": "Avoid Kambo during active bupropion treatment unless reviewed by a qualified clinician; risk may be highest around the acute Kambo period when vomiting, diarrhoea, water loading, dehydration, or sodium shifts occur.",
+        "field_notes": "Strongly avoid Kambo while taking bupropion, especially at higher doses or in people with seizure history, eating disorder history, head injury, stroke risk, electrolyte vulnerability, or cardiac disease. Do not abruptly stop bupropion without medical advice."
       },
       "mechanism": {
-        "primary_category": "unknown",
+        "primary_category": "seizure_threshold",
         "categories": [
-          "unknown"
+          "seizure_threshold",
+          "dehydration_or_electrolyte_risk",
+          "cardiovascular_load",
+          "qt_or_arrhythmia_risk"
         ]
       },
       "evidence": {
-        "tier": "not_applicable",
-        "support_type": "none",
+        "tier": "mechanistic_inference",
+        "support_type": "mechanistic",
         "source_refs": [
           {
             "source_id": "source_gap",
             "support_type": "none"
           }
         ],
-        "evidence_gaps": null
+        "evidence_gaps": "No published trials or case series directly evaluate Kambo with bupropion. Risk assessment is based on Kambo toxicity reports and bupropion’s established seizure and cardiotoxicity profile."
       },
       "source_text": "source-gap",
       "source_fingerprint": "e4fd07eea0d0220c7a90d6b6991b1a4eec24a8003b5d526b5e4f0d2b9ecbba26",
       "provenance": {
-        "derivation_type": "generated_unknown",
+        "derivation_type": "curated_inference",
         "origin_value_v1": "unknown",
         "migrated_from_v1": true,
         "migration_version": "v1_to_v2",
@@ -17922,13 +17913,8 @@
       },
       "audit": {
         "validation_flags": [
-          "missing_mechanism",
-          "missing_timing",
-          "missing_evidence_tier",
-          "low_confidence",
-          "unknown_classification",
-          "mechanism_category_unknown",
-          "source_gap"
+          "source_gap",
+          "low_confidence"
         ],
         "review_status": "needs_review"
       }
@@ -18184,39 +18170,44 @@
         "serotonergic_opioids"
       ],
       "classification": {
-        "code": "UNKNOWN",
-        "status": "unknown",
+        "code": "DANGEROUS",
+        "status": "inferred",
         "confidence": "low",
-        "risk_score": 0,
-        "label": "Unknown/Insufficient Data"
+        "risk_score": 5,
+        "label": "Dangerous / Contraindicated"
       },
       "clinical_summary": {
-        "headline": "No explicit interaction classification is loaded for this pair in the current curated dataset.",
-        "mechanism": null,
-        "timing_guidance": null,
-        "field_notes": null
+        "headline": "Avoid due to respiratory, collapse, seizure, and serotonin-toxicity risks",
+        "mechanism": "Kambo can cause intense vomiting, diarrhoea, hypotension, tachycardia, water retention, hyponatremia, seizures, cerebral edema, and death. Serotonergic opioids such as tramadol, tapentadol, dextromethorphan, and meperidine can contribute to serotonin syndrome, seizures, sedation, and respiratory depression. Combined use may increase risk of aspiration, hypoxemia, circulatory collapse, seizures, and delayed recognition of mixed opioid toxicity, serotonin toxicity, or hyponatremic encephalopathy.",
+        "timing_guidance": "Avoid Kambo during active serotonergic opioid use and around periods of opioid dose escalation, intoxication, withdrawal, or concurrent sedative/serotonergic drug use.",
+        "field_notes": "Strongly avoid Kambo in people currently taking serotonergic opioids, especially tramadol, tapentadol, meperidine, dextromethorphan, methadone, or fentanyl, and avoid especially in unsupervised ceremonial settings. Chronic opioid patients should discuss any contemplated Kambo use with a physician rather than attempting self-tapering or switching."
       },
       "mechanism": {
-        "primary_category": "unknown",
+        "primary_category": "respiratory_depression",
         "categories": [
-          "unknown"
+          "respiratory_depression",
+          "serotonergic_toxicity",
+          "seizure_threshold",
+          "dehydration_or_electrolyte_risk",
+          "cardiovascular_load",
+          "operational_or_behavioral_risk"
         ]
       },
       "evidence": {
-        "tier": "not_applicable",
-        "support_type": "none",
+        "tier": "mechanistic_inference",
+        "support_type": "mechanistic",
         "source_refs": [
           {
             "source_id": "source_gap",
             "support_type": "none"
           }
         ],
-        "evidence_gaps": null
+        "evidence_gaps": "No systematic studies directly evaluate Kambo with serotonergic opioids. Risk assessment is extrapolated from Kambo toxicity reports, serotonergic opioid serotonin-syndrome literature, and opioid-induced respiratory-depression evidence."
       },
       "source_text": "source-gap",
       "source_fingerprint": "e4fd07eea0d0220c7a90d6b6991b1a4eec24a8003b5d526b5e4f0d2b9ecbba26",
       "provenance": {
-        "derivation_type": "generated_unknown",
+        "derivation_type": "curated_inference",
         "origin_value_v1": "unknown",
         "migrated_from_v1": true,
         "migration_version": "v1_to_v2",
@@ -18227,13 +18218,8 @@
       },
       "audit": {
         "validation_flags": [
-          "missing_mechanism",
-          "missing_timing",
-          "missing_evidence_tier",
-          "low_confidence",
-          "unknown_classification",
-          "mechanism_category_unknown",
-          "source_gap"
+          "source_gap",
+          "low_confidence"
         ],
         "review_status": "needs_review"
       }
@@ -18245,39 +18231,42 @@
         "kambo"
       ],
       "classification": {
-        "code": "UNKNOWN",
-        "status": "unknown",
-        "confidence": "low",
-        "risk_score": 0,
-        "label": "Unknown/Insufficient Data"
+        "code": "CAUTION",
+        "status": "inferred",
+        "confidence": "medium",
+        "risk_score": 3,
+        "label": "Caution / Moderate Risk"
       },
       "clinical_summary": {
-        "headline": "No explicit interaction classification is loaded for this pair in the current curated dataset.",
-        "mechanism": null,
-        "timing_guidance": null,
-        "field_notes": null
+        "headline": "High-nicotine snuff may add seizure and cardiovascular stress with bupropion",
+        "mechanism": "Rapé can deliver rapid high-dose nicotine exposure, causing sympathetic activation, increased blood pressure and heart rate, nausea, vomiting, sweating, dizziness, and physiologic stress. Bupropion is an NDRI and nicotinic receptor antagonist that lowers seizure threshold in a dose-dependent manner. Together, acute nicotine stimulation, vomiting, dehydration, sleep deprivation, stimulant co-use, or high bupropion dose may compound seizure and cardiovascular risk.",
+        "timing_guidance": "Risk is likely highest during and shortly after rapé administration, when nicotine levels, autonomic activation, nausea, vomiting, and dehydration risk are greatest.",
+        "field_notes": "Treat rapé as a strong stimulant when using bupropion. Use only small test doses if used at all, avoid repeated or high-intensity applications, and avoid combining with other stimulants such as amphetamines, cocaine, or high caffeine. Avoid rapé when sleep-deprived, dehydrated, fasting heavily, or otherwise seizure-prone. Seek urgent care for seizure, loss of consciousness, chest pain, severe headache, focal neurological symptoms, or collapse."
       },
       "mechanism": {
-        "primary_category": "unknown",
+        "primary_category": "seizure_threshold",
         "categories": [
-          "unknown"
+          "seizure_threshold",
+          "cardiovascular_load",
+          "sympathomimetic_load",
+          "operational_or_behavioral_risk"
         ]
       },
       "evidence": {
-        "tier": "not_applicable",
-        "support_type": "none",
+        "tier": "mechanistic_inference",
+        "support_type": "mechanistic",
         "source_refs": [
           {
             "source_id": "source_gap",
             "support_type": "none"
           }
         ],
-        "evidence_gaps": null
+        "evidence_gaps": "No formal studies or case reports specifically evaluate rapé with bupropion. Risk assessment is extrapolated from chemical analyses of rapé nicotine content, known acute nicotine effects, and bupropion’s established seizure and cardiovascular risk profile."
       },
-      "source_text": "source-gap",
-      "source_fingerprint": "e4fd07eea0d0220c7a90d6b6991b1a4eec24a8003b5d526b5e4f0d2b9ecbba26",
+      "source_text": "Rapé may increase seizure and cardiovascular risk with bupropion through rapid nicotine exposure layered onto bupropion's pro-convulsant profile.",
+      "source_fingerprint": "fb89fcf957ae3c4ba9ca9046f0dc736eaa1961bc488ff7e4818a81fa517cc677",
       "provenance": {
-        "derivation_type": "generated_unknown",
+        "derivation_type": "curated_inference",
         "origin_value_v1": "unknown",
         "migrated_from_v1": true,
         "migration_version": "v1_to_v2",
@@ -18288,12 +18277,6 @@
       },
       "audit": {
         "validation_flags": [
-          "missing_mechanism",
-          "missing_timing",
-          "missing_evidence_tier",
-          "low_confidence",
-          "unknown_classification",
-          "mechanism_category_unknown",
           "source_gap"
         ],
         "review_status": "needs_review"
@@ -18306,39 +18289,42 @@
         "kambo"
       ],
       "classification": {
-        "code": "UNKNOWN",
-        "status": "unknown",
-        "confidence": "low",
-        "risk_score": 0,
-        "label": "Unknown/Insufficient Data"
+        "code": "CAUTION",
+        "status": "inferred",
+        "confidence": "medium",
+        "risk_score": 3,
+        "label": "Caution / Moderate Risk"
       },
       "clinical_summary": {
-        "headline": "No explicit interaction classification is loaded for this pair in the current curated dataset.",
-        "mechanism": null,
-        "timing_guidance": null,
-        "field_notes": null
+        "headline": "Respiratory, aspiration, and cardiovascular risks may rise with opioid co-use",
+        "mechanism": "Rapé is best understood as rapid high-dose nasal nicotine exposure with possible mild MAO-A modulation from trace beta-carbolines. It can acutely increase blood pressure and heart rate and may cause nausea, sweating, dizziness, and vomiting. Serotonergic opioids can cause sedation, respiratory depression, seizures, and serotonin syndrome when combined with other serotonergic drugs. Rapé is not primarily serotonergic, so the main interaction concerns are respiratory depression, aspiration during vomiting, cardiovascular strain, and reinforcement of nicotine-opioid co-use.",
+        "timing_guidance": "Risk is likely highest during acute rapé effects and periods of opioid intoxication, dose escalation, withdrawal, or concurrent CNS depressant use.",
+        "field_notes": "Avoid heavy or ritualised rapé use while taking serotonergic opioids, especially tramadol, tapentadol, meperidine, dextromethorphan, methadone, or fentanyl. Use extra caution if serotonergic antidepressants, MAOIs, alcohol, benzodiazepines, or other CNS depressants are also present. If used at all, keep doses low and infrequent, remain upright, and use sober supervision. Treat severe sedation, slow or irregular breathing, cyanosis, chest pain, collapse, or unresponsiveness as an emergency."
       },
       "mechanism": {
-        "primary_category": "unknown",
+        "primary_category": "respiratory_depression",
         "categories": [
-          "unknown"
+          "respiratory_depression",
+          "cardiovascular_load",
+          "operational_or_behavioral_risk",
+          "serotonergic_toxicity"
         ]
       },
       "evidence": {
-        "tier": "not_applicable",
-        "support_type": "none",
+        "tier": "mechanistic_inference",
+        "support_type": "mechanistic",
         "source_refs": [
           {
             "source_id": "source_gap",
             "support_type": "none"
           }
         ],
-        "evidence_gaps": null
+        "evidence_gaps": "No direct clinical literature addresses rapé with serotonergic opioids. Risk assessment is extrapolated from rapé nicotine chemistry, nicotine-opioid co-use data, opioid-induced respiratory-depression evidence, and serotonergic opioid serotonin-syndrome literature."
       },
-      "source_text": "source-gap",
-      "source_fingerprint": "e4fd07eea0d0220c7a90d6b6991b1a4eec24a8003b5d526b5e4f0d2b9ecbba26",
+      "source_text": "Rapé with serotonergic opioids may increase respiratory, aspiration, cardiovascular, and dependence-related risks, though serotonin syndrome is mainly driven by the opioid and other serotonergic co-medications rather than rapé itself.",
+      "source_fingerprint": "48c7414a526101aac7a5792d9a107220aa48e3cff80de3855c5b40671545da2b",
       "provenance": {
-        "derivation_type": "generated_unknown",
+        "derivation_type": "curated_inference",
         "origin_value_v1": "unknown",
         "migrated_from_v1": true,
         "migration_version": "v1_to_v2",
@@ -18349,12 +18335,6 @@
       },
       "audit": {
         "validation_flags": [
-          "missing_mechanism",
-          "missing_timing",
-          "missing_evidence_tier",
-          "low_confidence",
-          "unknown_classification",
-          "mechanism_category_unknown",
           "source_gap"
         ],
         "review_status": "needs_review"
@@ -18550,39 +18530,43 @@
         "ketamine"
       ],
       "classification": {
-        "code": "UNKNOWN",
-        "status": "unknown",
+        "code": "DANGEROUS",
+        "status": "inferred",
         "confidence": "low",
-        "risk_score": 0,
-        "label": "Unknown/Insufficient Data"
+        "risk_score": 5,
+        "label": "Dangerous / Contraindicated"
       },
       "clinical_summary": {
-        "headline": "No explicit interaction classification is loaded for this pair in the current curated dataset.",
-        "mechanism": null,
-        "timing_guidance": null,
-        "field_notes": null
+        "headline": "Avoid same-day use due to cardiovascular, emesis, and dissociation risk",
+        "mechanism": "Kambo can cause violent vomiting, diarrhoea, vasodilation, hypotension, tachycardia, ADH-like water retention, hyponatremia, seizures, and cerebral edema. Ketamine can increase blood pressure and heart rate while producing dissociation, impaired consciousness, and airway-risk concerns. Together, these effects may increase risk of arrhythmia, collapse, aspiration, seizure, or delayed recognition of medical deterioration.",
+        "timing_guidance": "Avoid ketamine during the acute Kambo period and for at least 24–48 hours after Kambo if vomiting, diarrhoea, high fluid intake, dehydration, or possible electrolyte disturbance occurred.",
+        "field_notes": "Strongly avoid same-session or same-day Kambo and ketamine use. Defer ketamine after recent Kambo if vomiting, diarrhoea, heavy water intake, confusion, weakness, or dehydration is present."
       },
       "mechanism": {
-        "primary_category": "unknown",
+        "primary_category": "cardiovascular_load",
         "categories": [
-          "unknown"
+          "cardiovascular_load",
+          "dehydration_or_electrolyte_risk",
+          "respiratory_depression",
+          "glutamatergic_dissociation",
+          "seizure_threshold"
         ]
       },
       "evidence": {
-        "tier": "not_applicable",
-        "support_type": "none",
+        "tier": "mechanistic_inference",
+        "support_type": "mechanistic",
         "source_refs": [
           {
             "source_id": "source_gap",
             "support_type": "none"
           }
         ],
-        "evidence_gaps": null
+        "evidence_gaps": "No systematic studies or controlled clinical data directly evaluate Kambo with ketamine. Risk assessment is extrapolated from Kambo toxicity reports, ketamine cardiovascular/CNS pharmacology, and practitioner-level warnings."
       },
       "source_text": "source-gap",
       "source_fingerprint": "e4fd07eea0d0220c7a90d6b6991b1a4eec24a8003b5d526b5e4f0d2b9ecbba26",
       "provenance": {
-        "derivation_type": "generated_unknown",
+        "derivation_type": "curated_inference",
         "origin_value_v1": "unknown",
         "migrated_from_v1": true,
         "migration_version": "v1_to_v2",
@@ -18593,13 +18577,8 @@
       },
       "audit": {
         "validation_flags": [
-          "missing_mechanism",
-          "missing_timing",
-          "missing_evidence_tier",
-          "low_confidence",
-          "unknown_classification",
-          "mechanism_category_unknown",
-          "source_gap"
+          "source_gap",
+          "low_confidence"
         ],
         "review_status": "needs_review"
       }
@@ -27978,39 +27957,43 @@
         "ndri_bupropion"
       ],
       "classification": {
-        "code": "UNKNOWN",
-        "status": "unknown",
-        "confidence": "low",
-        "risk_score": 0,
-        "label": "Unknown/Insufficient Data"
+        "code": "DANGEROUS",
+        "status": "inferred",
+        "confidence": "medium",
+        "risk_score": 5,
+        "label": "Dangerous / Contraindicated"
       },
       "clinical_summary": {
-        "headline": "No explicit interaction classification is loaded for this pair in the current curated dataset.",
-        "mechanism": null,
-        "timing_guidance": null,
-        "field_notes": null
+        "headline": "Avoid due to compounded seizure, cardiovascular, and sympathomimetic risk",
+        "mechanism": "Bupropion is a stimulant-like NDRI and CYP2D6 inhibitor that lowers seizure threshold and can cause cardiotoxicity at higher exposures. MDMA exposure is increased and prolonged by bupropion, while MDMA, 2C-x, DOx, and NBOMe compounds can produce serotonergic or sympathomimetic toxicity including hypertension, tachycardia, seizures, vasoconstriction, and serotonin-syndrome-like presentations. The combination creates additive pro-convulsant and cardiovascular stress.",
+        "timing_guidance": "Risk is highest during acute intoxication and may be prolonged with DOx compounds due to long duration, and with MDMA because bupropion can increase and prolong MDMA exposure.",
+        "field_notes": "Do not combine bupropion with MDMA, 2C-x, DOx, or NBOMe compounds. Risk is especially high with recreational MDMA doses, high-dose bupropion, NBOMe compounds, DOx compounds, sleep deprivation, dehydration, stimulant co-use, seizure history, cardiac disease, or overheating. Seek emergency care for severe agitation, seizures, chest pain, collapse, or focal neurological symptoms."
       },
       "mechanism": {
-        "primary_category": "unknown",
+        "primary_category": "seizure_threshold",
         "categories": [
-          "unknown"
+          "seizure_threshold",
+          "cardiovascular_load",
+          "sympathomimetic_load",
+          "operational_or_behavioral_risk",
+          "qt_or_arrhythmia_risk"
         ]
       },
       "evidence": {
-        "tier": "not_applicable",
-        "support_type": "none",
+        "tier": "mechanistic_inference",
+        "support_type": "mechanistic",
         "source_refs": [
           {
             "source_id": "source_gap",
             "support_type": "none"
           }
         ],
-        "evidence_gaps": null
+        "evidence_gaps": "Direct human interaction data are strongest for MDMA plus bupropion. Evidence for 2C-x, DOx, and NBOMe combinations with bupropion is largely extrapolated from each drug class’s seizure, cardiovascular, and toxicity profile."
       },
-      "source_text": "source-gap",
-      "source_fingerprint": "e4fd07eea0d0220c7a90d6b6991b1a4eec24a8003b5d526b5e4f0d2b9ecbba26",
+      "source_text": "MDMA, 2C-x, DOx, or NBOMe compounds combined with bupropion may substantially increase seizure, cardiovascular, and sympathomimetic risk, with strongest direct evidence for MDMA plus bupropion.",
+      "source_fingerprint": "c4154e2aca9dc1f33682894e0c15a7cc2f09342f551cef103cb5cc4226b9a245",
       "provenance": {
-        "derivation_type": "generated_unknown",
+        "derivation_type": "curated_inference",
         "origin_value_v1": "unknown",
         "migrated_from_v1": true,
         "migration_version": "v1_to_v2",
@@ -28021,12 +28004,6 @@
       },
       "audit": {
         "validation_flags": [
-          "missing_mechanism",
-          "missing_timing",
-          "missing_evidence_tier",
-          "low_confidence",
-          "unknown_classification",
-          "mechanism_category_unknown",
           "source_gap"
         ],
         "review_status": "needs_review"
@@ -30833,39 +30810,44 @@
         "serotonergic_opioids"
       ],
       "classification": {
-        "code": "UNKNOWN",
-        "status": "unknown",
-        "confidence": "low",
-        "risk_score": 0,
-        "label": "Unknown/Insufficient Data"
+        "code": "DANGEROUS",
+        "status": "inferred",
+        "confidence": "medium",
+        "risk_score": 5,
+        "label": "Dangerous / Contraindicated"
       },
       "clinical_summary": {
-        "headline": "No explicit interaction classification is loaded for this pair in the current curated dataset.",
-        "mechanism": null,
-        "timing_guidance": null,
-        "field_notes": null
+        "headline": "Avoid due to serotonin-toxicity, seizure, cardiovascular, and respiratory risks",
+        "mechanism": "MDMA releases serotonin, norepinephrine, and dopamine and can cause serotonin syndrome, hyperthermia, hyponatremia, and seizures. 2C-x, DOx, and NBOMe compounds add 5-HT2A agonism, sympathomimetic stress, and in some cases serotonin-syndrome-like toxicity, vasoconstriction, and seizures. Serotonergic opioids such as tramadol, tapentadol, dextromethorphan, and meperidine can increase serotonin tone, lower seizure threshold, and cause sedation or respiratory depression. Combined use can produce mixed serotonergic, stimulant-like, seizure, cardiovascular, and opioid-toxicity presentations.",
+        "timing_guidance": "Monitor risk throughout acute intoxication and longer for DOx compounds due to prolonged duration. Respiratory depression may overlap with or follow periods of agitation or serotonin-toxicity signs.",
+        "field_notes": "Avoid combining serotonergic opioids with MDMA, 2C-x, DOx, or NBOMe compounds, especially tramadol, tapentadol, dextromethorphan, meperidine, methadone, or fentanyl. Avoid entirely when SSRIs, SNRIs, MAOIs, TCAs, MDMA, stimulants, alcohol, benzodiazepines, or other CNS depressants are also present. Seek emergency care for agitation, clonus, hyperreflexia, hyperthermia, confusion, seizures, severe hypertension, chest pain, slow or irregular breathing, cyanosis, collapse, or unresponsiveness."
       },
       "mechanism": {
-        "primary_category": "unknown",
+        "primary_category": "serotonergic_toxicity",
         "categories": [
-          "unknown"
+          "serotonergic_toxicity",
+          "seizure_threshold",
+          "cardiovascular_load",
+          "respiratory_depression",
+          "sympathomimetic_load",
+          "operational_or_behavioral_risk"
         ]
       },
       "evidence": {
-        "tier": "not_applicable",
-        "support_type": "none",
+        "tier": "mechanistic_inference",
+        "support_type": "mechanistic",
         "source_refs": [
           {
             "source_id": "source_gap",
             "support_type": "none"
           }
         ],
-        "evidence_gaps": null
+        "evidence_gaps": "Direct human combination data are limited. Evidence is strongest for MDMA with serotonergic opioids and for severe NBOMe toxicity; 2C-x and DOx interaction ratings rely mainly on extrapolation from toxicity profiles and serotonergic opioid interaction literature."
       },
-      "source_text": "source-gap",
-      "source_fingerprint": "e4fd07eea0d0220c7a90d6b6991b1a4eec24a8003b5d526b5e4f0d2b9ecbba26",
+      "source_text": "MDMA, 2C-x, DOx, or NBOMe compounds combined with serotonergic opioids may increase serotonin-toxicity, seizure, cardiovascular, and respiratory-depression risks.",
+      "source_fingerprint": "01e9bbce7df57cfdf77a16dc0861f0eb7e4317125ad7813abdf125ad406fbefd",
       "provenance": {
-        "derivation_type": "generated_unknown",
+        "derivation_type": "curated_inference",
         "origin_value_v1": "unknown",
         "migrated_from_v1": true,
         "migration_version": "v1_to_v2",
@@ -30876,12 +30858,6 @@
       },
       "audit": {
         "validation_flags": [
-          "missing_mechanism",
-          "missing_timing",
-          "missing_evidence_tier",
-          "low_confidence",
-          "unknown_classification",
-          "mechanism_category_unknown",
           "source_gap"
         ],
         "review_status": "needs_review"
