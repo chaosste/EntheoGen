@@ -14,6 +14,10 @@
 ![Sources](https://img.shields.io/badge/sources-linked-green)
 ![Inference](https://img.shields.io/badge/inference-mechanistic-yellow)
 ![License](https://img.shields.io/badge/license-research%20use-lightgrey)
+![Deterministic](https://img.shields.io/badge/deterministic-2-blue)
+![Theoretical](https://img.shields.io/badge/theoretical-4-yellow)
+![Inferred](https://img.shields.io/badge/inferred-?--dynamic-lightgrey)
+![Source Coverage](https://img.shields.io/badge/source--coverage->90%25-green)
 <!-- BADGES:END -->
 	
 # 🌿 EntheoGen Plant Medicine Interaction Guide
@@ -77,57 +81,7 @@ EntheoGen's data model is mapped specifically to sacramental substances often us
 
 ⸻
 
-> ⚠️ **Dataset Status**
-
-![Deterministic](https://img.shields.io/badge/deterministic-2-blue)
-![Theoretical](https://img.shields.io/badge/theoretical-4-yellow)
-![Inferred](https://img.shields.io/badge/inferred-?--dynamic-lightgrey)
-![Source Coverage](https://img.shields.io/badge/source--coverage->90%25-green)
-
-# Version 2.1 Release April 25 2026
-
-## v2.1 introduces a fully normalized, schema-driven dataset with an additive (non-breaking) migration from v1 → v2.
-
-⸻
-
-## What’s new in Version 2.1
-
-- Graph-based interaction model (substances ↔ interactions ↔ sources).
-- Explicit separation of: risk classification, mechanism, evidence, provenance, audit / validation.
-- Canonical pair keys (a|b, sorted).
-- Multi-label mechanism classification.
-- Built-in validation + reporting pipeline.
-- v1 compatibility preserved.
-
-Full notes in project wiki
-
-⸻
-
-# Version 2.0 Release April 2 2026
-
-Version 2.0 extends EntheoGen beyond a web interaction tool into a **reproducible benchmarking dataset and safety-alignment evaluation platform** for studying pharmacological reasoning, abstention behavior, and mechanism classification.
-
-## What’s new in Version 2.0
-
-EntheoGen now includes a structured interaction dataset and local evaluation harness suitable for research, benchmarking, and model comparison workflows.
-
-New capabilities:
-
-- provenance-aware interaction classification (`explicit`, `fallback`, `unknown`, `self`)
-- normalized pharmacological mechanism taxonomy
-- deterministic dataset export pipeline
-- HuggingFace-ready dataset packaging
-- slice-based evaluation subsets (risk, mechanism, provenance)
-- diagnostics and regression drift safeguards
-- oracle baseline verification harness
-- structured prediction scoring metrics
-- leaderboard-ready experiment architecture
-- structured-output reliability measurement
-- parser recovery for malformed model outputs
-- retry logic with exponential backoff
-- prediction confidence estimation
-
-Full notes in project wiki
+[Full version release notes and more in project wiki](https://github.com/chaosste/EntheoGen/wiki).
 
 ⸻
 
