@@ -36,6 +36,7 @@ import { getInteractionExplanation, getDrugSummary } from './services/geminiServ
 import logoVine from './assets/logo-vine.png';
 import logoLeaf from './assets/logo-leaf.png';
 import logoJaguar from './assets/logo-jaguar.png';
+import referencesMd from '../knowledge-base/sources/Reference_List.md?raw';
 
 // --- Components ---
 
@@ -302,6 +303,7 @@ export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openSelect, setOpenSelect] = useState<'drug1' | 'drug2' | null>(null);
   const [favorites, setFavorites] = useState<{ id: string, d1: string, d2: string, code: string }[]>([]);
+  const [showReferences, setShowReferences] = useState(false);
   const favoritesStorageKey = 'entheogen_favorites';
 
   // Load favorites
@@ -908,6 +910,16 @@ export default function App() {
                 <section className="space-y-6">
                   <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--text-muted)] border-b border-white/5 pb-3">Useful Links</h3>
                   <div className="grid gap-3">
+                    <button
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        setShowReferences(true);
+                      }}
+                      className="flex justify-between items-center p-4 rounded-2xl bg-black/5 hover:bg-black/10 transition-colors group text-left"
+                    >
+                      <span className="font-semibold text-white/90">Reference List</span>
+                      <ExternalLink className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </button>
                     {[
                       { name: 'Crisis Help UK', url: 'https://thatsmental.co.uk/crisis' },
                       { name: 'Drug Science', url: 'https://www.drugscience.org.uk/' },
@@ -935,6 +947,42 @@ export default function App() {
                     EntheoGen v0.2 • Ceremonial Interaction Guidance
                   </p>
                 </section>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* References Modal */}
+      <AnimatePresence>
+        {showReferences && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowReferences(false)}
+              className="fixed inset-0 bg-black/60 backdrop-blur-md z-[80]"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="fixed inset-x-4 md:inset-x-auto md:w-[800px] top-[10%] bottom-[10%] max-w-full mx-auto bg-[#0a140f] border border-white/10 z-[90] shadow-2xl rounded-3xl overflow-hidden flex flex-col"
+            >
+              <div className="flex justify-between items-center p-6 border-b border-white/10 bg-black/20">
+                <h2 className="text-xl font-bold tracking-widest uppercase text-white/90">Reference List</h2>
+                <button
+                  onClick={() => setShowReferences(false)}
+                  className="p-2 hover:bg-white/10 rounded-full transition-colors text-white/80 hover:text-white"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+              <div className="p-8 overflow-y-auto custom-scrollbar flex-1">
+                <div className="markdown-body">
+                  <Markdown>{referencesMd}</Markdown>
+                </div>
               </div>
             </motion.div>
           </>
