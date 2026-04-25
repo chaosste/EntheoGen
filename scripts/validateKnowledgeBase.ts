@@ -36,6 +36,14 @@ const validateClaim = (claim: ClaimRecord, claimSchema: Record<string, unknown>)
     if (!claim.evidence_strength) issues.push({ path: '$.claim.evidence_strength', message: 'human_reviewed claims must include evidence_strength' });
     if (!claim.confidence) issues.push({ path: '$.claim.confidence', message: 'human_reviewed claims must include confidence' });
   }
+  if (claim.source_id === 'alma_ayahuasca_interactions_dataset') {
+    if (!claim.source_specific?.derivation) {
+      issues.push({ path: '$.claim.source_specific.derivation', message: 'Alma claims must include source_specific.derivation' });
+    }
+    if (claim.review_state !== 'human_reviewed' && claim.evidence_strength !== 'weak') {
+      issues.push({ path: '$.claim.evidence_strength', message: 'Alma claims must remain weak until human_reviewed' });
+    }
+  }
   return issues.map((issue) => `${issue.path}: ${issue.message}`);
 };
 

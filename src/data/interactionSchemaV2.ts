@@ -76,7 +76,8 @@ export const EVIDENCE_STATUSES_V2 = [
   'limited_data',
   'conflicting_evidence',
   'mechanistic_inference',
-  'supported'
+  'supported',
+  'provisional_secondary'
 ] as const;
 
 export type EvidenceStatusV2 = (typeof EVIDENCE_STATUSES_V2)[number];
@@ -92,6 +93,7 @@ export const EVIDENCE_SUPPORT_TYPES = [
   'class_level_literature',
   'mechanistic_literature',
   'adjacent_domain_literature',
+  'ai_synthesis',
   'none'
 ] as const;
 
@@ -107,7 +109,8 @@ export const SOURCE_MATCH_TYPES_V2 = [
   'drug_class',
   'mechanism',
   'adjacent_domain',
-  'source_gap'
+  'source_gap',
+  'ai_synthesis'
 ] as const;
 
 export type SourceMatchTypeV2 = (typeof SOURCE_MATCH_TYPES_V2)[number];
@@ -128,6 +131,7 @@ export const SOURCE_KINDS = [
   'secondary_source',
   'field_guidance',
   'internal_research_update',
+  'ai_synthesis',
   'generated_placeholder',
   'none'
 ] as const;
@@ -184,7 +188,9 @@ export interface SourceClaimRefV2 {
   match_type?: SourceMatchTypeV2;
   relevance_score?: number;
   evidence_strength?: EvidenceStrengthV2;
+  confidence?: ConfidenceLevel;
   review_state?: ReviewStateV2;
+  requires_verification?: boolean;
   notes?: string;
   claim_excerpt?: string;
   support_type?: EvidenceSupportType;
@@ -220,6 +226,7 @@ export interface ProvenanceV2 {
   method?: string;
   source_linking_method?: string;
   source_linking_confidence?: 'high' | 'medium' | 'low';
+  requires_verification?: boolean;
   rationale?: string;
   parent_node?: string;
   parent_nodes?: string[];

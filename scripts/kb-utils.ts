@@ -7,9 +7,9 @@ import { fileURLToPath } from 'node:url';
 export interface SourceManifestEntry {
   source_id: string;
   title: string;
-  source_type: 'academic_paper' | 'clinical_guideline' | 'expert_guideline' | 'traditional_context' | 'pharmacology_reference' | 'legal_policy';
+  source_type: 'academic_paper' | 'clinical_guideline' | 'expert_guideline' | 'expert_dataset' | 'ai_synthesis' | 'traditional_context' | 'pharmacology_reference' | 'legal_policy';
   authority_level: 'high' | 'medium' | 'contextual' | 'low';
-  evidence_domain: 'clinical' | 'pharmacological' | 'ceremonial' | 'harm_reduction' | 'legal' | 'cultural';
+  evidence_domain: 'clinical' | 'pharmacological' | 'aggregated_clinical' | 'ceremonial' | 'harm_reduction' | 'legal' | 'cultural';
   year?: number;
   authors?: string[];
   citation?: string;
@@ -25,13 +25,37 @@ export interface ClaimRecord {
   claim: string;
   claim_type: 'mechanism' | 'interaction' | 'risk' | 'contraindication' | 'guidance';
   entities: string[];
-  mechanism?: string;
+  mechanism?: string | string[];
   evidence_strength?: 'strong' | 'moderate' | 'weak' | 'theoretical';
   confidence?: 'high' | 'medium' | 'low';
   supports_pairs?: [string, string][];
   clinical_actionability?: 'none' | 'monitor' | 'caution' | 'avoid' | 'contraindicated';
-  review_state: 'machine_extracted' | 'human_reviewed' | 'rejected' | 'needs_revision';
+  review_state: 'machine_extracted' | 'needs_verification' | 'human_reviewed' | 'rejected' | 'needs_revision';
   notes?: string;
+  provenance?: {
+    source_type?: 'ai_synthesis';
+    requires_verification?: boolean;
+    ingestion_method?: string;
+    cited_sources?: Array<{
+      title?: string;
+      url?: string;
+      doi?: string;
+      authors?: string;
+      year?: number | string;
+      citation_text?: string;
+    }>;
+    [key: string]: unknown;
+  };
+  source_specific?: {
+    original_medication_name?: string;
+    normalized_medication_name?: string;
+    severity_label?: string;
+    other_information?: string;
+    derivation?: string;
+    original_row?: string;
+    aliases?: string[];
+    [key: string]: unknown;
+  };
 }
 
 export interface ClaimPackage {
@@ -192,6 +216,8 @@ export const inferSourceTypeFromPath = (filePath: string): SourceManifestEntry['
   const normalized = filePath.toLowerCase();
   if (normalized.includes('/clinical-guidelines/')) return 'clinical_guideline';
   if (normalized.includes('/expert-guidelines/')) return 'expert_guideline';
+  if (normalized.includes('/expert-datasets/')) return 'expert_dataset';
+  if (path.basename(normalized).startsWith('perplexity_')) return 'ai_synthesis';
   if (normalized.includes('/traditional-contexts/')) return 'traditional_context';
   if (normalized.includes('/legal-policy/')) return 'legal_policy';
   if (normalized.includes('/pharmacology-reference/')) return 'pharmacology_reference';
@@ -208,6 +234,7 @@ export const inferAuthorityLevel = (sourceType: SourceManifestEntry['source_type
 export const inferEvidenceDomain = (sourceType: SourceManifestEntry['source_type']): SourceManifestEntry['evidence_domain'] => {
   if (sourceType === 'clinical_guideline') return 'clinical';
   if (sourceType === 'pharmacology_reference' || sourceType === 'academic_paper') return 'pharmacological';
+  if (sourceType === 'expert_dataset') return 'aggregated_clinical';
   if (sourceType === 'expert_guideline') return 'harm_reduction';
   if (sourceType === 'traditional_context') return 'cultural';
   if (sourceType === 'legal_policy') return 'legal';
@@ -387,8 +414,10 @@ export const loadSchema = async (schemaPath: string): Promise<Record<string, unk
 
 export const sourceManifestToDatasetSourceType = (
   sourceType: SourceManifestEntry['source_type']
-): 'primary_source' | 'secondary_source' | 'field_guidance' | 'internal_research_update' | 'generated_placeholder' | 'none' => {
+): 'primary_source' | 'secondary_source' | 'field_guidance' | 'internal_research_update' | 'ai_synthesis' | 'generated_placeholder' | 'none' => {
   if (sourceType === 'clinical_guideline' || sourceType === 'expert_guideline') return 'field_guidance';
+  if (sourceType === 'expert_dataset') return 'secondary_source';
+  if (sourceType === 'ai_synthesis') return 'ai_synthesis';
   if (sourceType === 'traditional_context') return 'secondary_source';
   if (sourceType === 'legal_policy') return 'secondary_source';
   if (sourceType === 'academic_paper' || sourceType === 'pharmacology_reference') return 'primary_source';

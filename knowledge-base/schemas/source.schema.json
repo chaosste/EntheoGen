@@ -21,6 +21,8 @@
         "academic_paper",
         "clinical_guideline",
         "expert_guideline",
+        "expert_dataset",
+        "ai_synthesis",
         "traditional_context",
         "pharmacology_reference",
         "legal_policy"
@@ -29,7 +31,7 @@
     "authority_level": { "type": "string", "enum": ["high", "medium", "contextual", "low"] },
     "evidence_domain": {
       "type": "string",
-      "enum": ["clinical", "pharmacological", "ceremonial", "harm_reduction", "legal", "cultural"]
+      "enum": ["clinical", "pharmacological", "aggregated_clinical", "ceremonial", "harm_reduction", "legal", "cultural"]
     },
     "year": { "type": "integer" },
     "authors": {

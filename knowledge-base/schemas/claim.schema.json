@@ -17,7 +17,15 @@
       "minItems": 1,
       "items": { "type": "string", "minLength": 1 }
     },
-    "mechanism": { "type": "string" },
+    "mechanism": {
+      "oneOf": [
+        { "type": "string" },
+        {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      ]
+    },
     "evidence_strength": {
       "type": "string",
       "enum": ["strong", "moderate", "weak", "theoretical"]
@@ -38,9 +46,50 @@
     },
     "review_state": {
       "type": "string",
-      "enum": ["machine_extracted", "human_reviewed", "rejected", "needs_revision"]
+      "enum": ["machine_extracted", "needs_verification", "human_reviewed", "rejected", "needs_revision"]
     },
     "notes": { "type": "string" }
+    ,
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "source_type": { "type": "string", "enum": ["ai_synthesis"] },
+        "requires_verification": { "type": "boolean" },
+        "ingestion_method": { "type": "string" },
+        "cited_sources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "title": { "type": "string" },
+              "url": { "type": "string" },
+              "doi": { "type": "string" },
+              "authors": { "type": "string" },
+              "year": { "type": ["integer", "string"] },
+              "citation_text": { "type": "string" }
+            },
+            "additionalProperties": true
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "source_specific": {
+      "type": "object",
+      "properties": {
+        "original_medication_name": { "type": "string" },
+        "normalized_medication_name": { "type": "string" },
+        "severity_label": { "type": "string" },
+        "other_information": { "type": "string" },
+        "derivation": { "type": "string" },
+        "original_row": { "type": "string" },
+        "aliases": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": true
+    }
   },
   "additionalProperties": true
 }

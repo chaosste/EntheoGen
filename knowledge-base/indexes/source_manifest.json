@@ -26,6 +26,24 @@
       ],
       "review_state": "extracted",
       "notes": "Auto-indexed from sources/academic-papers/Ruffell-et-al-2020-The Pharmacological-interaction-of-compounds-in-ayahuasca-a-systemic-review.md"
+    },
+    {
+      "source_id": "alma_ayahuasca_interactions_dataset",
+      "title": "Alma Healing Center Ayahuasca and Medication Interactions",
+      "source_type": "expert_dataset",
+      "authority_level": "low",
+      "evidence_domain": "aggregated_clinical",
+      "year": 2025,
+      "citation": "Alma Healing Center. Ayahuasca and medication interactions.",
+      "url_or_path": "/Users/stephenbeale/Desktop/Alma-Healing-Centre-Ayahuasca-and-medication-interactions.pdf",
+      "file_refs": [
+        "sources/expert-guidelines/alma_ayahuasca_interactions_dataset.md"
+      ],
+      "review_state": "extracted",
+      "notes": "Secondary interaction compilation using moclobemide/RIMA as an ayahuasca proxy.",
+      "authors": [
+        "Alma Healing Center"
+      ]
     }
   ]
 }
