@@ -84,28 +84,28 @@ Key Features
 ⸻
 
 Migration Status
-
-Metric	Value
+```
+Metric			Value
 Interactions	561
-Substances	33
-Sources	6
-
+Substances		33
+Sources			6
+```
 Validation:
-
+```
 npm run lint                     → pass
 npm run validate:interactions:v2 → errors=0, warnings=0
-
+```
 Derived reports:
-
-Report	Rows
-Unknown	458
-Low confidence	479
+```
+Report				Rows
+Unknown				458
+Low confidence		479
 Missing evidence	508
-
+```
 ⸻
 
-Project Structure
-
+## Project Structure
+```
 src/
   data/
     interactionSchemaV2.ts
@@ -120,36 +120,36 @@ src/
   audit/
     low-confidence.csv
     missing-evidence.csv
-
+```
 ⸻
 
-Quick Start
+## Quick Start
 
 1. Migrate v1 → v2
-
+```
 npm run migrate:interactions:v2
-
+```
 2. Validate
-
+```
 npm run validate:interactions:v2
-
+```
 3. Generate reports
-
+```
 npm run reports:interactions
-
+```
 ⸻
 
 Usage
-
+```
 import { interactionDatasetV2 } from "./src/data/interactionDataset";
 const interaction = interactionDatasetV2.interactions.find(
   x => x.pair.key === "ayahuasca|psilocybin"
 );
-
+```
 ⸻
 
-Data Model (Simplified)
-
+## Data Model (Simplified)
+```
 Substances
    ↓
 Interactions
@@ -160,23 +160,24 @@ Interactions
    └─ audit (validation flags)
    ↓
 Sources
+```
 
 ⸻
 
-Classification Scale
-
-Code	Meaning	Risk
-SELF	Same entity	-1
-UNKNOWN	No data	0
-LOW	Minimal	1
-LOW_MOD	Modulation	2
-CAUTION	Moderate	3
-UNSAFE	High risk	4
-DANGEROUS	Contraindicated	5
-
+## Classification Scale
+```
+Code				Meaning				Risk
+SELF				Same entity			-1
+UNKNOWN				No data				0
+LOW					Minimal				1
+LOW_MOD				Modulation			2
+CAUTION				Moderate			3
+UNSAFE				High risk			4
+DANGEROUS			Contraindicated		5
+```
 ⸻
 
-Design Principles
+## Design Principles
 
 * Additive evolution — v2.1 does not break v2
 * Single source of truth — interactionDatasetV2.json
@@ -186,21 +187,21 @@ Design Principles
 
 ⸻
 
-Migration Notes
+## Migration Notes
 
 * Missing structure is filled conservatively:
-    * mechanism categories inferred from text
-    * evidence tiers mapped via keywords
+* mechanism categories inferred from text
+* evidence tiers mapped via keywords
 
 * Defaults:
-    * unknown mechanism → "unknown"
-    * unmapped evidence → "mechanistic_inference"
-    * source reliability → "unknown"
+* unknown mechanism → "unknown"
+* unmapped evidence → "mechanistic_inference"
+* source reliability → "unknown"
 
 * Overrides default to:
-
+```
 applied: false
-
+```
 ⸻
 
 Known Limitations
@@ -265,7 +266,7 @@ This makes EntheoGen one of the first **abstention-aware psychedelic interaction
 
 Exports regenerate deterministically from the rule engine:
 
-```bash
+```
 npm run export:interactions
 ```
 
