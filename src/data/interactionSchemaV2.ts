@@ -176,6 +176,7 @@ export type ValidationSeverityV2 = (typeof VALIDATION_SEVERITIES_V2)[number];
 export interface SourceClaimRefV2 {
   id?: string;
   source_id: string;
+  claim_id?: string;
   title?: string;
   authors?: string[];
   year?: number;
@@ -183,6 +184,7 @@ export interface SourceClaimRefV2 {
   match_type?: SourceMatchTypeV2;
   relevance_score?: number;
   evidence_strength?: EvidenceStrengthV2;
+  review_state?: ReviewStateV2;
   notes?: string;
   claim_excerpt?: string;
   support_type?: EvidenceSupportType;

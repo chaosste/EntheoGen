@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://entheogen.local/knowledge-base/claim.schema.json",
+  "title": "Knowledge Base Extracted Claim",
+  "type": "object",
+  "required": ["claim_id", "source_id", "claim", "claim_type", "entities", "review_state"],
+  "properties": {
+    "claim_id": { "type": "string", "minLength": 1 },
+    "source_id": { "type": "string", "minLength": 1 },
+    "claim": { "type": "string", "minLength": 1 },
+    "claim_type": {
+      "type": "string",
+      "enum": ["mechanism", "interaction", "risk", "contraindication", "guidance"]
+    },
+    "entities": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "mechanism": { "type": "string" },
+    "evidence_strength": {
+      "type": "string",
+      "enum": ["strong", "moderate", "weak", "theoretical"]
+    },
+    "confidence": { "type": "string", "enum": ["high", "medium", "low"] },
+    "supports_pairs": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 2,
+        "items": { "type": "string", "minLength": 1 }
+      }
+    },
+    "clinical_actionability": {
+      "type": "string",
+      "enum": ["none", "monitor", "caution", "avoid", "contraindicated"]
+    },
+    "review_state": {
+      "type": "string",
+      "enum": ["machine_extracted", "human_reviewed", "rejected", "needs_revision"]
+    },
+    "notes": { "type": "string" }
+  },
+  "additionalProperties": true
+}
