@@ -9,6 +9,9 @@
     "preview": "npm run build && wrangler dev",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
+    "migrate:interactions:v2": "tsx scripts/migrateInteractionsToV2.ts",
+    "validate:interactions:v2": "tsx scripts/validateInteractionsV2.ts",
+    "reports:interactions": "tsx scripts/generateInteractionReports.ts",
     "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
