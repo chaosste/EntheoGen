@@ -59,7 +59,173 @@ EntheoGen's data model is mapped specifically to sacramental substances often us
 
 💾 Privacy-first architecture — no remote storage of user inputs
 
----
+⸻
+
+# Version 2.1 Release April 25 2026
+
+## v2.1 introduces a fully normalized, schema-driven dataset with an additive (non-breaking) migration from v1 → v2.
+
+⸻
+
+Key Features
+
+* Graph-based interaction model (substances ↔ interactions ↔ sources)
+* Explicit separation of:
+    * risk classification
+    * mechanism
+    * evidence
+    * provenance
+    * audit / validation
+* Canonical pair keys (a|b, sorted)
+* Multi-label mechanism classification
+* Built-in validation + reporting pipeline
+* v1 compatibility preserved
+
+⸻
+
+Migration Status
+
+Metric	Value
+Interactions	561
+Substances	33
+Sources	6
+
+Validation:
+
+npm run lint                     → pass
+npm run validate:interactions:v2 → errors=0, warnings=0
+
+Derived reports:
+
+Report	Rows
+Unknown	458
+Low confidence	479
+Missing evidence	508
+
+⸻
+
+Project Structure
+
+src/
+  data/
+    interactionSchemaV2.ts
+    interactionDatasetV2.json
+    interactionDataset.ts   # v1 + additive v2 export
+scripts/
+  migrateInteractionsToV2.ts
+  validateInteractionsV2.ts
+  generateInteractionReports.ts
+src/
+  unknown.csv
+  audit/
+    low-confidence.csv
+    missing-evidence.csv
+
+⸻
+
+Quick Start
+
+1. Migrate v1 → v2
+
+npm run migrate:interactions:v2
+
+2. Validate
+
+npm run validate:interactions:v2
+
+3. Generate reports
+
+npm run reports:interactions
+
+⸻
+
+Usage
+
+import { interactionDatasetV2 } from "./src/data/interactionDataset";
+const interaction = interactionDatasetV2.interactions.find(
+  x => x.pair.key === "ayahuasca|psilocybin"
+);
+
+⸻
+
+Data Model (Simplified)
+
+Substances
+   ↓
+Interactions
+   ├─ classification (risk, confidence, status)
+   ├─ mechanism (multi-category)
+   ├─ evidence (tier, support, gaps)
+   ├─ provenance (derivation, overrides)
+   └─ audit (validation flags)
+   ↓
+Sources
+
+⸻
+
+Classification Scale
+
+Code	Meaning	Risk
+SELF	Same entity	-1
+UNKNOWN	No data	0
+LOW	Minimal	1
+LOW_MOD	Modulation	2
+CAUTION	Moderate	3
+UNSAFE	High risk	4
+DANGEROUS	Contraindicated	5
+
+⸻
+
+Design Principles
+
+* Additive evolution — v2.1 does not break v2
+* Single source of truth — interactionDatasetV2.json
+* Explicit uncertainty — unknowns are modeled, not hidden
+* Graph-first — not a flat table
+* Machine-readable — strongly typed + validated
+
+⸻
+
+Migration Notes
+
+* Missing structure is filled conservatively:
+    * mechanism categories inferred from text
+    * evidence tiers mapped via keywords
+
+* Defaults:
+    * unknown mechanism → "unknown"
+    * unmapped evidence → "mechanistic_inference"
+    * source reliability → "unknown"
+
+* Overrides default to:
+
+applied: false
+
+⸻
+
+Known Limitations
+
+* High proportion of unknown / low-confidence rows
+* Mechanism classification is rule-based
+* Source metadata is minimal (no DOI/journal structure yet)
+
+⸻
+
+Roadmap
+
+* Structured citations (DOI, authors, journals)
+* Mechanism ontology improvements
+* Quantitative confidence scoring
+* Graph DB export (Neo4j / RDF)
+
+⸻
+
+Disclaimer
+
+For research and harm-reduction purposes only.
+Not medical advice.
+
+⸻
 
 # Version 2.0 Release Spring 2026
 
