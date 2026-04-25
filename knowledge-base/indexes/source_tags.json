@@ -192,6 +192,32 @@
         "zolmitriptan",
         "zolpidem_tartrate"
       ]
+    },
+    {
+      "source_id": "perplexity_ayahuasca_interactions_synthesis_2026",
+      "tags": [
+        "ai_synthesis",
+        "avoid",
+        "cardiovascular_load",
+        "caution",
+        "contraindication",
+        "glutamate_modulation",
+        "guidance",
+        "hemodynamic_interaction",
+        "interaction",
+        "ion_channel_modulation",
+        "maoi_potentiation",
+        "mechanism",
+        "monitor",
+        "none",
+        "noradrenergic_suppression",
+        "perplexity",
+        "pharmacodynamic_cns_depression",
+        "provisional_secondary",
+        "risk",
+        "serotonergic_toxicity",
+        "sympathomimetic_load"
+      ]
     }
   ]
 }

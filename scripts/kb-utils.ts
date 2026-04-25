@@ -235,6 +235,7 @@ export const inferEvidenceDomain = (sourceType: SourceManifestEntry['source_type
   if (sourceType === 'clinical_guideline') return 'clinical';
   if (sourceType === 'pharmacology_reference' || sourceType === 'academic_paper') return 'pharmacological';
   if (sourceType === 'expert_dataset') return 'aggregated_clinical';
+  if (sourceType === 'ai_synthesis') return 'aggregated_clinical';
   if (sourceType === 'expert_guideline') return 'harm_reduction';
   if (sourceType === 'traditional_context') return 'cultural';
   if (sourceType === 'legal_policy') return 'legal';

@@ -44,6 +44,24 @@
       "authors": [
         "Alma Healing Center"
       ]
+    },
+    {
+      "source_id": "perplexity_ayahuasca_interactions_synthesis_2026",
+      "title": "Ayahuasca Drug Interaction Research (Perplexity Synthesis)",
+      "source_type": "ai_synthesis",
+      "authority_level": "low",
+      "evidence_domain": "aggregated_clinical",
+      "year": 2026,
+      "authors": [
+        "Perplexity AI synthesis (compiled by user)"
+      ],
+      "citation": "Perplexity AI research synthesis, compiled 2026",
+      "url_or_path": "sources/expert-guidelines/perplexity_ayahuasca_interactions_synthesis_2026.md",
+      "file_refs": [
+        "sources/expert-guidelines/perplexity_ayahuasca_interactions_synthesis_2026.md"
+      ],
+      "review_state": "extracted",
+      "notes": "AI-generated research synthesis. Use for provisional coverage and citation discovery only."
     }
   ]
 }

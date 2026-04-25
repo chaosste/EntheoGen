@@ -1,4 +1,4 @@
-import { canonicalPairKey, slugify, splitSentences, stableHash } from './kb-utils';
+import { canonicalPairKey, splitSentences, stableHash } from './kb-utils';
 
 export interface PerplexityCitation {
   title?: string;
@@ -118,6 +118,16 @@ const MECHANISM_MATCHES: PerplexityMechanismMatch[] = [
 
 const KNOWN_CLASS_LABELS = new Set(MEDICATION_CLASS_MAP.map((entry) => entry.classLabel));
 
+const compactObject = <T extends Record<string, unknown>>(value: T): T => {
+  const output: Record<string, unknown> = {};
+  for (const [key, entry] of Object.entries(value)) {
+    if (entry !== undefined) {
+      output[key] = entry;
+    }
+  }
+  return output as T;
+};
+
 export const normalizeMedicationLabel = (value: string): { normalized: string; aliases: string[] } => {
   const original = value.trim();
   const aliases: string[] = [];
@@ -193,56 +203,236 @@ export const inferPerplexityActionability = (text: string): PerplexityClaimCandi
   return 'none';
 };
 
-export const extractPerplexityCitations = (text: string): PerplexityCitation[] => {
-  const citations = new Map<string, PerplexityCitation>();
+export const isPerplexitySourceId = (sourceId: string): boolean => sourceId.startsWith('perplexity_');
 
-  for (const match of text.matchAll(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g)) {
-    const title = match[1].trim();
-    const url = match[2].trim();
-    citations.set(url, { title, url, citation_text: match[0] });
-  }
-
-  for (const match of text.matchAll(/https?:\/\/[^\s)]+/g)) {
-    const url = match[0].replace(/[.,;]+$/g, '');
-    if (!citations.has(url)) {
-      citations.set(url, { url, citation_text: url });
-    }
-  }
-
-  for (const match of text.matchAll(/\b(10\.\d{4,9}\/[-._;()/:A-Z0-9]+)\b/gi)) {
-    const doi = match[1];
-    const key = doi.toLowerCase();
-    if (!citations.has(key)) {
-      citations.set(key, { doi, citation_text: doi });
-    }
-  }
-
-  return Array.from(citations.values());
+export const summarizePerplexityClaimText = (claim: PerplexityClaimCandidate): string => {
+  const mechanismSummary = claim.mechanism.length > 0 ? ` mechanisms=${claim.mechanism.join(',')}` : '';
+  const pairSummary = claim.supports_pairs.length > 0 ? ` pairs=${claim.supports_pairs.map((pair) => canonicalPairKey(pair[0], pair[1])).join(',')}` : '';
+  return `${claim.claim}${mechanismSummary}${pairSummary}`;
 };
 
-const collectCandidateLines = (body: string): string[] => {
-  const lines = body.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
-  const candidates = new Set<string>();
+export const buildPerplexityCitationKey = (citation: PerplexityCitation): string =>
+  citation.doi?.trim()
+    ? `doi:${citation.doi.trim().toLowerCase()}`
+    : citation.url?.trim()
+      ? `url:${citation.url.trim().toLowerCase()}`
+      : `text:${normalizeWhitespace((citation.citation_text ?? citation.title ?? '').toLowerCase())}`;
 
-  for (const line of lines) {
-    if (/^[-*•]\s+/.test(line)) {
-      candidates.add(line.replace(/^[-*•]\s+/, '').trim());
+export const normalizePerplexitySourceLabel = (value: string): string =>
+  value
+    .replace(/\[[^\]]+\]/g, '')
+    .replace(/\s*\/\s*rima\s*/i, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase();
+
+export const knownPerplexityClassLabels = Array.from(KNOWN_CLASS_LABELS).sort();
+
+export interface PerplexityExtractionRejected {
+  text: string;
+  reason: string;
+  section: string;
+}
+
+export interface PerplexityExtractionResult {
+  claims: PerplexityClaimCandidate[];
+  rejected: PerplexityExtractionRejected[];
+  citations: PerplexityCitation[];
+}
+
+type MarkdownSection = {
+  heading: string;
+  level: number;
+  body: string;
+  citations: PerplexityCitation[];
+};
+
+const EXCLUDED_SECTION_PATTERNS = [
+  /metadata/i,
+  /summary/i,
+  /limitations/i,
+  /notes/i,
+  /extraction notes/i,
+  /source notes/i,
+  /how to use/i,
+  /references?/i,
+  /bibliography/i
+];
+
+const INCLUDED_SECTION_PATTERNS = [
+  /key claims/i,
+  /mechanisms described/i,
+  /clinical\s*\/\s*practical guidance/i,
+  /contraindications\s*\/\s*risks/i,
+  /interaction relevance/i
+];
+
+const META_REJECT_PHRASES = [
+  'not primary evidence',
+  'not authoritative',
+  'ai-generated',
+  'tertiary synthesis',
+  'this source',
+  'this document',
+  'limitations',
+  'notes',
+  'extraction notes',
+  'suitable for',
+  'not suitable for',
+  'requires validation',
+  'requires verification',
+  'candidate interaction pairs',
+  'guide for literature retrieval',
+  'must not',
+  'should be treated as',
+  'claim quality',
+  'source type',
+  'confidence penalty'
+];
+
+const PHARM_ENTITY_PATTERNS = [
+  /\bayahuasca\b/i,
+  /\bdmt\b/i,
+  /\bharmine\b/i,
+  /\bharmaline\b/i,
+  /\btetrahydroharmine\b/i,
+  /\bmaoi\b/i,
+  /\bmao[-\s]?a\b/i,
+  /\brima\b/i,
+  /\bssri(s)?\b/i,
+  /\bsnri(s)?\b/i,
+  /\btca(s)?\b/i,
+  /\bantidepressant(s)?\b/i,
+  /\bantipsychotic(s)?\b/i,
+  /\bstimulant(s)?\b/i,
+  /\bopioid(s)?\b/i,
+  /\bketamine\b/i,
+  /\blamotrigine\b/i,
+  /\bclonidine\b/i,
+  /\bguanfacine\b/i,
+  /\bantihypertensive(s)?\b/i,
+  /\btriptan(s)?\b/i,
+  /\bserotonergic\b/i,
+  /\bserotonin\b/i,
+  /\bdopamine\b/i,
+  /\bnorepinephrine\b/i,
+  /\bblood pressure\b/i,
+  /\bheart rate\b/i,
+  /\bcyp\b/i,
+  /\b5-ht2a\b/i,
+  /\bnmda\b/i,
+  /\bharmala\b/i,
+  /\bbeta[-_\s]?blockers?\b/i,
+  /\bcalcium[-_\s]?channel[-_\s]?blockers?\b/i
+];
+
+const PHARM_ACTION_PATTERNS = [
+  /\binhibit\b/i,
+  /\bincrease\b/i,
+  /\bdecrease\b/i,
+  /\battenuate\b/i,
+  /\bpotentiate\b/i,
+  /\bcause\b/i,
+  /\brisk\b/i,
+  /\bcontraindicat/i,
+  /\bavoid\b/i,
+  /\bmonitor\b/i,
+  /\binteract\b/i,
+  /\bmodulate\b/i,
+  /\bmetabolized\b/i,
+  /\binduce\b/i,
+  /\bblock\b/i,
+  /\bagonist\b/i,
+  /\bantagonist\b/i,
+  /\btoxicity\b/i,
+  /\bsyndrome\b/i,
+  /\bhypertensive\b/i,
+  /\bhypotension\b/i,
+  /\bsedation\b/i,
+  /\bseizure\b/i
+];
+
+const normalizeWhitespace = (value: string): string => value.replace(/\s+/g, ' ').trim();
+const makeClaimId = (sourceId: string, section: string, text: string, index: number): string =>
+  `${sourceId}_${String(index + 1).padStart(3, '0')}_${stableHash(`${section}|${text}`, 8)}`;
+
+const textMatchesAny = (text: string, patterns: RegExp[]): boolean => patterns.some((pattern) => pattern.test(text));
+
+const isExcludedSection = (heading: string): boolean => textMatchesAny(heading, EXCLUDED_SECTION_PATTERNS);
+
+const isIncludedSection = (heading: string): boolean => textMatchesAny(heading, INCLUDED_SECTION_PATTERNS);
+
+const containsMetaNoise = (text: string): boolean => textMatchesAny(text, META_REJECT_PHRASES.map((phrase) => new RegExp(phrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')));
+
+const hasPharmacologicalSignal = (text: string): boolean =>
+  textMatchesAny(text, PHARM_ENTITY_PATTERNS) && textMatchesAny(text, PHARM_ACTION_PATTERNS);
+
+const isValidClaimText = (text: string, context = ''): boolean => {
+  const cleaned = normalizeWhitespace(text);
+  if (!cleaned) return false;
+  if (!hasPharmacologicalSignal(`${cleaned} ${context}`.trim())) return false;
+  return true;
+};
+
+const parseMarkdownSections = (text: string): MarkdownSection[] => {
+  const sections: MarkdownSection[] = [];
+  let current: { heading: string; level: number; lines: string[] } = {
+    heading: '__preamble__',
+    level: 0,
+    lines: []
+  };
+
+  const flush = (): void => {
+    sections.push({
+      heading: current.heading,
+      level: current.level,
+      body: current.lines.join('\n'),
+      citations: []
+    });
+  };
+
+  for (const rawLine of text.split(/\r?\n/)) {
+    const headingMatch = rawLine.match(/^(#{1,6})\s+(.+)$/);
+    if (headingMatch) {
+      flush();
+      current = {
+        heading: headingMatch[2].trim(),
+        level: headingMatch[1].length,
+        lines: [rawLine.trim()]
+      };
       continue;
     }
-    if (/^\d+[\).]\s+/.test(line)) {
-      candidates.add(line.replace(/^\d+[\).]\s+/, '').trim());
-      continue;
-    }
-    if (/[.?!]/.test(line) || /interaction|risk|mechanism|monitor|avoid|caution|contraindicat/i.test(line)) {
-      candidates.add(line);
-    }
+    current.lines.push(rawLine);
   }
 
-  for (const sentence of splitSentences(body)) {
-    candidates.add(sentence);
-  }
+  flush();
+  return sections.map((section) => ({
+    ...section,
+    citations: extractPerplexityCitations(section.body)
+  }));
+};
 
-  return Array.from(candidates).filter((line) => line.length > 0 && !/^references?:?$/i.test(line));
+export const __debugParseMarkdownSections = parseMarkdownSections;
+
+const parseKeyValueLine = (line: string): [string, string] | null => {
+  const match = line.match(/^[-*]\s*([^:]+):\s*(.*)$/);
+  if (!match) return null;
+  return [match[1].trim().toLowerCase().replace(/\s+/g, '_'), match[2].trim()];
+};
+
+const parseListValue = (value: string): string[] => {
+  const trimmed = value.trim();
+  if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+    const inner = trimmed.slice(1, -1);
+    return inner
+      .split(',')
+      .map((item) => item.trim().replace(/^["']|["']$/g, ''))
+      .filter(Boolean);
+  }
+  return trimmed
+    .split(',')
+    .map((item) => item.trim().replace(/^["']|["']$/g, ''))
+    .filter(Boolean);
 };
 
 const buildSupportsPairs = (entities: string[]): [string, string][] => {
@@ -265,6 +455,257 @@ const buildSupportsPairs = (entities: string[]): [string, string][] => {
   return Array.from(new Map(pairs.map((pair) => [canonicalPairKey(pair[0], pair[1]), pair] as const)).values());
 };
 
+const parseStructuredClaimBlocks = (
+  section: MarkdownSection,
+  sourceId: string,
+  sourceTitle: string
+): { claims: PerplexityClaimCandidate[]; rejected: PerplexityExtractionRejected[] } => {
+  const claims: PerplexityClaimCandidate[] = [];
+  const rejected: PerplexityExtractionRejected[] = [];
+  const lines = section.body.split(/\r?\n/);
+  let currentBlock: string[] = [];
+  let currentHeading = '';
+
+  const flushBlock = (): void => {
+    if (currentHeading || currentBlock.length > 0) {
+      const blockText = [currentHeading, ...currentBlock].join('\n').trim();
+      const fieldMap = new Map<string, string>();
+      let rawClaim = '';
+      for (const line of currentBlock) {
+        const parsed = parseKeyValueLine(line.trim());
+        if (!parsed) continue;
+        const [key, value] = parsed;
+        fieldMap.set(key, value);
+        if (key === 'claim') rawClaim = value;
+      }
+
+      if (!rawClaim) {
+        rejected.push({ text: blockText, reason: 'missing structured claim text', section: section.heading });
+      } else if (containsMetaNoise(rawClaim) && !hasPharmacologicalSignal(rawClaim)) {
+        rejected.push({ text: rawClaim, reason: 'meta/source language without pharmacological claim', section: section.heading });
+      } else if (!isValidClaimText(rawClaim, `${fieldMap.get('entities') ?? ''} ${fieldMap.get('mechanism') ?? ''} ${sourceTitle}`)) {
+        rejected.push({ text: rawClaim, reason: 'lacks pharmacological claim signal', section: section.heading });
+      } else {
+        const inferredEntities = extractPerplexityEntities(rawClaim, sourceId, sourceTitle);
+        const explicitEntities = fieldMap.has('entities') ? parseListValue(fieldMap.get('entities') ?? '') : [];
+        const entities = Array.from(new Set([...explicitEntities, ...inferredEntities]));
+        const mechanisms = Array.from(
+          new Set([
+            ...(fieldMap.has('mechanism') ? parseListValue(fieldMap.get('mechanism') ?? '') : []),
+            ...extractPerplexityMechanisms(rawClaim)
+          ])
+        );
+        const citations = extractPerplexityCitations(blockText);
+        const claimType = (fieldMap.get('type') ?? inferPerplexityClaimType(rawClaim)) as PerplexityClaimCandidate['claim_type'];
+        claims.push({
+          claim_id: makeClaimId(sourceId, section.heading, rawClaim, claims.length),
+          source_id: sourceId,
+          claim: normalizeWhitespace(rawClaim),
+          claim_type: claimType,
+          entities: entities.length > 0 ? entities : ['ayahuasca'],
+          mechanism: mechanisms.length > 0 ? mechanisms : ['provisional_secondary'],
+          evidence_strength: 'theoretical',
+          confidence: 'low',
+          supports_pairs: buildSupportsPairs(entities.length > 0 ? entities : ['ayahuasca']),
+          clinical_actionability: inferPerplexityActionability(rawClaim),
+          review_state: 'needs_verification',
+          notes: 'Provisional claim extracted from AI synthesis; requires corroboration before promotion.',
+          provenance: {
+            source_type: 'ai_synthesis',
+            requires_verification: true,
+            ingestion_method: 'perplexity_ingestion_v1',
+            cited_sources: citations
+          },
+          source_specific: compactObject({
+            original_row: blockText,
+            normalized_medication_name: fieldMap.get('entities') ? parseListValue(fieldMap.get('entities') ?? '').join(', ') : undefined,
+            original_medication_name: fieldMap.get('entities') ? parseListValue(fieldMap.get('entities') ?? '').join(', ') : undefined,
+            severity_label: fieldMap.get('evidence_strength'),
+            other_information: fieldMap.get('directionality'),
+            derivation: 'structured_key_claim'
+          })
+        });
+      }
+    }
+    currentBlock = [];
+    currentHeading = '';
+  };
+
+  for (const rawLine of lines) {
+    const claimHeading = rawLine.match(/^###\s*Claim\b/i);
+    if (claimHeading) {
+      flushBlock();
+      currentHeading = rawLine.trim();
+      continue;
+    }
+    if (currentHeading) {
+      currentBlock.push(rawLine.trim());
+    }
+  }
+  flushBlock();
+  return { claims, rejected };
+};
+
+const extractClaimCandidatesFromSection = (
+  section: MarkdownSection,
+  sourceId: string,
+  sourceTitle: string,
+  sourceSpecific?: Record<string, unknown>
+): { claims: PerplexityClaimCandidate[]; rejected: PerplexityExtractionRejected[] } => {
+  const lines = section.body.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+  const claims: PerplexityClaimCandidate[] = [];
+  const rejected: PerplexityExtractionRejected[] = [];
+
+  for (const rawLine of lines) {
+    if (/^#{1,6}\s+/.test(rawLine)) continue;
+    if (/^[-*•]\s+/.test(rawLine) || /[.?!]/.test(rawLine)) {
+      let candidate = rawLine.replace(/^[-*•]\s+/, '').trim();
+      const claimMatch = candidate.match(/^claim:\s*(.+)$/i);
+      if (claimMatch) candidate = claimMatch[1].trim();
+      if (containsMetaNoise(candidate) && !hasPharmacologicalSignal(candidate)) {
+        rejected.push({ text: candidate, reason: 'meta/source language without pharmacological claim', section: section.heading });
+        continue;
+      }
+      if (!isValidClaimText(candidate, `${section.heading} ${sourceTitle}`)) {
+        rejected.push({ text: candidate, reason: 'lacks pharmacological claim signal', section: section.heading });
+        continue;
+      }
+      const entities = extractPerplexityEntities(candidate, sourceId, sourceTitle);
+      const mechanisms = extractPerplexityMechanisms(candidate);
+      claims.push({
+        claim_id: makeClaimId(sourceId, section.heading, candidate, claims.length),
+        source_id: sourceId,
+        claim: normalizeWhitespace(candidate),
+        claim_type: inferPerplexityClaimType(candidate),
+        entities: entities.length > 0 ? entities : ['ayahuasca'],
+        mechanism: mechanisms.length > 0 ? mechanisms : ['provisional_secondary'],
+        evidence_strength: 'theoretical',
+        confidence: 'low',
+        supports_pairs: buildSupportsPairs(entities.length > 0 ? entities : ['ayahuasca']),
+        clinical_actionability: inferPerplexityActionability(candidate),
+        review_state: 'needs_verification',
+        notes: 'Provisional claim extracted from AI synthesis; requires corroboration before promotion.',
+        provenance: {
+          source_type: 'ai_synthesis',
+          requires_verification: true,
+          ingestion_method: 'perplexity_ingestion_v1',
+          cited_sources: section.citations
+        },
+        source_specific: compactObject({
+          original_row: candidate,
+          derivation: 'section_sentence_extraction',
+          ...sourceSpecific
+        })
+      });
+    }
+  }
+
+  return { claims, rejected };
+};
+
+export const extractPerplexityCitations = (text: string): PerplexityCitation[] => {
+  const citations = new Map<string, PerplexityCitation>();
+  const lines = text.split(/\r?\n/);
+
+  const addCitation = (citation: PerplexityCitation): void => {
+    const key = buildPerplexityCitationKey(citation);
+    if (!citations.has(key)) {
+      citations.set(key, citation);
+    }
+  };
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed) continue;
+    const isStructuredFieldLine = /^[-*•]\s*[A-Za-z][A-Za-z0-9 _/-]+:\s*/.test(trimmed);
+
+    for (const match of trimmed.matchAll(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g)) {
+      addCitation({
+        title: match[1].trim(),
+        url: match[2].trim(),
+        citation_text: match[0]
+      });
+    }
+
+    for (const match of trimmed.matchAll(/https?:\/\/[^\s)]+/g)) {
+      const url = match[0].replace(/[.,;]+$/g, '');
+      addCitation({
+        url,
+        citation_text: trimmed
+      });
+    }
+
+    for (const match of trimmed.matchAll(/https?:\/\/doi\.org\/(10\.\d{4,9}\/[^\s)]+)/gi)) {
+      const doi = match[1];
+      addCitation({
+        doi,
+        url: `https://doi.org/${doi}`,
+        citation_text: trimmed
+      });
+    }
+
+    for (const match of trimmed.matchAll(/\bdoi:\s*(10\.\d{4,9}\/[^\s)\]]+)/gi)) {
+      const doi = match[1];
+      addCitation({
+        doi,
+        citation_text: trimmed
+      });
+    }
+
+    for (const match of trimmed.matchAll(/\b(10\.\d{4,9}\/[-._;()/:A-Z0-9]+)\b/gi)) {
+      const doi = match[1].replace(/[.,;]+$/g, '');
+      addCitation({
+        doi,
+        citation_text: trimmed
+      });
+    }
+
+    if (
+      !isStructuredFieldLine &&
+      /\b(et al\.?|and colleagues)\b/i.test(trimmed) &&
+      /\b(19|20)\d{2}\b/.test(trimmed) &&
+      !containsMetaNoise(trimmed)
+    ) {
+      addCitation({
+        title: trimmed.replace(/\s+/g, ' '),
+        citation_text: trimmed
+      });
+    }
+  }
+
+  return Array.from(citations.values());
+};
+
+export const extractPerplexityClaimsDetailed = (
+  sourceId: string,
+  sourceTitle: string,
+  body: string,
+  sourceSpecific?: Record<string, unknown>
+): PerplexityExtractionResult => {
+  const sections = parseMarkdownSections(body);
+  const allCitations = sections.flatMap((section) => section.citations);
+  const keyClaimsSection = sections.find((section) => /key claims/i.test(section.heading));
+  const rejected: PerplexityExtractionRejected[] = [];
+
+  if (keyClaimsSection) {
+    const structured = parseStructuredClaimBlocks(keyClaimsSection, sourceId, sourceTitle);
+    rejected.push(...structured.rejected);
+    if (structured.claims.length > 0) {
+      return { claims: structured.claims, rejected, citations: allCitations };
+    }
+  }
+
+  const candidateSections = sections.filter((section) => isIncludedSection(section.heading) && !isExcludedSection(section.heading));
+  const claims: PerplexityClaimCandidate[] = [];
+  for (const section of candidateSections) {
+    const extracted = extractClaimCandidatesFromSection(section, sourceId, sourceTitle, sourceSpecific);
+    claims.push(...extracted.claims);
+    rejected.push(...extracted.rejected);
+  }
+
+  return { claims, rejected, citations: allCitations };
+};
+
 export const extractPerplexityClaims = (
   sourceId: string,
   sourceTitle: string,
@@ -272,81 +713,15 @@ export const extractPerplexityClaims = (
   citedSources: PerplexityCitation[],
   sourceSpecific?: Record<string, unknown>
 ): PerplexityClaimCandidate[] => {
-  const candidates = collectCandidateLines(body);
-  const claims: PerplexityClaimCandidate[] = [];
-  const sourceKeywords = `${sourceId} ${sourceTitle}`.toLowerCase();
-
-  candidates.forEach((candidate, index) => {
-    const entities = extractPerplexityEntities(candidate, sourceId, sourceTitle);
-    if (entities.length === 0 && !/ayahuasca/.test(sourceKeywords) && !/ayahuasca/.test(candidate.toLowerCase())) {
-      return;
-    }
-    const mechanisms = extractPerplexityMechanisms(candidate);
-    const claimEntities = entities.length > 0 ? entities : extractPerplexityEntities(`${sourceTitle} ${body}`, sourceId, sourceTitle);
-    const claim = candidate.trim();
-    const supportsPairs = buildSupportsPairs(claimEntities);
-    const claimId = `${sourceId}_${String(index + 1).padStart(3, '0')}`;
-    claims.push({
-      claim_id: claimId,
-      source_id: sourceId,
-      claim,
-      claim_type: inferPerplexityClaimType(candidate),
-      entities: claimEntities.length > 0 ? claimEntities : ['ayahuasca'],
-      mechanism: mechanisms.length > 0 ? mechanisms : ['provisional_secondary'],
-      evidence_strength: 'theoretical',
-      confidence: 'low',
-      supports_pairs: supportsPairs,
-      clinical_actionability: inferPerplexityActionability(candidate),
-      review_state: 'needs_verification',
-      notes: 'Provisional claim extracted from AI synthesis; requires corroboration before promotion.',
+  const result = extractPerplexityClaimsDetailed(sourceId, sourceTitle, body, sourceSpecific);
+  if (citedSources.length > 0) {
+    return result.claims.map((claim) => ({
+      ...claim,
       provenance: {
-        source_type: 'ai_synthesis',
-        requires_verification: true,
-        ingestion_method: 'perplexity_ingestion_v1',
-        cited_sources: citedSources
-      },
-      source_specific: sourceSpecific
-        ? {
-            original_row: typeof sourceSpecific.original_row === 'string' ? String(sourceSpecific.original_row) : undefined,
-            normalized_medication_name: typeof sourceSpecific.normalized_medication_name === 'string' ? String(sourceSpecific.normalized_medication_name) : undefined,
-            original_medication_name: typeof sourceSpecific.original_medication_name === 'string' ? String(sourceSpecific.original_medication_name) : undefined,
-            aliases: Array.isArray(sourceSpecific.aliases) ? sourceSpecific.aliases.map((value) => String(value)) : undefined,
-            severity_label: typeof sourceSpecific.severity_label === 'string' ? String(sourceSpecific.severity_label) : undefined,
-            other_information: typeof sourceSpecific.other_information === 'string' ? String(sourceSpecific.other_information) : undefined,
-            derivation: typeof sourceSpecific.derivation === 'string' ? String(sourceSpecific.derivation) : undefined
-          }
-        : undefined
-    });
-  });
-
-  return claims;
+        ...claim.provenance,
+        cited_sources: claim.provenance.cited_sources.length > 0 ? claim.provenance.cited_sources : citedSources
+      }
+    }));
+  }
+  return result.claims;
 };
-
-export const isPerplexitySourceId = (sourceId: string): boolean => sourceId.startsWith('perplexity_');
-
-export const summarizePerplexityClaimText = (claim: PerplexityClaimCandidate): string => {
-  const mechanismSummary = claim.mechanism.length > 0 ? ` mechanisms=${claim.mechanism.join(',')}` : '';
-  const pairSummary = claim.supports_pairs.length > 0 ? ` pairs=${claim.supports_pairs.map((pair) => canonicalPairKey(pair[0], pair[1])).join(',')}` : '';
-  return `${claim.claim}${mechanismSummary}${pairSummary}`;
-};
-
-export const buildPerplexityCitationKey = (citation: PerplexityCitation): string =>
-  stableHash(
-    [
-      citation.title ?? '',
-      citation.url ?? '',
-      citation.doi ?? '',
-      citation.citation_text ?? ''
-    ].join('|'),
-    12
-  );
-
-export const normalizePerplexitySourceLabel = (value: string): string =>
-  value
-    .replace(/\[[^\]]+\]/g, '')
-    .replace(/\s*\/\s*rima\s*/i, '')
-    .replace(/\s+/g, ' ')
-    .trim()
-    .toLowerCase();
-
-export const knownPerplexityClassLabels = Array.from(KNOWN_CLASS_LABELS).sort();

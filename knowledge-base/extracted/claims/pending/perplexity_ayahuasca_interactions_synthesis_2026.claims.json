@@ -1,0 +1,97 @@
+{
+  "source_id": "perplexity_ayahuasca_interactions_synthesis_2026",
+  "source_path": "sources/expert-guidelines/perplexity_ayahuasca_interactions_synthesis_2026.md",
+  "source_metadata": {
+    "source_id": "perplexity_ayahuasca_interactions_synthesis_2026",
+    "source_type": "ai_synthesis",
+    "authority_level": "low",
+    "evidence_domain": "aggregated_clinical",
+    "year": 2026,
+    "authors": "Perplexity AI synthesis (compiled by user)",
+    "citation": "Perplexity AI research synthesis, compiled 2026",
+    "url": null,
+    "file_origin": "ai_generated_notes",
+    "review_state": "machine_extracted",
+    "derivation": "ai_synthesized",
+    "confidence_penalty": true
+  },
+  "claims": [
+    {
+      "claim_id": "perplexity_ayahuasca_interactions_synthesis_2026_001_6a3adbb5",
+      "source_id": "perplexity_ayahuasca_interactions_synthesis_2026",
+      "claim": "Avoid combining ayahuasca with serotonergic medications",
+      "claim_type": "contraindication",
+      "entities": [
+      ],
+      "mechanism": [
+        "serotonergic_toxicity"
+      ],
+      "evidence_strength": "theoretical",
+      "confidence": "low",
+      "supports_pairs": [],
+      "clinical_actionability": "avoid",
+      "review_state": "needs_verification",
+      "notes": "Provisional claim extracted from AI synthesis; requires corroboration before promotion.",
+      "provenance": {
+        "source_type": "ai_synthesis",
+        "requires_verification": true,
+        "ingestion_method": "perplexity_ingestion_v1",
+        "cited_sources": []
+      },
+      "source_specific": {
+        "original_row": "Avoid combining ayahuasca with serotonergic medications",
+        "derivation": "ai_synthesized",
+        "source_id": "perplexity_ayahuasca_interactions_synthesis_2026",
+        "source_type": "ai_synthesis",
+        "authority_level": "low",
+        "evidence_domain": "aggregated_clinical",
+        "year": 2026,
+        "authors": "Perplexity AI synthesis (compiled by user)",
+        "citation": "Perplexity AI research synthesis, compiled 2026",
+        "url": null,
+        "file_origin": "ai_generated_notes",
+        "review_state": "machine_extracted",
+        "confidence_penalty": true
+      }
+    },
+    {
+      "claim_id": "perplexity_ayahuasca_interactions_synthesis_2026_001_60b9752c",
+      "source_id": "perplexity_ayahuasca_interactions_synthesis_2026",
+      "claim": "Serotonin syndrome",
+      "claim_type": "interaction",
+      "entities": [
+        "ayahuasca"
+      ],
+      "mechanism": [
+        "serotonergic_toxicity"
+      ],
+      "evidence_strength": "theoretical",
+      "confidence": "low",
+      "supports_pairs": [],
+      "clinical_actionability": "none",
+      "review_state": "needs_verification",
+      "notes": "Provisional claim extracted from AI synthesis; requires corroboration before promotion.",
+      "provenance": {
+        "source_type": "ai_synthesis",
+        "requires_verification": true,
+        "ingestion_method": "perplexity_ingestion_v1",
+        "cited_sources": []
+      },
+      "source_specific": {
+        "original_row": "Serotonin syndrome",
+        "derivation": "ai_synthesized",
+        "source_id": "perplexity_ayahuasca_interactions_synthesis_2026",
+        "source_type": "ai_synthesis",
+        "authority_level": "low",
+        "evidence_domain": "aggregated_clinical",
+        "year": 2026,
+        "authors": "Perplexity AI synthesis (compiled by user)",
+        "citation": "Perplexity AI research synthesis, compiled 2026",
+        "url": null,
+        "file_origin": "ai_generated_notes",
+        "review_state": "machine_extracted",
+        "confidence_penalty": true
+      }
+    }
+  ]
+}

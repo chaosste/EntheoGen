@@ -10,6 +10,7 @@ This directory is the lightweight source-to-claim pipeline for the EntheoGen int
 - `extracted/claims/reviewed/` stores human-reviewed claims ready for dataset linking.
 - `extracted/claims/rejected/` stores claims that were reviewed and rejected.
 - `schemas/` stores the JSON Schemas used to validate source and claim records.
+- Perplexity research syntheses live under `sources/expert-guidelines/` with filenames like `perplexity_<topic_slug>_<year>.md`.
 
 The preferred extraction format is `.md` or `.txt`. PDFs can remain archival/source-of-record, but they are not part of the extraction pipeline yet.
 
@@ -22,6 +23,7 @@ The preferred extraction format is `.md` or `.txt`. PDFs can remain archival/sou
 5. Run `npm run kb:promote` to move reviewed claims into `reviewed/` or `rejected/`.
 6. Run `npm run kb:link` to attach reviewed claim source references into the interaction dataset.
 7. Run `npm run kb:validate` to verify manifests, claim files, source files, and dataset references.
+8. Run `npm run kb:ingest:perplexity` to turn Perplexity research syntheses into provisional claim candidates and citation leads.
 
 ## Adding a Source
 
@@ -43,6 +45,17 @@ Frontmatter is optional, but recommended. When present, it can define source met
 The extractor scans `.md` and `.txt` files, looks for explicit interaction/risk/mechanism language, and writes candidate claims into `extracted/claims/pending/`.
 
 All machine-generated claims are provisional. They should be treated as candidates only, not validated evidence.
+
+### Perplexity Research Synthesis
+
+`npm run kb:ingest:perplexity`
+
+Perplexity-derived markdown notes are treated as provisional secondary evidence.
+
+- They are extracted into candidate claims with `review_state = needs_verification`.
+- Their `evidence_strength` defaults to `theoretical`.
+- Any citations that appear in the synthesis are copied into the citation registry as `unverified`.
+- They may help close coverage gaps, but they do not upgrade dataset confidence by themselves.
 
 ## Review and Promotion
 
@@ -83,7 +96,9 @@ Validation checks:
 - reviewed claims reference known source IDs
 - manifest entries point to real source files
 - dataset source references resolve to known dataset sources
+- Perplexity claims stay provisional unless manually verified and corroborated by stronger evidence
 
 ## Safety Note
 
 Machine-extracted claims are not validated evidence. They are the first pass in a review workflow, not a final citation layer.
+Perplexity synthesis is useful for discovery, not authority.

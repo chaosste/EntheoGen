@@ -98,17 +98,14 @@ const run = async (): Promise<void> => {
           if (claim.provenance?.ingestion_method !== 'perplexity_ingestion_v1') {
             errors.push(`Perplexity claim missing provenance.ingestion_method: ${claim.claim_id}`);
           }
-          if (claim.evidence_strength && claim.evidence_strength !== 'theoretical') {
+          if (claim.review_state !== 'needs_verification' && claim.review_state !== 'human_reviewed') {
+            errors.push(`Perplexity claim must be needs_verification or human_reviewed: ${claim.claim_id}`);
+          }
+          if (claim.evidence_strength && claim.review_state !== 'human_reviewed' && claim.evidence_strength !== 'theoretical') {
             errors.push(`Perplexity claim must remain theoretical until corroborated: ${claim.claim_id}`);
           }
-          if (claim.confidence && claim.confidence !== 'low') {
+          if (claim.confidence && claim.review_state !== 'human_reviewed' && claim.confidence !== 'low') {
             errors.push(`Perplexity claim must remain low confidence until corroborated: ${claim.claim_id}`);
-          }
-          if (claim.review_state === 'machine_extracted') {
-            warnings.push(`Perplexity claim still machine_extracted instead of needs_verification: ${claim.claim_id}`);
-          }
-          if (claim.review_state === 'human_reviewed' && claim.provenance?.requires_verification === true) {
-            warnings.push(`Perplexity claim human_reviewed while still requiring verification: ${claim.claim_id}`);
           }
           if (claim.clinical_actionability === 'contraindicated') {
             errors.push(`Perplexity claim may not auto-promote to contraindicated: ${claim.claim_id}`);

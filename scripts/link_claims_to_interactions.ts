@@ -43,6 +43,12 @@ const normalize = (value: string): string => slugify(value);
 
 const pairHasMechanismMatch = (claim: ClaimRecord, pair: InteractionPairV2): boolean => {
   const claimText = `${claim.claim} ${claim.mechanism ?? ''} ${claim.notes ?? ''}`.toLowerCase();
+  const claimEntities = new Set(claim.entities.map(normalize));
+  const pairEntities = new Set(pair.substances.map(normalize));
+  const overlaps = [...pairEntities].filter((entity) => claimEntities.has(entity));
+  if (overlaps.length === 1 && overlaps[0] === 'ayahuasca') {
+    return false;
+  }
   const pairMechanismWords = [
     pair.mechanism.primary_category,
     ...pair.mechanism.categories
@@ -69,7 +75,8 @@ const determineMatchType = (claim: ClaimRecord, pair: InteractionPairV2): Linked
   const overlaps = [...pairEntities].filter((entity) => claimEntities.has(entity));
 
   if (overlaps.length === 2) return 'direct_pair';
-  if (overlaps.length === 1) return 'drug_class';
+  if (overlaps.length === 1 && overlaps[0] !== 'ayahuasca') return 'drug_class';
+  if (overlaps.length === 1 && overlaps[0] === 'ayahuasca') return null;
   if (pairHasMechanismMatch(claim, pair)) return 'mechanism';
 
   const adjacentKeywords = ['blood pressure', 'heart rate', 'sedation', 'monitor', 'caution', 'avoid', 'risk'];
