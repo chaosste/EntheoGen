@@ -93,9 +93,7 @@ Academic literature is still sparse in some areas of plant-medicine interaction 
 
 Community expertise helps prioritize future rule additions and dataset extensions.
 
-Please leave feedback in:
-
-https://github.com/chaosste/EntheoGen/discussions/1
+Please leave feedback in [Discussions](https://github.com/chaosste/EntheoGen/discussions/1)
 
 # Tech Stack
 | Layer | Technology Frontend |
