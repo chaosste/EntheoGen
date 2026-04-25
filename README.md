@@ -156,7 +156,7 @@ In moments of clinical emergency, seek urgent professional medical care.
 <div align="center">
 
 Built by Steve Beale
-https://newpsychonaut.com
+[www.newpsychonaut.com](https://www.newpsychonaut.com/)
 
 © 2026 Stephen Beale · MIT License
 
