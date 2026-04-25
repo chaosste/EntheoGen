@@ -15,6 +15,7 @@ import {
   SOURCE_KINDS,
   SOURCE_MATCH_TYPES_V2,
   VALIDATION_FLAGS_V2,
+  type ValidationFlagV2,
   type InteractionDatasetV2
 } from '../src/data/interactionSchemaV2';
 import { isAggregateNodeId } from '../src/data/aggregateNodeDecomposition';
@@ -206,8 +207,13 @@ const run = async (): Promise<void> => {
     if (!pair.evidence.review_state) {
       errors.push(`missing evidence.review_state in ${pair.key}`);
     }
-    if (!pair.evidence.source_refs?.length) {
+    const isProvisionalGapFill = pair.provenance.source === 'provisional_gap_fill';
+
+    if (!pair.evidence.source_refs?.length && !isProvisionalGapFill) {
       errors.push(`missing source_refs in ${pair.key}`);
+    }
+    if (isProvisionalGapFill && pair.evidence.source_refs.length > 0) {
+      errors.push(`provisional gap fill pair ${pair.key} must not have source_refs`);
     }
     if (!pair.validation) {
       errors.push(`missing validation grouping in ${pair.key}`);
@@ -290,7 +296,11 @@ const run = async (): Promise<void> => {
       if (pair.provenance.confidence_tier === 'high') {
         errors.push(`theoretical pair ${pair.key} must not have high provenance confidence`);
       }
-      if (pair.evidence.status !== 'mechanistic_inference' && pair.evidence.status !== 'supported') {
+      if (
+        pair.evidence.status !== 'mechanistic_inference' &&
+        pair.evidence.status !== 'supported' &&
+        pair.evidence.status !== 'provisional_secondary'
+      ) {
         warnings.push(`theoretical pair ${pair.key} uses evidence status ${pair.evidence.status ?? 'missing'}`);
       }
     }
@@ -372,6 +382,42 @@ const run = async (): Promise<void> => {
     }
     if (!pair.provenance.source_linking_confidence) {
       errors.push(`missing provenance.source_linking_confidence in ${pair.key}`);
+    }
+
+    if (isProvisionalGapFill) {
+      if (pair.classification.code !== 'THEORETICAL') {
+        errors.push(`provisional gap fill pair ${pair.key} must be THEORETICAL`);
+      }
+      if (pair.classification.confidence !== 'low') {
+        errors.push(`provisional gap fill pair ${pair.key} must have low confidence`);
+      }
+      if (pair.evidence.support_type !== 'provisional_gap_fill') {
+        errors.push(`provisional gap fill pair ${pair.key} must use provisional_gap_fill support type`);
+      }
+      if (pair.evidence.status !== 'provisional_secondary') {
+        errors.push(`provisional gap fill pair ${pair.key} must have provisional_secondary evidence status`);
+      }
+      if (pair.evidence.review_state !== 'needs_verification') {
+        errors.push(`provisional gap fill pair ${pair.key} must require verification`);
+      }
+      if (!pair.provenance.requires_verification) {
+        errors.push(`provisional gap fill pair ${pair.key} must require verification`);
+      }
+      if (pair.provenance.confidence_tier !== 'low') {
+        errors.push(`provisional gap fill pair ${pair.key} must have low provenance confidence`);
+      }
+      const provisionalFlags = new Set<ValidationFlagV2>(pair.audit.validation_flags);
+      const expectedProvisionalFlags: ValidationFlagV2[] = [
+        'low_confidence',
+        'provisional_secondary',
+        'needs_verification',
+        'upgrade_candidate'
+      ];
+      for (const flag of expectedProvisionalFlags) {
+        if (!provisionalFlags.has(flag)) {
+          errors.push(`provisional gap fill pair ${pair.key} missing validation flag ${flag}`);
+        }
+      }
     }
 
     if (pair.classification.confidence === 'low' && !pair.audit.validation_flags.includes('low_confidence')) {

@@ -13,8 +13,14 @@
     "review_state"
   ],
   "properties": {
-    "source_id": { "type": "string", "minLength": 1 },
-    "title": { "type": "string", "minLength": 1 },
+    "source_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
     "source_type": {
       "type": "string",
       "enum": [
@@ -28,27 +34,63 @@
         "legal_policy"
       ]
     },
-    "authority_level": { "type": "string", "enum": ["high", "medium", "contextual", "low"] },
+    "authority_level": {
+      "type": "string",
+      "enum": [
+        "high",
+        "medium",
+        "contextual",
+        "low"
+      ]
+    },
     "evidence_domain": {
       "type": "string",
-      "enum": ["clinical", "pharmacological", "aggregated_clinical", "ceremonial", "harm_reduction", "legal", "cultural"]
+      "enum": [
+        "clinical",
+        "pharmacological",
+        "aggregated_clinical",
+        "ceremonial",
+        "harm_reduction",
+        "legal",
+        "cultural"
+      ]
     },
-    "year": { "type": "integer" },
+    "year": {
+      "type": "integer"
+    },
     "authors": {
       "type": "array",
-      "items": { "type": "string", "minLength": 1 }
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
     },
-    "citation": { "type": "string" },
-    "url_or_path": { "type": "string", "minLength": 1 },
+    "citation": {
+      "type": "string"
+    },
+    "url_or_path": {
+      "type": "string",
+      "minLength": 1
+    },
     "file_refs": {
       "type": "array",
-      "items": { "type": "string", "minLength": 1 }
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
     },
     "review_state": {
       "type": "string",
-      "enum": ["unreviewed", "extracted", "validated", "rejected"]
+      "enum": [
+        "unreviewed",
+        "extracted",
+        "validated",
+        "rejected"
+      ]
     },
-    "notes": { "type": "string" }
+    "notes": {
+      "type": "string"
+    }
   },
   "additionalProperties": true
 }

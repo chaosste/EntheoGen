@@ -30,21 +30,31 @@ export type ConfidenceLevel = (typeof CONFIDENCE_LEVELS)[number];
 export const MECHANISM_CATEGORIES_V2 = [
   'serotonergic_toxicity',
   'maoi_potentiation',
+  'serotonergic_modulation',
+  'mao_inhibition',
+  'nmda_antagonism',
   'psychedelic_intensification',
   'sympathomimetic_load',
   'cardiovascular_load',
   'hemodynamic_interaction',
+  'hemodynamic_modulation',
   'qt_or_arrhythmia_risk',
+  'qt_prolongation',
   'cns_depression',
   'pharmacodynamic_cns_depression',
+  'dopaminergic_modulation',
   'respiratory_depression',
   'seizure_threshold',
+  'seizure_threshold_lowering',
   'noradrenergic_suppression',
   'anticholinergic_delirium',
   'dopaminergic_load',
   'glutamatergic_dissociation',
   'glutamate_modulation',
   'gabaergic_modulation',
+  '5ht_receptor_agonism',
+  'cyp_inhibition',
+  'metabolic_interaction',
   'dehydration_or_electrolyte_risk',
   'psychiatric_destabilization',
   'ion_channel_modulation',
@@ -93,6 +103,7 @@ export const EVIDENCE_SUPPORT_TYPES = [
   'class_level_literature',
   'mechanistic_literature',
   'adjacent_domain_literature',
+  'provisional_gap_fill',
   'ai_synthesis',
   'none'
 ] as const;
@@ -110,6 +121,7 @@ export const SOURCE_MATCH_TYPES_V2 = [
   'mechanism',
   'adjacent_domain',
   'source_gap',
+  'provisional_gap_fill',
   'ai_synthesis'
 ] as const;
 
@@ -159,7 +171,10 @@ export const VALIDATION_FLAGS_V2 = [
   'inferred_mechanism_added',
   'machine_inferred',
   'needs_human_review',
-  'source_gap_unresolved'
+  'source_gap_unresolved',
+  'provisional_secondary',
+  'needs_verification',
+  'upgrade_candidate'
 ] as const;
 
 export type ValidationFlagV2 = (typeof VALIDATION_FLAGS_V2)[number];
@@ -168,7 +183,8 @@ export const REVIEW_STATES_V2 = [
   'unreviewed',
   'machine_inferred',
   'human_reviewed',
-  'requires_review'
+  'requires_review',
+  'needs_verification'
 ] as const;
 
 export type ReviewStateV2 = (typeof REVIEW_STATES_V2)[number];
@@ -221,7 +237,7 @@ export interface EvidenceProfileV2 {
 
 export interface ProvenanceV2 {
   derivation_type: DerivationType;
-  source?: 'deterministic_mapping_table' | 'heuristic_fallback' | 'self_pair' | 'decomposition' | 'mechanistic_inference';
+  source?: 'deterministic_mapping_table' | 'heuristic_fallback' | 'self_pair' | 'decomposition' | 'mechanistic_inference' | 'provisional_gap_fill';
   confidence_tier?: 'high' | 'medium' | 'low';
   method?: string;
   source_linking_method?: string;

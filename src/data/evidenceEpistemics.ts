@@ -21,7 +21,8 @@ export const REVIEW_STATES = [
   'unreviewed',
   'machine_inferred',
   'human_reviewed',
-  'requires_review'
+  'requires_review',
+  'needs_verification'
 ] as const;
 
 export type ReviewStateV2 = (typeof REVIEW_STATES)[number];
@@ -49,6 +50,9 @@ export const VALIDATION_FLAG_SEVERITY: Record<string, ValidationSeverity> = {
   inferred_mechanism_added: 'info',
   machine_inferred: 'info',
   needs_human_review: 'info',
+  provisional_secondary: 'info',
+  needs_verification: 'info',
+  upgrade_candidate: 'info',
   missing_source: 'warning',
   source_gap_unresolved: 'warning',
   override_applied: 'info'

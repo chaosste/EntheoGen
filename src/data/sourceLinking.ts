@@ -14,7 +14,7 @@ export interface SourceLinkingContext {
   substanceB: string;
   mechanismCategories: string[];
   code: InteractionCodeV2;
-  reviewState?: 'unreviewed' | 'machine_inferred' | 'human_reviewed' | 'requires_review';
+  reviewState?: 'unreviewed' | 'machine_inferred' | 'human_reviewed' | 'requires_review' | 'needs_verification';
   sourceText?: string | null;
   existingSourceRefs: SourceClaimRefV2[];
   sourceLibrary: SourceV2[];

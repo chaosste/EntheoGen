@@ -9,6 +9,7 @@ import { extractPerplexityClaimsDetailed, extractPerplexityCitations } from './p
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
+const perplexitySourceId = 'perplexity_ayahuasca_interactions_synthesis_2026';
 
 const runScript = (script: string, env: Record<string, string>) => {
   const result = spawnSync(process.execPath, [path.join(root, 'node_modules/.bin/tsx'), script], {
@@ -38,7 +39,7 @@ const datasetPath = path.join(tempRoot, 'dataset.json');
 const manifestPath = path.join(kbIndexesDir, 'source_manifest.json');
 const tagsPath = path.join(kbIndexesDir, 'source_tags.json');
 const citationPath = path.join(kbIndexesDir, 'citation_registry.json');
-const perplexitySourcePath = path.join(kbSourcesDir, 'perplexity_ayahuasca_interactions_2025.md');
+const perplexitySourcePath = path.join(kbSourcesDir, `${perplexitySourceId}.md`);
 
 mkdirSync(kbSourcesDir, { recursive: true });
 mkdirSync(pendingDir, { recursive: true });
@@ -51,19 +52,38 @@ writeFileSync(
   `# Ayahuasca Interaction Synthesis
 
 ## Metadata
-- source_id: perplexity_ayahuasca_interactions_2025
+- source_id: ${perplexitySourceId}
 - source_type: ai_synthesis
 - authority_level: low
 - evidence_domain: aggregated_clinical
-- year: 2025
+- year: 2026
 - authors: Perplexity research synthesis
-- citation: Perplexity research synthesis, generated/retrieved 2025-04-25
+- citation: Perplexity research synthesis, generated/retrieved 2026-04-25
 
 ---
 
-- Ayahuasca with sertraline may increase serotonin syndrome risk. See [Halman et al. 2023](https://example.com/halman) and DOI 10.1234/example.doi.
-- The mechanism is serotonergic toxicity and blood pressure changes.
-- Moclobemide is relevant through MAOI potentiation.
+## Key Claims
+### Claim 1
+- claim: Ayahuasca with sertraline may increase serotonin syndrome risk.
+- type: contraindication
+- entities: [ayahuasca, sertraline, SSRIs]
+- confidence: low
+- evidence_strength: theoretical
+- citation: [Halman et al. 2023](https://example.com/halman) doi:10.1234/example.doi
+
+### Claim 2
+- claim: Harmala alkaloids inhibit MAO-A and can potentiate serotonergic signaling.
+- type: mechanism
+- entities: [ayahuasca, harmala alkaloids, MAO-A]
+- confidence: low
+- evidence_strength: theoretical
+
+### Claim 3
+- claim: Moclobemide-like MAOI potentiation may increase blood pressure risk when combined with serotonergic drugs.
+- type: interaction
+- entities: [moclobemide, MAOI, serotonergic drugs]
+- confidence: low
+- evidence_strength: theoretical
 `,
   'utf8'
 );
@@ -246,7 +266,8 @@ runScript('scripts/ingest_perplexity_research.ts', {
   KB_CLAIM_SCHEMA_PATH: path.join(root, 'knowledge-base/schemas/claim.schema.json')
 });
 
-const pendingPackage = await readJson<{ claims: ClaimRecord[] }>(path.join(pendingDir, 'perplexity_ayahuasca_interactions_2025.claims.json'));
+const pendingClaimsFilename = `${perplexitySourceId}.claims.json`;
+const pendingPackage = await readJson<{ claims: ClaimRecord[] }>(path.join(pendingDir, pendingClaimsFilename));
 assert.ok(pendingPackage.claims.length >= 2, 'expected Perplexity ingestion to generate several claims');
 
 const sertralineClaim = pendingPackage.claims.find((claim) => claim.claim.includes('sertraline'));
@@ -262,7 +283,7 @@ assert.ok(sertralineClaim?.entities.includes('SSRIs'), 'sertraline should infer 
 
 const citationRegistry = await readJson<{ citations: Array<{ status?: string; discovered_via?: string; title?: string; url?: string; doi?: string }> }>(citationPath);
 assert.ok(citationRegistry.citations.some((entry) => entry.status === 'unverified'), 'new citations should be marked unverified');
-assert.ok(citationRegistry.citations.some((entry) => entry.discovered_via === 'perplexity_ayahuasca_interactions_2025'), 'citation registry should record discovery source');
+assert.ok(citationRegistry.citations.some((entry) => entry.discovered_via === perplexitySourceId), 'citation registry should record discovery source');
 
 const report = await readJson<any>(path.join(reportDir, 'perplexity_ingestion_report.json'));
 assert.ok(report.total_files_processed >= 1, 'report should count processed files');
@@ -284,7 +305,7 @@ const reviewedPackage = {
       review_state: 'human_reviewed' as const
     }))
 };
-await writeJson(path.join(reviewedDir, 'perplexity_ayahuasca_interactions_2025.claims.json'), reviewedPackage);
+await writeJson(path.join(reviewedDir, pendingClaimsFilename), reviewedPackage);
 
 runScript('scripts/link_claims_to_interactions.ts', {
   KB_ROOT: tempRoot,
@@ -300,7 +321,7 @@ assert.notStrictEqual(linkedPair.classification.code, 'DETERMINISTIC', 'Perplexi
 assert.strictEqual(linkedPair.evidence.status, 'provisional_secondary', 'Perplexity linkage should remain provisional');
 assert.ok(
   linkedPair.evidence.source_refs.some((ref: any) =>
-    ref.source_id === 'perplexity_ayahuasca_interactions_2025' &&
+    ref.source_id === perplexitySourceId &&
     ref.match_type === 'ai_synthesis' &&
     ref.confidence === 'low' &&
     ref.requires_verification === true
@@ -316,7 +337,7 @@ assert.strictEqual(
   'stronger evidence must be preserved'
 );
 assert.strictEqual(
-  strongPair.evidence.source_refs.filter((ref: any) => ref.source_id === 'perplexity_ayahuasca_interactions_2025').length,
+  strongPair.evidence.source_refs.filter((ref: any) => ref.source_id === perplexitySourceId).length,
   0,
   'weaker Perplexity evidence should not replace stronger source refs'
 );
