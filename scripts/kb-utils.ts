@@ -457,3 +457,21 @@ export const pathExists = async (filePath: string): Promise<boolean> => {
     return false;
   }
 };
+export function buildPerplexityCitationKey(input: {
+  title?: string;
+  url?: string;
+  doi?: string;
+  year?: string | number;
+}): string {
+  const base =
+    input.doi ||
+    input.url ||
+    [input.title, input.year].filter(Boolean).join(" ");
+
+  return String(base || "unknown_citation")
+    .toLowerCase()
+    .replace(/^https?:\/\//, "")
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "")
+    .slice(0, 120);
+}

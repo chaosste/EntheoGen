@@ -17,58 +17,40 @@
   },
   "claims": [
     {
-      "claim_id": "perplexity_ayahuasca_interactions_synthesis_2026_001_6a3adbb5",
+      "claim_id": "perplexity_ayahuasca_interactions_synthesis_2026_001_8661e263",
       "source_id": "perplexity_ayahuasca_interactions_synthesis_2026",
-      "claim": "Avoid combining ayahuasca with serotonergic medications",
+      "claim": "Combining ayahuasca with serotonergic agents (SSRIs, SNRIs, TCAs, certain opioids) may increase risk of serotonin syndrome",
       "claim_type": "contraindication",
       "entities": [
-        "ayahuasca"
+        "ayahuasca",
+        "SSRIs",
+        "SNRIs",
+        "TCAs",
+        "opioids"
       ],
       "mechanism": [
         "serotonergic_toxicity"
       ],
       "evidence_strength": "theoretical",
       "confidence": "low",
-      "supports_pairs": [],
-      "clinical_actionability": "avoid",
-      "review_state": "needs_verification",
-      "notes": "Provisional claim extracted from AI synthesis; requires corroboration before promotion.",
-      "provenance": {
-        "source_type": "ai_synthesis",
-        "requires_verification": true,
-        "ingestion_method": "perplexity_ingestion_v1",
-        "cited_sources": []
-      },
-      "source_specific": {
-        "original_row": "Avoid combining ayahuasca with serotonergic medications",
-        "derivation": "ai_synthesized",
-        "source_id": "perplexity_ayahuasca_interactions_synthesis_2026",
-        "source_type": "ai_synthesis",
-        "authority_level": "low",
-        "evidence_domain": "aggregated_clinical",
-        "year": 2026,
-        "authors": "Perplexity AI synthesis (compiled by user)",
-        "citation": "Perplexity AI research synthesis, compiled 2026",
-        "url": null,
-        "file_origin": "ai_generated_notes",
-        "review_state": "machine_extracted",
-        "confidence_penalty": true
-      }
-    },
-    {
-      "claim_id": "perplexity_ayahuasca_interactions_synthesis_2026_001_60b9752c",
-      "source_id": "perplexity_ayahuasca_interactions_synthesis_2026",
-      "claim": "Serotonin syndrome",
-      "claim_type": "interaction",
-      "entities": [
-        "ayahuasca"
+      "supports_pairs": [
+        [
+          "ayahuasca",
+          "ssris"
+        ],
+        [
+          "ayahuasca",
+          "snris"
+        ],
+        [
+          "ayahuasca",
+          "tcas"
+        ],
+        [
+          "ayahuasca",
+          "opioids"
+        ]
       ],
-      "mechanism": [
-        "serotonergic_toxicity"
-      ],
-      "evidence_strength": "theoretical",
-      "confidence": "low",
-      "supports_pairs": [],
       "clinical_actionability": "none",
       "review_state": "needs_verification",
       "notes": "Provisional claim extracted from AI synthesis; requires corroboration before promotion.",
@@ -79,19 +61,203 @@
         "cited_sources": []
       },
       "source_specific": {
-        "original_row": "Serotonin syndrome",
-        "derivation": "ai_synthesized",
-        "source_id": "perplexity_ayahuasca_interactions_synthesis_2026",
+        "original_row": "### Claim 2\n- claim: Combining ayahuasca with serotonergic agents (SSRIs, SNRIs, TCAs, certain opioids) may increase risk of serotonin syndrome\n- type: contraindication\n- entities: [ayahuasca, SSRIs, SNRIs, TCAs, opioids]\n- directionality: increases serotonin toxicity\n- confidence: low\n- evidence_strength: theoretical",
+        "normalized_medication_name": "ayahuasca, SSRIs, SNRIs, TCAs, opioids",
+        "original_medication_name": "ayahuasca, SSRIs, SNRIs, TCAs, opioids",
+        "severity_label": "theoretical",
+        "other_information": "increases serotonin toxicity",
+        "derivation": "structured_key_claim"
+      }
+    },
+    {
+      "claim_id": "perplexity_ayahuasca_interactions_synthesis_2026_002_bfe66c11",
+      "source_id": "perplexity_ayahuasca_interactions_synthesis_2026",
+      "claim": "Sympathomimetic agents (e.g. stimulants) combined with ayahuasca may produce hypertensive crisis due to catecholamine accumulation",
+      "claim_type": "contraindication",
+      "entities": [
+        "ayahuasca",
+        "stimulants"
+      ],
+      "mechanism": [
+        "sympathomimetic_load"
+      ],
+      "evidence_strength": "theoretical",
+      "confidence": "low",
+      "supports_pairs": [
+        [
+          "ayahuasca",
+          "stimulants"
+        ]
+      ],
+      "clinical_actionability": "none",
+      "review_state": "needs_verification",
+      "notes": "Provisional claim extracted from AI synthesis; requires corroboration before promotion.",
+      "provenance": {
         "source_type": "ai_synthesis",
-        "authority_level": "low",
-        "evidence_domain": "aggregated_clinical",
-        "year": 2026,
-        "authors": "Perplexity AI synthesis (compiled by user)",
-        "citation": "Perplexity AI research synthesis, compiled 2026",
-        "url": null,
-        "file_origin": "ai_generated_notes",
-        "review_state": "machine_extracted",
-        "confidence_penalty": true
+        "requires_verification": true,
+        "ingestion_method": "perplexity_ingestion_v1",
+        "cited_sources": []
+      },
+      "source_specific": {
+        "original_row": "### Claim 3\n- claim: Sympathomimetic agents (e.g. stimulants) combined with ayahuasca may produce hypertensive crisis due to catecholamine accumulation\n- type: contraindication\n- entities: [ayahuasca, stimulants]\n- directionality: increases blood pressure\n- confidence: low\n- evidence_strength: theoretical",
+        "normalized_medication_name": "ayahuasca, stimulants",
+        "original_medication_name": "ayahuasca, stimulants",
+        "severity_label": "theoretical",
+        "other_information": "increases blood pressure",
+        "derivation": "structured_key_claim"
+      }
+    },
+    {
+      "claim_id": "perplexity_ayahuasca_interactions_synthesis_2026_003_e9e4310f",
+      "source_id": "perplexity_ayahuasca_interactions_synthesis_2026",
+      "claim": "Lamotrigine may interact with ketamine and glutamatergic systems, potentially modulating psychedelic or dissociative effects",
+      "claim_type": "interaction",
+      "entities": [
+        "lamotrigine",
+        "ketamine",
+        "ayahuasca",
+        "dissociatives"
+      ],
+      "mechanism": [
+        "glutamate_modulation",
+        "ion_channel_modulation"
+      ],
+      "evidence_strength": "theoretical",
+      "confidence": "low",
+      "supports_pairs": [
+        [
+          "ayahuasca",
+          "lamotrigine"
+        ],
+        [
+          "ayahuasca",
+          "ketamine"
+        ],
+        [
+          "ayahuasca",
+          "dissociatives"
+        ]
+      ],
+      "clinical_actionability": "none",
+      "review_state": "needs_verification",
+      "notes": "Provisional claim extracted from AI synthesis; requires corroboration before promotion.",
+      "provenance": {
+        "source_type": "ai_synthesis",
+        "requires_verification": true,
+        "ingestion_method": "perplexity_ingestion_v1",
+        "cited_sources": []
+      },
+      "source_specific": {
+        "original_row": "### Claim 4\n- claim: Lamotrigine may interact with ketamine and glutamatergic systems, potentially modulating psychedelic or dissociative effects\n- type: interaction\n- entities: [lamotrigine, ketamine]\n- directionality: attenuates effect\n- confidence: low\n- evidence_strength: theoretical",
+        "normalized_medication_name": "lamotrigine, ketamine",
+        "original_medication_name": "lamotrigine, ketamine",
+        "severity_label": "theoretical",
+        "other_information": "attenuates effect",
+        "derivation": "structured_key_claim"
+      }
+    },
+    {
+      "claim_id": "perplexity_ayahuasca_interactions_synthesis_2026_004_58d17567",
+      "source_id": "perplexity_ayahuasca_interactions_synthesis_2026",
+      "claim": "Alpha-2 agonists (e.g. clonidine, guanfacine) may interact with psychedelics through sedation and blood pressure modulation",
+      "claim_type": "interaction",
+      "entities": [
+        "clonidine",
+        "guanfacine",
+        "psychedelics",
+        "antihypertensives",
+        "ayahuasca"
+      ],
+      "mechanism": [
+        "hemodynamic_interaction",
+        "noradrenergic_suppression",
+        "pharmacodynamic_cns_depression",
+        "cardiovascular_load"
+      ],
+      "evidence_strength": "theoretical",
+      "confidence": "low",
+      "supports_pairs": [
+        [
+          "ayahuasca",
+          "clonidine"
+        ],
+        [
+          "ayahuasca",
+          "guanfacine"
+        ],
+        [
+          "ayahuasca",
+          "psychedelics"
+        ],
+        [
+          "ayahuasca",
+          "antihypertensives"
+        ]
+      ],
+      "clinical_actionability": "none",
+      "review_state": "needs_verification",
+      "notes": "Provisional claim extracted from AI synthesis; requires corroboration before promotion.",
+      "provenance": {
+        "source_type": "ai_synthesis",
+        "requires_verification": true,
+        "ingestion_method": "perplexity_ingestion_v1",
+        "cited_sources": []
+      },
+      "source_specific": {
+        "original_row": "### Claim 5\n- claim: Alpha-2 agonists (e.g. clonidine, guanfacine) may interact with psychedelics through sedation and blood pressure modulation\n- type: interaction\n- entities: [clonidine, guanfacine, psychedelics]\n- directionality: alters sedation and BP\n- confidence: low\n- evidence_strength: theoretical",
+        "normalized_medication_name": "clonidine, guanfacine, psychedelics",
+        "original_medication_name": "clonidine, guanfacine, psychedelics",
+        "severity_label": "theoretical",
+        "other_information": "alters sedation and BP",
+        "derivation": "structured_key_claim"
+      }
+    },
+    {
+      "claim_id": "perplexity_ayahuasca_interactions_synthesis_2026_005_4dd02177",
+      "source_id": "perplexity_ayahuasca_interactions_synthesis_2026",
+      "claim": "Antipsychotics and certain antidepressants may attenuate psychedelic effects via receptor antagonism or downstream signaling effects",
+      "claim_type": "interaction",
+      "entities": [
+        "antipsychotics",
+        "SSRIs",
+        "psychedelics",
+        "ayahuasca"
+      ],
+      "mechanism": [
+        "provisional_secondary"
+      ],
+      "evidence_strength": "theoretical",
+      "confidence": "low",
+      "supports_pairs": [
+        [
+          "ayahuasca",
+          "antipsychotics"
+        ],
+        [
+          "ayahuasca",
+          "ssris"
+        ],
+        [
+          "ayahuasca",
+          "psychedelics"
+        ]
+      ],
+      "clinical_actionability": "none",
+      "review_state": "needs_verification",
+      "notes": "Provisional claim extracted from AI synthesis; requires corroboration before promotion.",
+      "provenance": {
+        "source_type": "ai_synthesis",
+        "requires_verification": true,
+        "ingestion_method": "perplexity_ingestion_v1",
+        "cited_sources": []
+      },
+      "source_specific": {
+        "original_row": "### Claim 6\n- claim: Antipsychotics and certain antidepressants may attenuate psychedelic effects via receptor antagonism or downstream signaling effects\n- type: interaction\n- entities: [antipsychotics, SSRIs, psychedelics]\n- directionality: decreases effect\n- confidence: low\n- evidence_strength: theoretical\n\n---",
+        "normalized_medication_name": "antipsychotics, SSRIs, psychedelics",
+        "original_medication_name": "antipsychotics, SSRIs, psychedelics",
+        "severity_label": "theoretical",
+        "other_information": "decreases effect",
+        "derivation": "structured_key_claim"
       }
     }
   ]

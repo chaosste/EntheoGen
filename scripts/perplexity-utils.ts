@@ -106,7 +106,7 @@ const MEDICATION_CLASS_MAP: Array<{ label: string; classLabel: string }> = [
 
 const MECHANISM_MATCHES: PerplexityMechanismMatch[] = [
   { label: 'serotonergic_toxicity', patterns: [/serotonin syndrome/i, /serotonergic/i, /5-ht/i] },
-  { label: 'maoi_potentiation', patterns: [/maoi/i, /monoamine oxidase/i, /rima/i] },
+  { label: 'maoi_potentiation', patterns: [/maoi/i, /mao[-\s]?a/i, /monoamine oxidase/i, /rima/i] },
   { label: 'hemodynamic_interaction', patterns: [/blood pressure/i, /heart rate/i, /hemodynamic/i] },
   { label: 'noradrenergic_suppression', patterns: [/alpha-2/i, /alpha 2/i, /sympathetic outflow/i] },
   { label: 'glutamate_modulation', patterns: [/nmda/i, /glutamate/i, /ketamine/i] },
@@ -394,12 +394,17 @@ const parseMarkdownSections = (text: string): MarkdownSection[] => {
   for (const rawLine of text.split(/\r?\n/)) {
     const headingMatch = rawLine.match(/^(#{1,6})\s+(.+)$/);
     if (headingMatch) {
-      flush();
-      current = {
-        heading: headingMatch[2].trim(),
-        level: headingMatch[1].length,
-        lines: [rawLine.trim()]
-      };
+      const level = headingMatch[1].length;
+      if (level <= 2) {
+        flush();
+        current = {
+          heading: headingMatch[2].trim(),
+          level,
+          lines: [rawLine.trim()]
+        };
+      } else {
+        current.lines.push(rawLine);
+      }
       continue;
     }
     current.lines.push(rawLine);
@@ -411,8 +416,6 @@ const parseMarkdownSections = (text: string): MarkdownSection[] => {
     citations: extractPerplexityCitations(section.body)
   }));
 };
-
-export const __debugParseMarkdownSections = parseMarkdownSections;
 
 const parseKeyValueLine = (line: string): [string, string] | null => {
   const match = line.match(/^[-*]\s*([^:]+):\s*(.*)$/);
@@ -618,6 +621,7 @@ export const extractPerplexityCitations = (text: string): PerplexityCitation[] =
     const trimmed = line.trim();
     if (!trimmed) continue;
     const isStructuredFieldLine = /^[-*•]\s*[A-Za-z][A-Za-z0-9 _/-]+:\s*/.test(trimmed);
+    const citationLine = trimmed.replace(/^[-*•]\s*[A-Za-z][A-Za-z0-9 _/-]+:\s*/, '').trim();
 
     for (const match of trimmed.matchAll(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g)) {
       addCitation({
@@ -666,9 +670,19 @@ export const extractPerplexityCitations = (text: string): PerplexityCitation[] =
       /\b(19|20)\d{2}\b/.test(trimmed) &&
       !containsMetaNoise(trimmed)
     ) {
+      const urlMatch = citationLine.match(/https?:\/\/[^\s)]+/i);
+      const doiMatch = citationLine.match(/\b(?:doi:\s*)?(10\.\d{4,9}\/[^\s)\]]+)/i);
+      const cleanedTitle = citationLine
+        .replace(/https?:\/\/[^\s)]+/gi, '')
+        .replace(/\bdoi:\s*10\.\d{4,9}\/[^\s)\]]+/gi, '')
+        .replace(/\b10\.\d{4,9}\/[^\s)\]]+/gi, '')
+        .replace(/\s+/g, ' ')
+        .trim();
       addCitation({
-        title: trimmed.replace(/\s+/g, ' '),
-        citation_text: trimmed
+        ...(cleanedTitle ? { title: cleanedTitle } : {}),
+        ...(urlMatch ? { url: urlMatch[0].replace(/[.,;]+$/g, '') } : {}),
+        ...(doiMatch ? { doi: doiMatch[1].replace(/[.,;]+$/g, '') } : {}),
+        citation_text: citationLine
       });
     }
   }
