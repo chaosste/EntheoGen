@@ -14,54 +14,49 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
 const datasetPath = path.join(root, 'src/data/interactionDatasetV2.json');
 
-const assertDeterministicMatch = (drugA: string, drugB: string) => {
+const assertDeterministicMatch = (
+  drugA: string,
+  drugB: string,
+  expectations: {
+    code?: string;
+    label?: string;
+    confidenceTier: 'high' | 'medium';
+    riskLevel?: 'high' | 'moderate';
+    mechanismNeedle?: string;
+  }
+) => {
   const forward = resolveInteraction(drugA, drugB);
   const reverse = resolveInteraction(drugB, drugA);
 
-  assert.notStrictEqual(forward.evidence.code, 'UNKNOWN', `${drugA}+${drugB} should not resolve to UNKNOWN`);
+  if (expectations.code) {
+    assert.strictEqual(forward.evidence.code, expectations.code, `${drugA}+${drugB} should resolve as ${expectations.code}`);
+  }
+  if (expectations.label) {
+    assert.strictEqual(forward.evidence.label, expectations.label, `${drugA}+${drugB} should use the expected label`);
+  }
   assert.strictEqual(forward.origin, 'explicit', `${drugA}+${drugB} should hit the deterministic table`);
   assert.strictEqual(forward.evidence.provenance?.source, 'deterministic_mapping_table');
-  assert.strictEqual(forward.evidence.provenance?.confidenceTier, 'high');
+  assert.strictEqual(forward.evidence.provenance?.confidenceTier, expectations.confidenceTier);
+  if (expectations.riskLevel) {
+    assert.strictEqual(forward.evidence.riskAssessment?.level, expectations.riskLevel);
+  }
+  if (expectations.mechanismNeedle) {
+    assert.match(forward.evidence.mechanism ?? '', new RegExp(expectations.mechanismNeedle, 'i'));
+  }
   assert.deepStrictEqual(
     {
       code: forward.evidence.code,
       label: forward.evidence.label,
       source: forward.evidence.provenance?.source,
-      confidenceTier: forward.evidence.provenance?.confidenceTier
+      confidenceTier: forward.evidence.provenance?.confidenceTier,
+      riskLevel: forward.evidence.riskAssessment?.level
     },
     {
       code: reverse.evidence.code,
       label: reverse.evidence.label,
       source: reverse.evidence.provenance?.source,
-      confidenceTier: reverse.evidence.provenance?.confidenceTier
-    },
-    `${drugA}+${drugB} should be commutative`
-  );
-};
-
-const assertTheoreticalClassification = (drugA: string, drugB: string) => {
-  const forward = resolveInteraction(drugA, drugB);
-  const reverse = resolveInteraction(drugB, drugA);
-
-  assert.strictEqual(forward.evidence.code, 'THEORETICAL', `${drugA}+${drugB} should be theoretical`);
-  assert.strictEqual(forward.origin, 'fallback');
-  assert.strictEqual(forward.evidence.label, 'Theoretical interaction');
-  assert.strictEqual(forward.evidence.evidenceTier, 'theoretical');
-  assert.strictEqual(forward.evidence.provenance?.source, 'mechanistic_inference');
-  assert.ok(
-    forward.evidence.provenance?.confidenceTier === 'low' || forward.evidence.provenance?.confidenceTier === 'medium',
-    `${drugA}+${drugB} should stay low/medium confidence`
-  );
-  assert.deepStrictEqual(
-    {
-      code: forward.evidence.code,
-      source: forward.evidence.provenance?.source,
-      confidenceTier: forward.evidence.provenance?.confidenceTier
-    },
-    {
-      code: reverse.evidence.code,
-      source: reverse.evidence.provenance?.source,
-      confidenceTier: reverse.evidence.provenance?.confidenceTier
+      confidenceTier: reverse.evidence.provenance?.confidenceTier,
+      riskLevel: reverse.evidence.riskAssessment?.level
     },
     `${drugA}+${drugB} should be commutative`
   );
@@ -261,10 +256,18 @@ const assertDatasetEvidenceFields = async () => {
   assert.ok(!selfPair?.audit.validation_flags.includes('missing_mechanism'), 'SELF should not get missing_mechanism');
   assert.ok(!selfPair?.audit.validation_flags.includes('missing_evidence_tier'), 'SELF should not get missing_evidence_tier');
 
-  const samplePairs = ['ayahuasca|ssri', 'beta_blockers|clonidine', 'beta_blockers|cannabis'];
+  const samplePairs = [
+    'ayahuasca|ssri',
+    'beta_blockers|clonidine',
+    'calcium_channel_blockers|clonidine',
+    'beta_blockers|cannabis'
+  ];
   for (const key of samplePairs) {
     const pair = pairByKey.get(key);
     assert.ok(pair, `expected dataset pair ${key}`);
+    if (key === 'beta_blockers|clonidine' || key === 'calcium_channel_blockers|clonidine') {
+      assert.strictEqual(pair?.classification.code, 'DETERMINISTIC', `${key} should be deterministic in the canonical dataset`);
+    }
     assert.ok(pair?.evidence.status, `${key} should include evidence.status`);
     assert.ok(pair?.evidence.review_state, `${key} should include evidence.review_state`);
     assert.ok(pair?.evidence.review_notes, `${key} should include evidence.review_notes`);
@@ -385,8 +388,23 @@ const assertValidatorWarnsOnUnresolvedSourceGap = () => {
   }
 };
 
-assertDeterministicMatch('ayahuasca', 'ssri');
-assertTheoreticalClassification('clonidine', 'beta_blockers');
+assertDeterministicMatch('ayahuasca', 'ssri', {
+  confidenceTier: 'high',
+});
+assertDeterministicMatch('clonidine', 'beta_blockers', {
+  code: 'DETERMINISTIC',
+  label: 'Established clinically significant interaction',
+  confidenceTier: 'high',
+  riskLevel: 'high',
+  mechanismNeedle: 'sympathetic rebound'
+});
+assertDeterministicMatch('clonidine', 'calcium_channel_blockers', {
+  code: 'DETERMINISTIC',
+  label: 'Predictable pharmacodynamic interaction',
+  confidenceTier: 'medium',
+  riskLevel: 'moderate',
+  mechanismNeedle: 'predictable additive cardiovascular effects'
+});
 assertFallbackInference('cannabis', 'beta_blockers');
 assertSelfPair('lsd');
 assertNoUnknownNonSelf();

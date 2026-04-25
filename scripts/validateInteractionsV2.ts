@@ -29,6 +29,7 @@ const expectedRiskByCode: Record<string, number | null> = {
   UNKNOWN: 0,
   INFERRED: null,
   THEORETICAL: 2,
+  DETERMINISTIC: null,
   LOW: 1,
   LOW_MOD: 2,
   CAUTION: 3,

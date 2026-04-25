@@ -67,6 +67,7 @@ const codeMap: Record<string, InteractionCodeV2> = {
   UNKNOWN: 'UNKNOWN',
   INFERRED: 'INFERRED',
   THEORETICAL: 'THEORETICAL',
+  DETERMINISTIC: 'DETERMINISTIC',
   LOW: 'LOW',
   LOW_MOD: 'LOW_MOD',
   CAU: 'CAUTION',
@@ -439,6 +440,10 @@ const run = async (): Promise<void> => {
         ? -1
         : code === 'INFERRED'
           ? null
+          : code === 'DETERMINISTIC'
+            ? evidence.riskAssessment?.level === 'high'
+              ? 8
+              : 5
           : code === 'THEORETICAL'
             ? 2
             : (riskByCode[code] ?? null);

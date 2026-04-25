@@ -3,6 +3,7 @@ export const INTERACTION_CODES_V2 = [
   'UNKNOWN',
   'INFERRED',
   'THEORETICAL',
+  'DETERMINISTIC',
   'LOW',
   'LOW_MOD',
   'CAUTION',

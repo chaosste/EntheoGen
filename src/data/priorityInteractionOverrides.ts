@@ -1,6 +1,77 @@
 import type { InteractionEvidence } from './drugData';
 
 export const PRIORITY_INTERACTION_RULES: Record<string, InteractionEvidence> = {
+  'beta_blockers|clonidine': {
+    code: 'DETERMINISTIC',
+    label: 'Established clinically significant interaction',
+    summary: 'Risk of severe rebound hypertension if clonidine is withdrawn while beta-blockade is present.',
+    confidence: 'high',
+    sources: '',
+    clinicalEffect: {
+      primary: 'Risk of severe rebound hypertension if clonidine is withdrawn while beta-blockade is present',
+      direction: 'hypertensive_rebound',
+      severity: 'high'
+    },
+    mechanism: 'Clonidine withdrawal can cause sympathetic rebound; beta-blockade may worsen hypertensive response through unopposed alpha-adrenergic activity.',
+    mechanismCategory: 'rebound_hypertension',
+    mechanismCategories: ['hemodynamic_interaction', 'adrenergic_rebound', 'cardiovascular_load'],
+    practicalGuidance:
+      'Avoid abrupt clonidine discontinuation. If both are used, taper beta-blocker before tapering clonidine where clinically appropriate.',
+    management: {
+      recommendation:
+        'Avoid abrupt clonidine discontinuation. If both are used, taper beta-blocker before tapering clonidine where clinically appropriate.',
+      monitoring: ['blood_pressure', 'heart_rate', 'withdrawal_symptoms']
+    },
+    riskAssessment: {
+      level: 'high',
+      rationale:
+        'Clonidine withdrawal can cause sympathetic rebound; beta-blockade may worsen hypertensive response through unopposed alpha-adrenergic activity.'
+    },
+    evidenceTier: 'established',
+    fieldNotes: 'Preserved from deterministic mapping snippet; source_refs intentionally remain empty pending source linking.',
+    provenance: {
+      source: 'deterministic_mapping_table',
+      confidenceTier: 'high',
+      method: 'manual_clinical_rule_v1',
+      rationale: 'Use the open deterministic mapping snippet as the source of truth for the clonidine plus beta-blocker interaction.'
+    }
+  },
+
+  'calcium_channel_blockers|clonidine': {
+    code: 'DETERMINISTIC',
+    label: 'Predictable pharmacodynamic interaction',
+    summary: 'Additive blood-pressure lowering with possible hypotension, dizziness, bradycardia, or syncope.',
+    confidence: 'medium',
+    sources: '',
+    clinicalEffect: {
+      primary: 'Additive blood-pressure lowering with possible hypotension, dizziness, bradycardia, or syncope',
+      direction: 'hypotensive_additive',
+      severity: 'moderate'
+    },
+    mechanism:
+      'Clonidine reduces sympathetic outflow while calcium-channel blockers reduce vascular tone and/or cardiac conduction, producing predictable additive cardiovascular effects.',
+    mechanismCategory: 'additive_hypotension',
+    mechanismCategories: ['hemodynamic_interaction', 'additive_hypotension', 'cardiovascular_load'],
+    practicalGuidance: 'Use with monitoring, especially during initiation or dose changes.',
+    management: {
+      recommendation: 'Use with monitoring, especially during initiation or dose changes.',
+      monitoring: ['blood_pressure', 'heart_rate', 'orthostatic_symptoms', 'syncope']
+    },
+    riskAssessment: {
+      level: 'moderate',
+      rationale:
+        'Clonidine reduces sympathetic outflow while calcium-channel blockers reduce vascular tone and/or cardiac conduction, producing predictable additive cardiovascular effects.'
+    },
+    evidenceTier: 'established',
+    fieldNotes: 'Preserved from deterministic mapping snippet; source_refs intentionally remain empty pending source linking.',
+    provenance: {
+      source: 'deterministic_mapping_table',
+      confidenceTier: 'medium',
+      method: 'manual_clinical_rule_v1',
+      rationale: 'Use the open deterministic mapping snippet as the source of truth for the clonidine plus calcium-channel blocker interaction.'
+    }
+  },
+
   'ketamine|ndri_bupropion': {
     code: 'UNK',
     summary: 'No direct outcome data exists, but both substances may lower seizure threshold under stress or excitation.',

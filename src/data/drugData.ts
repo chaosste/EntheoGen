@@ -28,10 +28,19 @@ export interface InteractionEvidence {
   summary: string;
   confidence: string;
   sources: string;
+  clinicalEffect?: {
+    primary: string;
+    direction: string;
+    severity: string;
+  };
   mechanism?: string;
   mechanismCategory?: MechanismCategory;
   mechanismCategories?: MechanismCategory[];
   practicalGuidance?: string;
+  management?: {
+    recommendation: string;
+    monitoring: string[];
+  };
   timing?: string;
   evidenceGaps?: string;
   evidenceTier?: string;
@@ -80,6 +89,9 @@ export type MechanismCategory =
   | 'psychedelic_intensification'
   | 'seizure_threshold'
   | 'noradrenergic_suppression'
+  | 'adrenergic_rebound'
+  | 'rebound_hypertension'
+  | 'additive_hypotension'
   | 'respiratory_depression'
   | 'dehydration_or_electrolyte_risk'
   | 'psychiatric_destabilization'
@@ -967,28 +979,6 @@ const makeTheoreticalFallbackEvidence = (
   );
 
 const THEORETICAL_INTERACTION_RULES: Record<string, InteractionEvidence> = {
-  'beta_blockers|clonidine': makeTheoreticalInteraction(
-    'Clonidine plus beta-blockers is a plausible hemodynamic interaction with additive bradycardia/hypotension risk and no strong direct co-administration dataset.',
-    'Both agents suppress sympathetic compensation and can blunt heart-rate responses, making dizziness, fatigue, and hypotension harder to predict.',
-    'hemodynamic_interaction',
-    ['hemodynamic_interaction', 'noradrenergic_suppression', 'cardiovascular_load'],
-    'medium',
-    'This is class-level pharmacology rather than a pair-specific clinical outcome result.',
-    'No direct clinical trials for the exact clonidine plus beta-blocker pairing were identified.',
-    '- Use caution with dose changes, dehydration, and standing quickly.\n- Do not stop clonidine abruptly, especially if beta-blockade is present.',
-    'The main concern is compensatory bradycardia/hypotension rather than a unique receptor-level syndrome.'
-  ),
-  'calcium_channel_blockers|clonidine': makeTheoreticalInteraction(
-    'Clonidine plus calcium-channel blockers is a plausible hemodynamic interaction with hypotension and bradycardia concern.',
-    'Central alpha-2 agonism lowers sympathetic outflow while rate-controlling calcium-channel blockade can further reduce chronotropy or blood-pressure compensation.',
-    'hemodynamic_interaction',
-    ['hemodynamic_interaction', 'noradrenergic_suppression', 'cardiovascular_load'],
-    'medium',
-    'The interaction is mechanistically plausible but not supported by direct pair-specific clinical outcome data.',
-    'No direct clinical trials for clonidine plus calcium-channel blockers were identified.',
-    '- Monitor for lightheadedness, syncope, or excessive sedation.\n- Prefer conservative titration when either drug is newly started or increased.',
-    'Agent-specific calcium-channel effects vary; this remains a class-level theoretical call.'
-  ),
   'beta_blockers|guanfacine': makeTheoreticalInteraction(
     'Guanfacine plus beta-blockers is a plausible noradrenergic suppression interaction with blood-pressure and heart-rate lowering effects.',
     'Both drugs reduce sympathetic tone and can make compensatory tachycardia or orthostatic recovery less reliable.',
@@ -1118,9 +1108,10 @@ const inferRiskAssessmentLevel = (confidence: string): RiskAssessmentLevel => {
 const makeDeterministicEvidence = (evidence: InteractionEvidence): InteractionEvidence => ({
   ...evidence,
   provenance: {
+    ...evidence.provenance,
     source: 'deterministic_mapping_table',
-    confidenceTier: inferProvenanceConfidence(evidence.confidence),
-    rationale: evidence.summary
+    confidenceTier: evidence.provenance?.confidenceTier ?? inferProvenanceConfidence(evidence.confidence),
+    rationale: evidence.provenance?.rationale ?? evidence.summary
   },
   label: LEGEND[evidence.code]?.label ?? evidence.label
 });
@@ -1393,15 +1384,6 @@ export const resolveInteraction = (drug1: string, drug2: string): ResolvedIntera
     };
   }
 
-  const theoreticalEvidence = THEORETICAL_INTERACTION_RULES[canonicalPairKey];
-  if (theoreticalEvidence) {
-    return {
-      pairKey: canonicalPairKey,
-      origin: 'fallback',
-      evidence: theoreticalEvidence
-    };
-  }
-
   const explicitEvidence =
     PRIORITY_INTERACTION_RULES[canonicalPairKey] ??
     DATASET_INTERACTION_RULES[canonicalPairKey] ??
@@ -1411,6 +1393,15 @@ export const resolveInteraction = (drug1: string, drug2: string): ResolvedIntera
       pairKey: canonicalPairKey,
       origin: 'explicit',
       evidence: makeDeterministicEvidence(explicitEvidence)
+    };
+  }
+
+  const theoreticalEvidence = THEORETICAL_INTERACTION_RULES[canonicalPairKey];
+  if (theoreticalEvidence) {
+    return {
+      pairKey: canonicalPairKey,
+      origin: 'fallback',
+      evidence: theoreticalEvidence
     };
   }
 
