@@ -2744,40 +2744,62 @@
         "psilocybin"
       ],
       "classification": {
-        "code": "UNKNOWN",
-        "status": "unknown",
-        "confidence": "low",
-        "risk_score": 0,
-        "label": "Unknown/Insufficient Data"
+        "code": "CAUTION",
+        "status": "confirmed",
+        "confidence": "medium",
+        "risk_score": 3,
+        "label": "Caution / Moderate Risk"
       },
       "clinical_summary": {
-        "headline": "No explicit interaction classification is loaded for this pair in the current curated dataset.",
-        "mechanism": null,
+        "headline": "Caution interaction driven by dose-dependent intensification of psilocybin effects and increased risk of challenging experiences, anxiety, paranoia, or destabilization.",
+        "mechanism": "Cannabis co-use with classic psychedelics is common in real-world settings. Prospective survey data suggest simultaneous cannabis use can dose-dependently increase mystical-type effects, visual phenomena, and ego dissolution, while higher cannabis doses may also increase challenging experiences. The main risk is psychological and operational rather than severe physiological toxicity: cannabis may intensify or prolong psilocybin effects and increase anxiety, paranoia, derealization, or severe bad-trip reactions in vulnerable individuals.",
         "timing_guidance": null,
         "field_notes": null
       },
       "mechanism": {
-        "primary_category": "unknown",
+        "primary_category": "psychedelic_intensification",
         "categories": [
-          "unknown"
+          "psychedelic_intensification",
+          "psychiatric_destabilization",
+          "operational_or_behavioral_risk"
         ]
       },
       "evidence": {
-        "tier": "not_applicable",
-        "support_type": "none",
+        "tier": "observational_report",
+        "support_type": "indirect",
         "source_refs": [
           {
-            "source_id": "source_gap",
-            "support_type": "none"
+            "source_id": "healthline_mushrooms_cannabis_interaction",
+            "support_type": "indirect"
+          },
+          {
+            "source_id": "cannabis_psychedelic_experience_pubmed",
+            "support_type": "field_observation"
+          },
+          {
+            "source_id": "cannabis_psychedelic_experience_escholarship",
+            "support_type": "field_observation"
+          },
+          {
+            "source_id": "recovered_psilocybin_other_drugs",
+            "support_type": "indirect"
+          },
+          {
+            "source_id": "blossom_cannabis_psychedelic_survey",
+            "support_type": "field_observation"
+          },
+          {
+            "source_id": "psychiatric_times_cannabis_psychedelics_memory",
+            "support_type": "indirect"
           }
         ],
-        "evidence_gaps": null
+        "evidence_gaps": "Controlled pharmacokinetic and medical-outcome studies are limited; the rating relies mainly on observational survey data and clinical or harm-reduction commentary about psychological intensification and challenging experiences."
       },
-      "source_text": "source-gap",
-      "source_fingerprint": "e4fd07eea0d0220c7a90d6b6991b1a4eec24a8003b5d526b5e4f0d2b9ecbba26",
+      "source_text": "Healthline Mushrooms Cannabis Interaction; Cannabis Psychedelic Experience Pubmed; Cannabis Psychedelic Experience Escholarship; Recovered Psilocybin Other Drugs; Blossom Cannabis Psychedelic Survey; Psychiatric Times Cannabis Psychedelics Memory",
+      "source_fingerprint": "bb7043a576087c323c44be306a81b1b0d1247ad6ae3599c09f2778299591a61e",
       "provenance": {
-        "derivation_type": "generated_unknown",
-        "origin_value_v1": "unknown",
+        "derivation_type": "explicit_source",
+        "origin_value_v1": "explicit",
         "migrated_from_v1": true,
         "migration_version": "v1_to_v2",
         "migrated_at": "2026-04-25T01:58:13.110Z"
@@ -2787,13 +2809,7 @@
       },
       "audit": {
         "validation_flags": [
-          "missing_mechanism",
-          "missing_timing",
-          "missing_evidence_tier",
-          "low_confidence",
-          "unknown_classification",
-          "mechanism_category_unknown",
-          "source_gap"
+          "missing_timing"
         ],
         "review_status": "needs_review"
       }
@@ -2805,40 +2821,68 @@
         "psilocybin"
       ],
       "classification": {
-        "code": "UNKNOWN",
-        "status": "unknown",
-        "confidence": "low",
-        "risk_score": 0,
-        "label": "Unknown/Insufficient Data"
+        "code": "CAUTION",
+        "status": "confirmed",
+        "confidence": "medium",
+        "risk_score": 3,
+        "label": "Caution / Moderate Risk"
       },
       "clinical_summary": {
-        "headline": "No explicit interaction classification is loaded for this pair in the current curated dataset.",
-        "mechanism": null,
-        "timing_guidance": null,
+        "headline": "Caution interaction driven by synergistic impairment, nausea/vomiting, dehydration, accident risk, and unpredictable psychological effects.",
+        "mechanism": "Psilocybin and alcohol do not appear to create a classic receptor-level contraindication, but co-use can increase nausea, vomiting, dehydration, impaired coordination, tachycardia, blood-pressure changes, and behavioral risk. Psilocybin may dampen perceived alcohol intoxication for some users, encouraging heavier drinking and increasing risk of alcohol poisoning, falls, injuries, risky behavior, traffic accidents, or difficult psychological experiences.",
+        "timing_guidance": "In therapeutic or ceremonial contexts, abstain from alcohol for at least one day before and after psilocybin.",
         "field_notes": null
       },
       "mechanism": {
-        "primary_category": "unknown",
+        "primary_category": "operational_or_behavioral_risk",
         "categories": [
-          "unknown"
+          "operational_or_behavioral_risk",
+          "dehydration_or_electrolyte_risk",
+          "cns_depression",
+          "cardiovascular_load",
+          "psychiatric_destabilization"
         ]
       },
       "evidence": {
-        "tier": "not_applicable",
-        "support_type": "none",
+        "tier": "field_consensus",
+        "support_type": "field_observation",
         "source_refs": [
           {
-            "source_id": "source_gap",
-            "support_type": "none"
+            "source_id": "recovered_psilocybin_other_drugs",
+            "support_type": "indirect"
+          },
+          {
+            "source_id": "avenues_shrooms_alcohol_risks",
+            "support_type": "indirect"
+          },
+          {
+            "source_id": "whitesands_shrooms_alcohol_risks",
+            "support_type": "indirect"
+          },
+          {
+            "source_id": "choosingtherapy_psilocybin_alcohol",
+            "support_type": "indirect"
+          },
+          {
+            "source_id": "alcohol_org_mushrooms_alcohol",
+            "support_type": "indirect"
+          },
+          {
+            "source_id": "classic_psychedelics_aud_systematic_review_pmc",
+            "support_type": "indirect"
+          },
+          {
+            "source_id": "classic_psychedelics_aud_systematic_review_pubmed",
+            "support_type": "indirect"
           }
         ],
-        "evidence_gaps": null
+        "evidence_gaps": "Evidence is mostly from harm-reduction, clinical education, and broader alcohol/psychedelic literature rather than controlled co-ingestion studies. Systematic reviews do not identify a specific pharmacotoxic syndrome when co-ingested."
       },
-      "source_text": "source-gap",
-      "source_fingerprint": "e4fd07eea0d0220c7a90d6b6991b1a4eec24a8003b5d526b5e4f0d2b9ecbba26",
+      "source_text": "Recovered Psilocybin Other Drugs; Avenues Shrooms Alcohol Risks; Whitesands Shrooms Alcohol Risks; Choosingtherapy Psilocybin Alcohol; Alcohol Org Mushrooms Alcohol; Classic Psychedelics Aud Systematic Review Pmc; Classic Psychedelics Aud Systematic Review Pubmed",
+      "source_fingerprint": "9a6fca1a81b1db3abda63770c94372929430814b4401263e4f6c23f90f8c6600",
       "provenance": {
-        "derivation_type": "generated_unknown",
-        "origin_value_v1": "unknown",
+        "derivation_type": "explicit_source",
+        "origin_value_v1": "explicit",
         "migrated_from_v1": true,
         "migration_version": "v1_to_v2",
         "migrated_at": "2026-04-25T01:58:13.110Z"
@@ -2847,15 +2891,7 @@
         "applied": false
       },
       "audit": {
-        "validation_flags": [
-          "missing_mechanism",
-          "missing_timing",
-          "missing_evidence_tier",
-          "low_confidence",
-          "unknown_classification",
-          "mechanism_category_unknown",
-          "source_gap"
-        ],
+        "validation_flags": [],
         "review_status": "needs_review"
       }
     },
@@ -3796,40 +3832,56 @@
         "psilocybin"
       ],
       "classification": {
-        "code": "UNKNOWN",
-        "status": "unknown",
+        "code": "CAUTION",
+        "status": "low_confidence",
         "confidence": "low",
-        "risk_score": 0,
-        "label": "Unknown/Insufficient Data"
+        "risk_score": 3,
+        "label": "Caution / Moderate Risk"
       },
       "clinical_summary": {
-        "headline": "No explicit interaction classification is loaded for this pair in the current curated dataset.",
-        "mechanism": null,
+        "headline": "Caution interaction with low confidence, driven by plausible psychological intensification, autonomic activation, confusion, and accident risk.",
+        "mechanism": "Psilocybin is a classic 5-HT2A agonist psychedelic, while ketamine is a dissociative NMDA antagonist that modulates glutamate and monoamines. Both agents can increase cortical excitability and may elevate heart rate and blood pressure. Preclinical work suggests overlapping antidepressant-like mechanisms, but does not establish safety for concurrent human use. Combined use may increase psychological intensity, dissociation, confusion, autonomic activation, and impaired self-care, especially outside clinical settings.",
         "timing_guidance": null,
         "field_notes": null
       },
       "mechanism": {
-        "primary_category": "unknown",
+        "primary_category": "glutamatergic_dissociation",
         "categories": [
-          "unknown"
+          "glutamatergic_dissociation",
+          "psychedelic_intensification",
+          "cardiovascular_load",
+          "psychiatric_destabilization",
+          "operational_or_behavioral_risk"
         ]
       },
       "evidence": {
-        "tier": "not_applicable",
-        "support_type": "none",
+        "tier": "mechanistic_inference",
+        "support_type": "mechanistic",
         "source_refs": [
           {
-            "source_id": "source_gap",
-            "support_type": "none"
+            "source_id": "frontiers_low_dose_psilocybin_ketamine_motivation",
+            "support_type": "mechanistic"
+          },
+          {
+            "source_id": "psilocybin_ketamine_neurotransmitters_pmc",
+            "support_type": "mechanistic"
+          },
+          {
+            "source_id": "ketamine_serotonergic_psychedelics_common_mechanisms_pmc",
+            "support_type": "mechanistic"
+          },
+          {
+            "source_id": "overview_psilocybin_lsd_mdma_ketamine_2025",
+            "support_type": "indirect"
           }
         ],
-        "evidence_gaps": null
+        "evidence_gaps": "No substantial human trials or case series specifically examining psilocybin plus ketamine together were identified; risk estimates are extrapolated from individual drug profiles, shared glutamatergic/plasticity mechanisms, and preclinical work."
       },
-      "source_text": "source-gap",
-      "source_fingerprint": "e4fd07eea0d0220c7a90d6b6991b1a4eec24a8003b5d526b5e4f0d2b9ecbba26",
+      "source_text": "Frontiers Low Dose Psilocybin Ketamine Motivation; Psilocybin Ketamine Neurotransmitters Pmc; Ketamine Serotonergic Psychedelics Common Mechanisms Pmc; Overview Psilocybin Lsd Mdma Ketamine 2025",
+      "source_fingerprint": "b02efaca85aec4793fa4ae59e0f4f1b48ee6f0202bcc373db907e1695c81631c",
       "provenance": {
-        "derivation_type": "generated_unknown",
-        "origin_value_v1": "unknown",
+        "derivation_type": "explicit_source",
+        "origin_value_v1": "explicit",
         "migrated_from_v1": true,
         "migration_version": "v1_to_v2",
         "migrated_at": "2026-04-25T01:58:13.110Z"
@@ -3839,13 +3891,8 @@
       },
       "audit": {
         "validation_flags": [
-          "missing_mechanism",
           "missing_timing",
-          "missing_evidence_tier",
-          "low_confidence",
-          "unknown_classification",
-          "mechanism_category_unknown",
-          "source_gap"
+          "low_confidence"
         ],
         "review_status": "needs_review"
       }
@@ -11414,40 +11461,62 @@
         "lsd"
       ],
       "classification": {
-        "code": "UNKNOWN",
-        "status": "unknown",
-        "confidence": "low",
-        "risk_score": 0,
-        "label": "Unknown/Insufficient Data"
+        "code": "CAUTION",
+        "status": "confirmed",
+        "confidence": "medium",
+        "risk_score": 3,
+        "label": "Caution / Moderate Risk"
       },
       "clinical_summary": {
-        "headline": "No explicit interaction classification is loaded for this pair in the current curated dataset.",
-        "mechanism": null,
+        "headline": "Caution interaction driven by intensified and prolonged LSD effects with increased risk of anxiety, paranoia, psychosis-like reactions, impaired judgment, and accidents.",
+        "mechanism": "Cannabis can intensify and prolong LSD-related hallucinations, perceptual distortions, anxiety, paranoia, confusion, and impaired judgment, especially in people prone to mental health problems. Observational data on cannabis co-use with classic psychedelics show dose-dependent increases in mystical-type effects, visual phenomena, ego dissolution, and, at higher cannabis doses, challenging experiences. Serious medical toxicity appears rare, but psychological destabilization and hazardous behavior are plausible risks.",
         "timing_guidance": null,
         "field_notes": null
       },
       "mechanism": {
-        "primary_category": "unknown",
+        "primary_category": "psychedelic_intensification",
         "categories": [
-          "unknown"
+          "psychedelic_intensification",
+          "psychiatric_destabilization",
+          "operational_or_behavioral_risk"
         ]
       },
       "evidence": {
-        "tier": "not_applicable",
-        "support_type": "none",
+        "tier": "observational_report",
+        "support_type": "indirect",
         "source_refs": [
           {
-            "source_id": "source_gap",
-            "support_type": "none"
+            "source_id": "leafwell_lsd_weed",
+            "support_type": "indirect"
+          },
+          {
+            "source_id": "muse_lsd_marijuana_risks",
+            "support_type": "indirect"
+          },
+          {
+            "source_id": "cannabis_psychedelic_experience_pubmed",
+            "support_type": "field_observation"
+          },
+          {
+            "source_id": "cannabis_psychedelic_experience_escholarship",
+            "support_type": "field_observation"
+          },
+          {
+            "source_id": "blossom_cannabis_psychedelic_survey",
+            "support_type": "field_observation"
+          },
+          {
+            "source_id": "cannabis_psychedelic_experience_pmc",
+            "support_type": "field_observation"
           }
         ],
-        "evidence_gaps": null
+        "evidence_gaps": "Controlled medical-outcome data are limited; evidence relies on prospective survey data for cannabis plus classic psychedelics and clinical or harm-reduction commentary specific to LSD plus cannabis."
       },
-      "source_text": "source-gap",
-      "source_fingerprint": "e4fd07eea0d0220c7a90d6b6991b1a4eec24a8003b5d526b5e4f0d2b9ecbba26",
+      "source_text": "Leafwell Lsd Weed; Muse Lsd Marijuana Risks; Cannabis Psychedelic Experience Pubmed; Cannabis Psychedelic Experience Escholarship; Blossom Cannabis Psychedelic Survey; Cannabis Psychedelic Experience Pmc",
+      "source_fingerprint": "57a07ebff5745ebcc9097dd3b1c9806d9bee414a4d24ac4b3dee5886341e0009",
       "provenance": {
-        "derivation_type": "generated_unknown",
-        "origin_value_v1": "unknown",
+        "derivation_type": "explicit_source",
+        "origin_value_v1": "explicit",
         "migrated_from_v1": true,
         "migration_version": "v1_to_v2",
         "migrated_at": "2026-04-25T01:58:13.111Z"
@@ -11457,13 +11526,7 @@
       },
       "audit": {
         "validation_flags": [
-          "missing_mechanism",
-          "missing_timing",
-          "missing_evidence_tier",
-          "low_confidence",
-          "unknown_classification",
-          "mechanism_category_unknown",
-          "source_gap"
+          "missing_timing"
         ],
         "review_status": "needs_review"
       }
@@ -12501,40 +12564,56 @@
         "lsd"
       ],
       "classification": {
-        "code": "UNKNOWN",
-        "status": "unknown",
+        "code": "CAUTION",
+        "status": "low_confidence",
         "confidence": "low",
-        "risk_score": 0,
-        "label": "Unknown/Insufficient Data"
+        "risk_score": 3,
+        "label": "Caution / Moderate Risk"
       },
       "clinical_summary": {
-        "headline": "No explicit interaction classification is loaded for this pair in the current curated dataset.",
-        "mechanism": null,
+        "headline": "Caution interaction with low confidence, driven by plausible additive dissociation, psychedelic intensification, cardiovascular activation, confusion, and accident risk.",
+        "mechanism": "LSD is a high-potency, long-acting 5-HT2A agonist psychedelic, while ketamine is a dissociative NMDA antagonist that increases glutamatergic signaling and cortical entropy. Both substances can increase measures of cortical complexity and alter ego boundaries, perception, and cognition. Co-use may produce additive or supra-additive psychological disruption, dissociation, ataxia, tachycardia, elevated blood pressure, anxiety, panic, transient psychosis-like reactions, impaired self-care, and accident risk.",
         "timing_guidance": null,
         "field_notes": null
       },
       "mechanism": {
-        "primary_category": "unknown",
+        "primary_category": "glutamatergic_dissociation",
         "categories": [
-          "unknown"
+          "glutamatergic_dissociation",
+          "psychedelic_intensification",
+          "cardiovascular_load",
+          "psychiatric_destabilization",
+          "operational_or_behavioral_risk"
         ]
       },
       "evidence": {
-        "tier": "not_applicable",
-        "support_type": "none",
+        "tier": "mechanistic_inference",
+        "support_type": "mechanistic",
         "source_refs": [
           {
-            "source_id": "source_gap",
-            "support_type": "none"
+            "source_id": "lucy_in_the_sky_with_ketamine_pmc",
+            "support_type": "indirect"
+          },
+          {
+            "source_id": "ketamine_serotonergic_psychedelics_common_mechanisms_ijnp",
+            "support_type": "mechanistic"
+          },
+          {
+            "source_id": "ketamine_serotonergic_psychedelics_common_mechanisms_pmc",
+            "support_type": "mechanistic"
+          },
+          {
+            "source_id": "overview_psilocybin_lsd_mdma_ketamine_2025",
+            "support_type": "indirect"
           }
         ],
-        "evidence_gaps": null
+        "evidence_gaps": "There is virtually no systematic clinical literature on intentional LSD plus ketamine co-administration; current risk estimates are based on individual drug profiles, shared glutamatergic/cortical-complexity mechanisms, and scattered anecdotal or theoretical considerations."
       },
-      "source_text": "source-gap",
-      "source_fingerprint": "e4fd07eea0d0220c7a90d6b6991b1a4eec24a8003b5d526b5e4f0d2b9ecbba26",
+      "source_text": "Lucy In The Sky With Ketamine Pmc; Ketamine Serotonergic Psychedelics Common Mechanisms Ijnp; Ketamine Serotonergic Psychedelics Common Mechanisms Pmc; Overview Psilocybin Lsd Mdma Ketamine 2025",
+      "source_fingerprint": "7b8e5ff1b6d5a042e709e163f0e90ca80db196f27e3903a20a3448a90b6bf895",
       "provenance": {
-        "derivation_type": "generated_unknown",
-        "origin_value_v1": "unknown",
+        "derivation_type": "explicit_source",
+        "origin_value_v1": "explicit",
         "migrated_from_v1": true,
         "migration_version": "v1_to_v2",
         "migrated_at": "2026-04-25T01:58:13.111Z"
@@ -12544,13 +12623,8 @@
       },
       "audit": {
         "validation_flags": [
-          "missing_mechanism",
           "missing_timing",
-          "missing_evidence_tier",
-          "low_confidence",
-          "unknown_classification",
-          "mechanism_category_unknown",
-          "source_gap"
+          "low_confidence"
         ],
         "review_status": "needs_review"
       }
@@ -34076,6 +34150,132 @@
       "source_type": "primary_source",
       "reliability": "unknown",
       "fingerprint": "70f96ba113b16c893a84964b5549eb70141b503ad78dfad159dc8a19cafba68f"
+    },
+    {
+      "id": "frontiers_low_dose_psilocybin_ketamine_motivation",
+      "title": "Frontiers Low Dose Psilocybin Ketamine Motivation",
+      "source_type": "primary_source",
+      "reliability": "unknown"
+    },
+    {
+      "id": "psilocybin_ketamine_neurotransmitters_pmc",
+      "title": "Psilocybin Ketamine Neurotransmitters Pmc",
+      "source_type": "primary_source",
+      "reliability": "unknown"
+    },
+    {
+      "id": "ketamine_serotonergic_psychedelics_common_mechanisms_pmc",
+      "title": "Ketamine Serotonergic Psychedelics Common Mechanisms Pmc",
+      "source_type": "primary_source",
+      "reliability": "unknown"
+    },
+    {
+      "id": "overview_psilocybin_lsd_mdma_ketamine_2025",
+      "title": "Overview Psilocybin Lsd Mdma Ketamine 2025",
+      "source_type": "primary_source",
+      "reliability": "unknown"
+    },
+    {
+      "id": "healthline_mushrooms_cannabis_interaction",
+      "title": "Healthline Mushrooms Cannabis Interaction",
+      "source_type": "secondary_source",
+      "reliability": "unknown"
+    },
+    {
+      "id": "cannabis_psychedelic_experience_pubmed",
+      "title": "Cannabis Psychedelic Experience Pubmed",
+      "source_type": "primary_source",
+      "reliability": "unknown"
+    },
+    {
+      "id": "cannabis_psychedelic_experience_escholarship",
+      "title": "Cannabis Psychedelic Experience Escholarship",
+      "source_type": "secondary_source",
+      "reliability": "unknown"
+    },
+    {
+      "id": "recovered_psilocybin_other_drugs",
+      "title": "Recovered Psilocybin Other Drugs",
+      "source_type": "secondary_source",
+      "reliability": "unknown"
+    },
+    {
+      "id": "blossom_cannabis_psychedelic_survey",
+      "title": "Blossom Cannabis Psychedelic Survey",
+      "source_type": "secondary_source",
+      "reliability": "unknown"
+    },
+    {
+      "id": "psychiatric_times_cannabis_psychedelics_memory",
+      "title": "Psychiatric Times Cannabis Psychedelics Memory",
+      "source_type": "secondary_source",
+      "reliability": "unknown"
+    },
+    {
+      "id": "avenues_shrooms_alcohol_risks",
+      "title": "Avenues Shrooms Alcohol Risks",
+      "source_type": "secondary_source",
+      "reliability": "unknown"
+    },
+    {
+      "id": "whitesands_shrooms_alcohol_risks",
+      "title": "Whitesands Shrooms Alcohol Risks",
+      "source_type": "secondary_source",
+      "reliability": "unknown"
+    },
+    {
+      "id": "choosingtherapy_psilocybin_alcohol",
+      "title": "Choosingtherapy Psilocybin Alcohol",
+      "source_type": "secondary_source",
+      "reliability": "unknown"
+    },
+    {
+      "id": "alcohol_org_mushrooms_alcohol",
+      "title": "Alcohol Org Mushrooms Alcohol",
+      "source_type": "secondary_source",
+      "reliability": "unknown"
+    },
+    {
+      "id": "classic_psychedelics_aud_systematic_review_pmc",
+      "title": "Classic Psychedelics Aud Systematic Review Pmc",
+      "source_type": "primary_source",
+      "reliability": "unknown"
+    },
+    {
+      "id": "classic_psychedelics_aud_systematic_review_pubmed",
+      "title": "Classic Psychedelics Aud Systematic Review Pubmed",
+      "source_type": "primary_source",
+      "reliability": "unknown"
+    },
+    {
+      "id": "lucy_in_the_sky_with_ketamine_pmc",
+      "title": "Lucy In The Sky With Ketamine Pmc",
+      "source_type": "primary_source",
+      "reliability": "unknown"
+    },
+    {
+      "id": "ketamine_serotonergic_psychedelics_common_mechanisms_ijnp",
+      "title": "Ketamine Serotonergic Psychedelics Common Mechanisms Ijnp",
+      "source_type": "primary_source",
+      "reliability": "unknown"
+    },
+    {
+      "id": "cannabis_psychedelic_experience_pmc",
+      "title": "Cannabis Psychedelic Experience Pmc",
+      "source_type": "primary_source",
+      "reliability": "unknown"
+    },
+    {
+      "id": "leafwell_lsd_weed",
+      "title": "Leafwell Lsd Weed",
+      "source_type": "secondary_source",
+      "reliability": "unknown"
+    },
+    {
+      "id": "muse_lsd_marijuana_risks",
+      "title": "Muse Lsd Marijuana Risks",
+      "source_type": "secondary_source",
+      "reliability": "unknown"
     },
     {
       "id": "source_gap",
