@@ -3488,40 +3488,44 @@
         "serotonergic_opioids"
       ],
       "classification": {
-        "code": "UNKNOWN",
-        "status": "unknown",
-        "confidence": "low",
-        "risk_score": 0,
-        "label": "Unknown/Insufficient Data"
+        "code": "CAUTION",
+        "status": "inferred",
+        "confidence": "medium",
+        "risk_score": 3,
+        "label": "Caution / Moderate Risk"
       },
       "clinical_summary": {
-        "headline": "No explicit interaction classification is loaded for this pair in the current curated dataset.",
-        "mechanism": null,
-        "timing_guidance": null,
-        "field_notes": null
+        "headline": "Serotonin-toxicity and overdose risks rise in poly-drug settings",
+        "mechanism": "Some opioids, especially tramadol, tapentadol, dextromethorphan, meperidine, fentanyl, and methadone, can add serotonergic burden or impair respiration and cognition. Psilocybin is a classic serotonergic psychedelic and is not a strong serotonin reuptake inhibitor, so the main concern is additive risk in broader serotonergic stacks plus overlapping autonomic and behavioral impairment.",
+        "timing_guidance": "Risk monitoring should cover the full psychedelic session and post-acute period, with attention to mental status, temperature, blood pressure, heart rate, respiratory rate, and neuromuscular signs.",
+        "field_notes": "Avoid using serotonergic opioids as ad-hoc trip smoothers or pain control during a psychedelic experience. Prefer non-serotonergic analgesic strategies where medically appropriate."
       },
       "mechanism": {
-        "primary_category": "unknown",
+        "primary_category": "serotonergic_toxicity",
         "categories": [
-          "unknown"
+          "serotonergic_toxicity",
+          "respiratory_depression",
+          "seizure_threshold",
+          "operational_or_behavioral_risk",
+          "cardiovascular_load"
         ]
       },
       "evidence": {
-        "tier": "not_applicable",
-        "support_type": "none",
+        "tier": "mechanistic_inference",
+        "support_type": "mechanistic",
         "source_refs": [
           {
             "source_id": "source_gap",
             "support_type": "none"
           }
         ],
-        "evidence_gaps": null
+        "evidence_gaps": "No large systematic studies directly evaluate psilocybin co-administered with serotonergic opioids. Risk is extrapolated from serotonergic opioid toxicity data, opioid-plus-psychoactive-drug harm-reduction principles, and psychedelic interaction reviews rather than controlled co-administration trials."
       },
-      "source_text": "source-gap",
-      "source_fingerprint": "e4fd07eea0d0220c7a90d6b6991b1a4eec24a8003b5d526b5e4f0d2b9ecbba26",
+      "source_text": "Serotonergic opioids combined with classic psychedelics may increase serotonin-toxicity risk in poly-serotonergic stacks and raise behavioral or overdose risk, though no uniquely toxic class-level interaction is established.",
+      "source_fingerprint": "e0aacf3dcfd1eae913d3eb734fb18b56d9fa93cc191d5562d6ddc6a2b44d4d00",
       "provenance": {
-        "derivation_type": "generated_unknown",
-        "origin_value_v1": "unknown",
+        "derivation_type": "curated_inference",
+        "origin_value_v1": "explicit",
         "migrated_from_v1": true,
         "migration_version": "v1_to_v2",
         "migrated_at": "2026-04-25T01:58:13.110Z"
@@ -3531,12 +3535,6 @@
       },
       "audit": {
         "validation_flags": [
-          "missing_mechanism",
-          "missing_timing",
-          "missing_evidence_tier",
-          "low_confidence",
-          "unknown_classification",
-          "mechanism_category_unknown",
           "source_gap"
         ],
         "review_status": "needs_review"
@@ -3904,40 +3902,50 @@
         "psilocybin"
       ],
       "classification": {
-        "code": "UNKNOWN",
-        "status": "unknown",
-        "confidence": "low",
-        "risk_score": 0,
-        "label": "Unknown/Insufficient Data"
+        "code": "CAUTION",
+        "status": "confirmed",
+        "confidence": "medium",
+        "risk_score": 3,
+        "label": "Caution / Moderate Risk"
       },
       "clinical_summary": {
-        "headline": "No explicit interaction classification is loaded for this pair in the current curated dataset.",
-        "mechanism": null,
-        "timing_guidance": null,
-        "field_notes": null
+        "headline": "Autonomic effects may offset but hypotension and sedation risk remain",
+        "mechanism": "Psilocybin can raise blood pressure and heart rate during the acute experience, while clonidine and guanfacine reduce sympathetic outflow through central alpha-2 agonism. The opposing effects may partially blunt tachycardia yet also make later hypotension, bradycardia, dizziness, and sedation harder to predict.",
+        "timing_guidance": "Monitor for early hypertension during peak psychedelic effects and possible later hypotension or bradycardia as alpha-2 agonist effects predominate.",
+        "field_notes": "Avoid high psilocybin doses, alcohol, benzodiazepines, and other antihypertensives. Use a supervised seated or lying setting with BP/HR monitoring if the combination cannot be avoided."
       },
       "mechanism": {
-        "primary_category": "unknown",
+        "primary_category": "cardiovascular_load",
         "categories": [
-          "unknown"
+          "cardiovascular_load",
+          "psychedelic_intensification",
+          "cns_depression"
         ]
       },
       "evidence": {
-        "tier": "not_applicable",
-        "support_type": "none",
+        "tier": "mechanistic_inference",
+        "support_type": "mechanistic",
         "source_refs": [
           {
-            "source_id": "source_gap",
-            "support_type": "none"
+            "source_id": "cardiovascular_safety_psychedelic_medicine_2023",
+            "support_type": "indirect"
+          },
+          {
+            "source_id": "psilocybin_clinicians_guide_interactions",
+            "support_type": "direct"
+          },
+          {
+            "source_id": "classic_psychedelic_ddi_review_2024",
+            "support_type": "extrapolated"
           }
         ],
-        "evidence_gaps": null
+        "evidence_gaps": "No large controlled human studies specifically examining psilocybin with alpha-2 agonists; limited clinical reports and emerging preclinical work on guanfacine combinations."
       },
-      "source_text": "source-gap",
-      "source_fingerprint": "e4fd07eea0d0220c7a90d6b6991b1a4eec24a8003b5d526b5e4f0d2b9ecbba26",
+      "source_text": "Cardiovascular safety of psychedelic medicine: current status and future directions; Psilocybin: A Clinician's Guide to Pharmacological Interactions; Drug-drug interactions involving classic psychedelics",
+      "source_fingerprint": "fec84c1d0dbe3948140ce3ae42c32fe35d065be52fa8565b6d0b4508d77e9234",
       "provenance": {
-        "derivation_type": "generated_unknown",
-        "origin_value_v1": "unknown",
+        "derivation_type": "curated_inference",
+        "origin_value_v1": "explicit",
         "migrated_from_v1": true,
         "migration_version": "v1_to_v2",
         "migrated_at": "2026-04-25T01:58:13.110Z"
@@ -3946,15 +3954,7 @@
         "applied": false
       },
       "audit": {
-        "validation_flags": [
-          "missing_mechanism",
-          "missing_timing",
-          "missing_evidence_tier",
-          "low_confidence",
-          "unknown_classification",
-          "mechanism_category_unknown",
-          "source_gap"
-        ],
+        "validation_flags": [],
         "review_status": "needs_review"
       }
     },
@@ -3965,40 +3965,54 @@
         "psilocybin"
       ],
       "classification": {
-        "code": "UNKNOWN",
-        "status": "unknown",
-        "confidence": "low",
-        "risk_score": 0,
-        "label": "Unknown/Insufficient Data"
+        "code": "CAUTION",
+        "status": "confirmed",
+        "confidence": "medium",
+        "risk_score": 3,
+        "label": "Caution / Moderate Risk"
       },
       "clinical_summary": {
-        "headline": "No explicit interaction classification is loaded for this pair in the current curated dataset.",
-        "mechanism": null,
-        "timing_guidance": null,
-        "field_notes": null
+        "headline": "Beta blockers and psilocybin are not intrinsically contraindicated, but the combination may produce non-trivial cardiovascular and experiential modulation requiring monitoring.",
+        "mechanism": "Psilocybin can transiently increase blood pressure and heart rate. Beta blockers may blunt tachycardia and lower baseline cardiovascular tone, but may not fully prevent psilocybin-related blood pressure elevation and may complicate later-session hypotension or bradycardia risk.",
+        "timing_guidance": "Do not abruptly discontinue prescribed beta blockers. Use only with caution, especially at higher psilocybin doses or in people with cardiovascular disease.",
+        "field_notes": "Potentially manageable in clinical settings with BP/HR monitoring. Avoid additional stimulants or vasoconstrictors."
       },
       "mechanism": {
-        "primary_category": "unknown",
+        "primary_category": "cardiovascular_load",
         "categories": [
-          "unknown"
+          "cardiovascular_load",
+          "sympathomimetic_load",
+          "psychedelic_intensification"
         ]
       },
       "evidence": {
-        "tier": "not_applicable",
-        "support_type": "none",
+        "tier": "clinical_guideline",
+        "support_type": "direct",
         "source_refs": [
           {
-            "source_id": "source_gap",
-            "support_type": "none"
+            "source_id": "cardiovascular_safety_psychedelic_medicine_2023",
+            "support_type": "indirect"
+          },
+          {
+            "source_id": "psilocybin_clinicians_guide_interactions",
+            "support_type": "direct"
+          },
+          {
+            "source_id": "beta_blockers_statpearls",
+            "support_type": "mechanistic"
+          },
+          {
+            "source_id": "classic_psychedelic_ddi_review_2024",
+            "support_type": "extrapolated"
           }
         ],
-        "evidence_gaps": null
+        "evidence_gaps": "Direct systematic studies of psilocybin combined with beta blockers are limited."
       },
-      "source_text": "source-gap",
-      "source_fingerprint": "e4fd07eea0d0220c7a90d6b6991b1a4eec24a8003b5d526b5e4f0d2b9ecbba26",
+      "source_text": "Cardiovascular safety of psychedelic medicine: current status and future directions; Psilocybin: A Clinician's Guide to Pharmacological Interactions; Beta Blockers - StatPearls - NCBI Bookshelf; Drug-drug interactions involving classic psychedelics",
+      "source_fingerprint": "a350e8edf7bd1712459edd138e43f7b7d56dff268f7dfcfdaa37400b7857228f",
       "provenance": {
-        "derivation_type": "generated_unknown",
-        "origin_value_v1": "unknown",
+        "derivation_type": "explicit_source",
+        "origin_value_v1": "explicit",
         "migrated_from_v1": true,
         "migration_version": "v1_to_v2",
         "migrated_at": "2026-04-25T01:58:13.110Z"
@@ -4007,15 +4021,7 @@
         "applied": false
       },
       "audit": {
-        "validation_flags": [
-          "missing_mechanism",
-          "missing_timing",
-          "missing_evidence_tier",
-          "low_confidence",
-          "unknown_classification",
-          "mechanism_category_unknown",
-          "source_gap"
-        ],
+        "validation_flags": [],
         "review_status": "needs_review"
       }
     },
@@ -8894,40 +8900,44 @@
         "serotonergic_opioids"
       ],
       "classification": {
-        "code": "UNKNOWN",
-        "status": "unknown",
-        "confidence": "low",
-        "risk_score": 0,
-        "label": "Unknown/Insufficient Data"
+        "code": "CAUTION",
+        "status": "inferred",
+        "confidence": "medium",
+        "risk_score": 3,
+        "label": "Caution / Moderate Risk"
       },
       "clinical_summary": {
-        "headline": "No explicit interaction classification is loaded for this pair in the current curated dataset.",
-        "mechanism": null,
-        "timing_guidance": null,
-        "field_notes": null
+        "headline": "Serotonin-toxicity and overdose risks rise in poly-drug settings",
+        "mechanism": "Some opioids, especially tramadol, tapentadol, dextromethorphan, meperidine, fentanyl, and methadone, can add serotonergic burden or impair respiration and cognition. Mescaline is a classic serotonergic psychedelic and is not a strong serotonin reuptake inhibitor, so the main concern is additive risk in broader serotonergic stacks plus overlapping autonomic and behavioral impairment.",
+        "timing_guidance": "Risk monitoring should cover the full psychedelic session and post-acute period, with attention to mental status, temperature, blood pressure, heart rate, respiratory rate, and neuromuscular signs.",
+        "field_notes": "Avoid using serotonergic opioids as ad-hoc trip smoothers or pain control during a psychedelic experience. Prefer non-serotonergic analgesic strategies where medically appropriate."
       },
       "mechanism": {
-        "primary_category": "unknown",
+        "primary_category": "serotonergic_toxicity",
         "categories": [
-          "unknown"
+          "serotonergic_toxicity",
+          "respiratory_depression",
+          "seizure_threshold",
+          "operational_or_behavioral_risk",
+          "cardiovascular_load"
         ]
       },
       "evidence": {
-        "tier": "not_applicable",
-        "support_type": "none",
+        "tier": "mechanistic_inference",
+        "support_type": "mechanistic",
         "source_refs": [
           {
             "source_id": "source_gap",
             "support_type": "none"
           }
         ],
-        "evidence_gaps": null
+        "evidence_gaps": "No large systematic studies directly evaluate mescaline co-administered with serotonergic opioids. Risk is extrapolated from serotonergic opioid toxicity data, opioid-plus-psychoactive-drug harm-reduction principles, and psychedelic interaction reviews rather than controlled co-administration trials."
       },
-      "source_text": "source-gap",
-      "source_fingerprint": "e4fd07eea0d0220c7a90d6b6991b1a4eec24a8003b5d526b5e4f0d2b9ecbba26",
+      "source_text": "Serotonergic opioids combined with classic psychedelics may increase serotonin-toxicity risk in poly-serotonergic stacks and raise behavioral or overdose risk, though no uniquely toxic class-level interaction is established.",
+      "source_fingerprint": "e0aacf3dcfd1eae913d3eb734fb18b56d9fa93cc191d5562d6ddc6a2b44d4d00",
       "provenance": {
-        "derivation_type": "generated_unknown",
-        "origin_value_v1": "unknown",
+        "derivation_type": "curated_inference",
+        "origin_value_v1": "explicit",
         "migrated_from_v1": true,
         "migration_version": "v1_to_v2",
         "migrated_at": "2026-04-25T01:58:13.111Z"
@@ -8937,12 +8947,6 @@
       },
       "audit": {
         "validation_flags": [
-          "missing_mechanism",
-          "missing_timing",
-          "missing_evidence_tier",
-          "low_confidence",
-          "unknown_classification",
-          "mechanism_category_unknown",
           "source_gap"
         ],
         "review_status": "needs_review"
@@ -12209,40 +12213,44 @@
         "serotonergic_opioids"
       ],
       "classification": {
-        "code": "UNKNOWN",
-        "status": "unknown",
-        "confidence": "low",
-        "risk_score": 0,
-        "label": "Unknown/Insufficient Data"
+        "code": "CAUTION",
+        "status": "inferred",
+        "confidence": "medium",
+        "risk_score": 3,
+        "label": "Caution / Moderate Risk"
       },
       "clinical_summary": {
-        "headline": "No explicit interaction classification is loaded for this pair in the current curated dataset.",
-        "mechanism": null,
-        "timing_guidance": null,
-        "field_notes": null
+        "headline": "Serotonin-toxicity and overdose risks rise in poly-drug settings",
+        "mechanism": "Some opioids, especially tramadol, tapentadol, dextromethorphan, meperidine, fentanyl, and methadone, can add serotonergic burden or impair respiration and cognition. LSD is a classic serotonergic psychedelic and is not a strong serotonin reuptake inhibitor, so the main concern is additive risk in broader serotonergic stacks plus overlapping autonomic and behavioral impairment.",
+        "timing_guidance": "Risk monitoring should cover the full psychedelic session and post-acute period, with attention to mental status, temperature, blood pressure, heart rate, respiratory rate, and neuromuscular signs.",
+        "field_notes": "Avoid using serotonergic opioids as ad-hoc trip smoothers or pain control during a psychedelic experience. Prefer non-serotonergic analgesic strategies where medically appropriate."
       },
       "mechanism": {
-        "primary_category": "unknown",
+        "primary_category": "serotonergic_toxicity",
         "categories": [
-          "unknown"
+          "serotonergic_toxicity",
+          "respiratory_depression",
+          "seizure_threshold",
+          "operational_or_behavioral_risk",
+          "cardiovascular_load"
         ]
       },
       "evidence": {
-        "tier": "not_applicable",
-        "support_type": "none",
+        "tier": "mechanistic_inference",
+        "support_type": "mechanistic",
         "source_refs": [
           {
             "source_id": "source_gap",
             "support_type": "none"
           }
         ],
-        "evidence_gaps": null
+        "evidence_gaps": "No large systematic studies directly evaluate LSD co-administered with serotonergic opioids. Risk is extrapolated from serotonergic opioid toxicity data, opioid-plus-psychoactive-drug harm-reduction principles, and psychedelic interaction reviews rather than controlled co-administration trials."
       },
-      "source_text": "source-gap",
-      "source_fingerprint": "e4fd07eea0d0220c7a90d6b6991b1a4eec24a8003b5d526b5e4f0d2b9ecbba26",
+      "source_text": "Serotonergic opioids combined with classic psychedelics may increase serotonin-toxicity risk in poly-serotonergic stacks and raise behavioral or overdose risk, though no uniquely toxic class-level interaction is established.",
+      "source_fingerprint": "e0aacf3dcfd1eae913d3eb734fb18b56d9fa93cc191d5562d6ddc6a2b44d4d00",
       "provenance": {
-        "derivation_type": "generated_unknown",
-        "origin_value_v1": "unknown",
+        "derivation_type": "curated_inference",
+        "origin_value_v1": "explicit",
         "migrated_from_v1": true,
         "migration_version": "v1_to_v2",
         "migrated_at": "2026-04-25T01:58:13.111Z"
@@ -12252,12 +12260,6 @@
       },
       "audit": {
         "validation_flags": [
-          "missing_mechanism",
-          "missing_timing",
-          "missing_evidence_tier",
-          "low_confidence",
-          "unknown_classification",
-          "mechanism_category_unknown",
           "source_gap"
         ],
         "review_status": "needs_review"
@@ -12636,40 +12638,50 @@
         "lsd"
       ],
       "classification": {
-        "code": "UNKNOWN",
-        "status": "unknown",
-        "confidence": "low",
-        "risk_score": 0,
-        "label": "Unknown/Insufficient Data"
+        "code": "CAUTION",
+        "status": "confirmed",
+        "confidence": "medium",
+        "risk_score": 3,
+        "label": "Caution / Moderate Risk"
       },
       "clinical_summary": {
-        "headline": "No explicit interaction classification is loaded for this pair in the current curated dataset.",
-        "mechanism": null,
-        "timing_guidance": null,
-        "field_notes": null
+        "headline": "Opposing autonomic effects with possible intensity modulation",
+        "mechanism": "LSD can increase blood pressure and heart rate during the acute experience, while clonidine and guanfacine reduce sympathetic tone through central alpha-2 agonism. The pair may partially offset cardiovascular stimulation but also increase the chance of later hypotension, bradycardia, sedation, and altered psychedelic intensity.",
+        "timing_guidance": "Expect early increases in blood pressure and heart rate followed by possible later hypotension or bradycardia as alpha-2 agonist effects dominate.",
+        "field_notes": "Use a supervised low-stimulation setting because dizziness, impaired coordination, and an unpredictable intensity shift are plausible."
       },
       "mechanism": {
-        "primary_category": "unknown",
+        "primary_category": "cardiovascular_load",
         "categories": [
-          "unknown"
+          "cardiovascular_load",
+          "psychedelic_intensification",
+          "cns_depression"
         ]
       },
       "evidence": {
-        "tier": "not_applicable",
-        "support_type": "none",
+        "tier": "mechanistic_inference",
+        "support_type": "mechanistic",
         "source_refs": [
           {
-            "source_id": "source_gap",
-            "support_type": "none"
+            "source_id": "cardiovascular_safety_psychedelic_medicine_2023",
+            "support_type": "indirect"
+          },
+          {
+            "source_id": "human_heart_hallucinogenic_drugs_2024",
+            "support_type": "mechanistic"
+          },
+          {
+            "source_id": "classic_psychedelic_ddi_review_2024",
+            "support_type": "extrapolated"
           }
         ],
-        "evidence_gaps": null
+        "evidence_gaps": "Very limited direct human data; existing evidence includes cardiovascular pharmacology, hallucinogen heart effects, and sparse pilot or animal observations of altered LSD responses."
       },
-      "source_text": "source-gap",
-      "source_fingerprint": "e4fd07eea0d0220c7a90d6b6991b1a4eec24a8003b5d526b5e4f0d2b9ecbba26",
+      "source_text": "Cardiovascular safety of psychedelic medicine: current status and future directions; Effects of hallucinogenic drugs on the human heart; Drug-drug interactions involving classic psychedelics",
+      "source_fingerprint": "bf4a740b19eecaf0620a57eeec19b914ab740be9fc26ab4fa8c568d316bf7ac5",
       "provenance": {
-        "derivation_type": "generated_unknown",
-        "origin_value_v1": "unknown",
+        "derivation_type": "curated_inference",
+        "origin_value_v1": "explicit",
         "migrated_from_v1": true,
         "migration_version": "v1_to_v2",
         "migrated_at": "2026-04-25T01:58:13.111Z"
@@ -12678,15 +12690,7 @@
         "applied": false
       },
       "audit": {
-        "validation_flags": [
-          "missing_mechanism",
-          "missing_timing",
-          "missing_evidence_tier",
-          "low_confidence",
-          "unknown_classification",
-          "mechanism_category_unknown",
-          "source_gap"
-        ],
+        "validation_flags": [],
         "review_status": "needs_review"
       }
     },
@@ -12697,40 +12701,53 @@
         "lsd"
       ],
       "classification": {
-        "code": "UNKNOWN",
-        "status": "unknown",
-        "confidence": "low",
-        "risk_score": 0,
-        "label": "Unknown/Insufficient Data"
+        "code": "CAUTION",
+        "status": "confirmed",
+        "confidence": "medium",
+        "risk_score": 3,
+        "label": "Caution / Moderate Risk"
       },
       "clinical_summary": {
-        "headline": "No explicit interaction classification is loaded for this pair in the current curated dataset.",
-        "mechanism": null,
-        "timing_guidance": null,
-        "field_notes": null
+        "headline": "Beta blockers and LSD are likely clinically manageable but under-studied; caution is warranted due to cardiovascular overlap and limited direct evidence.",
+        "mechanism": "LSD can transiently increase blood pressure and heart rate. Beta blockers may blunt heart-rate increases but may not fully prevent pressor effects, may mask adrenergic warning signs, and may contribute to hypotension or bradycardia later in the experience.",
+        "timing_guidance": "Do not abruptly discontinue prescribed beta blockers. People with hypertension, arrhythmias, structural heart disease, or post-MI history should avoid unsupervised LSD use.",
+        "field_notes": "Avoid high-dose LSD, stimulants, and vasoconstrictors. Seek urgent care for chest pain, severe headache, dyspnoea, presyncope, or sustained palpitations."
       },
       "mechanism": {
-        "primary_category": "unknown",
+        "primary_category": "cardiovascular_load",
         "categories": [
-          "unknown"
+          "cardiovascular_load",
+          "sympathomimetic_load"
         ]
       },
       "evidence": {
-        "tier": "not_applicable",
-        "support_type": "none",
+        "tier": "mechanistic_inference",
+        "support_type": "extrapolated",
         "source_refs": [
           {
-            "source_id": "source_gap",
-            "support_type": "none"
+            "source_id": "cardiovascular_safety_psychedelic_medicine_2023",
+            "support_type": "indirect"
+          },
+          {
+            "source_id": "human_heart_hallucinogenic_drugs_2024",
+            "support_type": "mechanistic"
+          },
+          {
+            "source_id": "beta_blockers_statpearls",
+            "support_type": "mechanistic"
+          },
+          {
+            "source_id": "classic_psychedelic_ddi_review_2024",
+            "support_type": "extrapolated"
           }
         ],
-        "evidence_gaps": null
+        "evidence_gaps": "No controlled human studies or large case series specifically evaluating LSD combined with beta blockers were identified."
       },
-      "source_text": "source-gap",
-      "source_fingerprint": "e4fd07eea0d0220c7a90d6b6991b1a4eec24a8003b5d526b5e4f0d2b9ecbba26",
+      "source_text": "Cardiovascular safety of psychedelic medicine: current status and future directions; Effects of hallucinogenic drugs on the human heart; Beta Blockers - StatPearls - NCBI Bookshelf; Drug-drug interactions involving classic psychedelics",
+      "source_fingerprint": "c2bff5954e331f44415ba243137324d7fb2011071ab043e5c5f3658c4c308c5a",
       "provenance": {
-        "derivation_type": "generated_unknown",
-        "origin_value_v1": "unknown",
+        "derivation_type": "explicit_source",
+        "origin_value_v1": "explicit",
         "migrated_from_v1": true,
         "migration_version": "v1_to_v2",
         "migrated_at": "2026-04-25T01:58:13.111Z"
@@ -12739,15 +12756,7 @@
         "applied": false
       },
       "audit": {
-        "validation_flags": [
-          "missing_mechanism",
-          "missing_timing",
-          "missing_evidence_tier",
-          "low_confidence",
-          "unknown_classification",
-          "mechanism_category_unknown",
-          "source_gap"
-        ],
+        "validation_flags": [],
         "review_status": "needs_review"
       }
     },
@@ -34274,6 +34283,36 @@
     {
       "id": "muse_lsd_marijuana_risks",
       "title": "Muse Lsd Marijuana Risks",
+      "source_type": "secondary_source",
+      "reliability": "unknown"
+    },
+    {
+      "id": "cardiovascular_safety_psychedelic_medicine_2023",
+      "title": "Cardiovascular safety of psychedelic medicine: current status and future directions",
+      "source_type": "secondary_source",
+      "reliability": "unknown"
+    },
+    {
+      "id": "psilocybin_clinicians_guide_interactions",
+      "title": "Psilocybin: A Clinician's Guide to Pharmacological Interactions",
+      "source_type": "field_guidance",
+      "reliability": "unknown"
+    },
+    {
+      "id": "beta_blockers_statpearls",
+      "title": "Beta Blockers - StatPearls - NCBI Bookshelf",
+      "source_type": "secondary_source",
+      "reliability": "unknown"
+    },
+    {
+      "id": "classic_psychedelic_ddi_review_2024",
+      "title": "Drug-drug interactions involving classic psychedelics",
+      "source_type": "secondary_source",
+      "reliability": "unknown"
+    },
+    {
+      "id": "human_heart_hallucinogenic_drugs_2024",
+      "title": "Effects of hallucinogenic drugs on the human heart",
       "source_type": "secondary_source",
       "reliability": "unknown"
     },
