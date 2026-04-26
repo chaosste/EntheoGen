@@ -897,29 +897,43 @@ export default function App() {
                 <section className="space-y-5 bg-white/5 p-6 rounded-2xl border border-white/5">
                   <div className="flex items-center gap-3 text-red-400 mb-2">
                     <ShieldAlert className="w-5 h-5" />
-                    <h3 className="text-sm font-bold uppercase tracking-[0.2em]">Important!</h3>
+                    <h3 className="text-sm font-bold uppercase tracking-[0.2em]">Important</h3>
                   </div>
                   <div className="space-y-4 text-[var(--text-muted)] text-sm leading-relaxed">
-                    <p className="font-semibold text-[var(--text-primary)]">This app is educational harm-reduction guidance, not medical advice.</p>
-                    <p>Interaction ratings are sourced from the curated ceremonial dataset and can include unknown gaps.</p>
-                    <p>Favorites are saved in your browser. Hosting, CDN, and AI providers may process technical metadata and logs.</p>
+                    <p className="font-semibold text-[var(--text-primary)]">This app provides educational harm-reduction guidance, not medical advice.</p>
+                    <p>Interaction ratings are derived from a curated, evidence-gated dataset with explicit uncertainty and known gaps.</p>
+                    <p>All claims are traceable to source material. See References for full citations.</p>
                     <p className="italic text-red-300/80">If you suspect toxicity, serotonin syndrome, or hypertensive crisis, seek urgent medical help.</p>
+                  </div>
+                </section>
+
+                <section className="space-y-6">
+                  <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--text-muted)] border-b border-white/5 pb-3">References</h3>
+                  <div className="space-y-4">
+                    <div className="px-2 text-sm text-[var(--text-muted)]">
+                      <p className="mb-2 font-semibold text-[var(--text-primary)]">Key Sources:</p>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Malcolm (2023)</li>
+                        <li>Halman et al. (2023)</li>
+                        <li>Ruffell et al. (2020)</li>
+                      </ul>
+                    </div>
+                    <button
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        setShowReferences(true);
+                      }}
+                      className="w-full flex justify-between items-center p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors group text-left"
+                    >
+                      <span className="font-semibold text-white/90">View Full Reference List</span>
+                      <ExternalLink className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" />
+                    </button>
                   </div>
                 </section>
 
                 <section className="space-y-6">
                   <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--text-muted)] border-b border-white/5 pb-3">Useful Links</h3>
                   <div className="grid gap-3">
-                    <button
-                      onClick={() => {
-                        setIsMenuOpen(false);
-                        setShowReferences(true);
-                      }}
-                      className="flex justify-between items-center p-4 rounded-2xl bg-black/5 hover:bg-black/10 transition-colors group text-left"
-                    >
-                      <span className="font-semibold text-white/90">Reference List</span>
-                      <ExternalLink className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </button>
                     {[
                       { name: 'Crisis Help UK', url: 'https://thatsmental.co.uk/crisis' },
                       { name: 'Drug Science', url: 'https://www.drugscience.org.uk/' },
@@ -981,7 +995,14 @@ export default function App() {
               </div>
               <div className="p-8 overflow-y-auto custom-scrollbar flex-1">
                 <div className="markdown-body">
-                  <Markdown>{referencesMd}</Markdown>
+                  {/* Markdown rendered directly via vite ?raw string import */}
+                  <Markdown
+                    components={{
+                      a: ({node, ...props}) => <a {...props} target="_blank" rel="noopener noreferrer" />
+                    }}
+                  >
+                    {referencesMd}
+                  </Markdown>
                 </div>
               </div>
             </motion.div>
