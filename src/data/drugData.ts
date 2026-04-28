@@ -300,6 +300,13 @@ export const DRUGS: Drug[] = [
     notes: 'Listed in lower-risk ayahuasca combinations.'
   },
   {
+    id: 'ketamine',
+    name: 'Ketamine',
+    class: 'Pharmaceutical Or Clinical Psychedelic',
+    mechanismTag: 'NMDA-antagonist dissociative',
+    notes: 'No formal ayahuasca interaction trials; concern is mainly confusion, sedation, and autonomic instability.'
+  },
+  {
     id: 'alcohol',
     name: 'Alcohol',
     class: 'Non Ceremonial',
@@ -445,13 +452,6 @@ export const DRUGS: Drug[] = [
     class: 'Pharmaceutical Class',
     mechanismTag: 'Cardiovascular rate and pressure control',
     notes: 'Distinct class from beta-blockers; includes agent-specific differences in conduction and vasodilation.'
-  },
-  {
-    id: 'ketamine',
-    name: 'Ketamine',
-    class: 'Pharmaceutical Or Clinical Psychedelic',
-    mechanismTag: 'NMDA-antagonist dissociative',
-    notes: 'No formal ayahuasca interaction trials; concern is mainly confusion, sedation, and autonomic instability.'
   },
   {
     id: 'clonidine_guanfacine',

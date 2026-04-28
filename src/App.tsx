@@ -28,14 +28,14 @@ import Markdown from 'react-markdown';
 import {
   DRUGS,
   LEGEND,
-  classifyMechanismCategory,
-  resolveInteraction
+  type MechanismCategory
 } from './data/drugData';
-import type { MechanismCategory, RuleOrigin } from './data/drugData';
+import { getAllUIInteractions, getUIInteraction } from './data/uiInteractions';
+import type { UIInteraction } from './data/uiInteractions';
+import ResearchModePanel from './components/ResearchModePanel';
+import { filterInteractionsForResearchMode, type ResearchModeFilters } from './data/researchMode';
 import { getInteractionExplanation, getDrugSummary } from './services/geminiService';
 import logoVine from './assets/logo-vine.png';
-import logoLeaf from './assets/logo-leaf.png';
-import logoJaguar from './assets/logo-jaguar.png';
 import referencesMd from '../knowledge-base/sources/Reference_List.md?raw';
 
 // --- Components ---
@@ -254,13 +254,6 @@ function SearchableSelect({
 
 // --- Main App ---
 
-const ORIGIN_LABELS: Record<RuleOrigin, string> = {
-  self: 'Same selection',
-  explicit: 'Deterministic mapping table',
-  fallback: 'Heuristic fallback',
-  unknown: 'Source gap'
-};
-
 const MECHANISM_FAMILY_LABELS: Partial<Record<MechanismCategory, string>> = {
   serotonergic: 'Serotonergic',
   maoi: 'MAOI-mediated',
@@ -304,7 +297,14 @@ export default function App() {
   const [openSelect, setOpenSelect] = useState<'drug1' | 'drug2' | null>(null);
   const [favorites, setFavorites] = useState<{ id: string, d1: string, d2: string, code: string }[]>([]);
   const [showReferences, setShowReferences] = useState(false);
+  const [lastSynthPairKey, setLastSynthPairKey] = useState<string>('');
+  const [researchFilters, setResearchFilters] = useState<ResearchModeFilters>({
+    showUnknownRisk: false,
+    showUnknownMechanism: false,
+    showUnknownConfidence: false
+  });
   const favoritesStorageKey = 'entheogen_favorites';
+  const currentPairKey = useMemo(() => [drug1 || '', drug2 || ''].sort().join('|'), [drug1, drug2]);
 
   // Load favorites
   useEffect(() => {
@@ -327,28 +327,35 @@ export default function App() {
 
   const resolvedInteraction = useMemo(() => {
     if (!drug1 || !drug2) return null;
-    return resolveInteraction(drug1, drug2);
+    return getUIInteraction(drug1, drug2);
   }, [drug1, drug2]);
 
-  const interactionEvidence = resolvedInteraction?.evidence ?? null;
-  const interactionOrigin = resolvedInteraction?.origin ?? null;
+  const mechanismFamilyLabel = useMemo(() => {
+    if (!resolvedInteraction || resolvedInteraction.isSelfPair) return null;
+    return getMechanismFamilyLabel(resolvedInteraction.mechanismCategory as MechanismCategory);
+  }, [resolvedInteraction]);
 
-  const mechanismCategory = useMemo(() => {
-    if (!interactionEvidence) return null;
-    return classifyMechanismCategory(interactionEvidence.mechanism);
-  }, [interactionEvidence]);
-
-  const mechanismFamilyLabel = useMemo(
-    () => getMechanismFamilyLabel(mechanismCategory),
-    [mechanismCategory]
-  );
-
-  const interactionCode = interactionEvidence?.code || null;
+  const interactionCode = resolvedInteraction?.riskLabel || null;
 
   const interaction = useMemo(() => {
     if (!interactionCode) return null;
     return LEGEND[interactionCode];
   }, [interactionCode]);
+
+  const researchModeInteractions = useMemo(
+    () => getAllUIInteractions(),
+    []
+  );
+
+  const filteredResearchInteractions = useMemo(
+    () => filterInteractionsForResearchMode(researchModeInteractions, researchFilters),
+    [researchModeInteractions, researchFilters]
+  );
+
+  const visibleResearchInteractions = useMemo(
+    () => filteredResearchInteractions.slice(0, 24),
+    [filteredResearchInteractions]
+  );
 
   const isFavorited = useMemo(() => {
     if (!drug1 || !drug2) return false;
@@ -382,16 +389,13 @@ export default function App() {
     setError(null);
     setExplanation('');
     setSummary('');
+    setLastSynthPairKey([selectedDrug1 || '', selectedDrug2 || ''].sort().join('|'));
 
     const localResolvedInteraction = selectedDrug1 && selectedDrug2
-      ? resolveInteraction(selectedDrug1, selectedDrug2)
+      ? getUIInteraction(selectedDrug1, selectedDrug2)
       : null;
-    const localEvidence = localResolvedInteraction?.evidence ?? null;
-    const localOrigin = localResolvedInteraction?.origin;
-    const localMechanismCategory = localEvidence
-      ? classifyMechanismCategory(localEvidence.mechanism)
-      : undefined;
-    const localInteractionCode = localEvidence?.code || null;
+    const localMechanismCategory = localResolvedInteraction?.mechanismCategory;
+    const localInteractionCode = localResolvedInteraction?.riskLabel || null;
     const localInteraction = localInteractionCode ? LEGEND[localInteractionCode] : null;
 
     const d1Obj = DRUGS.find(d => d.id === selectedDrug1);
@@ -401,25 +405,17 @@ export default function App() {
 
     try {
       // Evidence-grounded interaction explanation for paired selections.
-      if (selectedDrug1 && selectedDrug2 && localInteraction && localEvidence) {
+      if (selectedDrug1 && selectedDrug2 && localInteraction && localResolvedInteraction) {
         const interactionReadout = await getInteractionExplanation(
           d1Name,
           d2Name,
-          localInteraction.label,
-          localEvidence.summary,
+          localResolvedInteraction.riskDisplayLabel,
+          localResolvedInteraction.headline,
           {
-            confidence: localEvidence.confidence,
+            confidence: localResolvedInteraction.confidenceLabel,
             riskScale: localInteraction.riskScale,
-            mechanism: localEvidence.mechanism,
-            mechanismCategory: localMechanismCategory,
-            origin: localOrigin,
-            provenanceSource: localEvidence.provenance?.source,
-            provenanceConfidenceTier: localEvidence.provenance?.confidenceTier,
-            practicalGuidance: localEvidence.practicalGuidance,
-            timing: localEvidence.timing,
-            evidenceGaps: localEvidence.evidenceGaps,
-            evidenceTier: localEvidence.evidenceTier,
-            fieldNotes: localEvidence.fieldNotes
+            mechanismCategory: localMechanismCategory as MechanismCategory | undefined,
+            fieldNotes: localResolvedInteraction.notes
           }
         );
         setExplanation(interactionReadout);
@@ -430,18 +426,10 @@ export default function App() {
       const targetDrug1 = selectedDrug1 ? d1Name : d2Name;
       const targetDrug2 = (selectedDrug1 && selectedDrug2) ? d2Name : undefined;
       const profile = await getDrugSummary(targetDrug1, targetDrug2, {
-        confidence: localEvidence?.confidence,
+        confidence: localResolvedInteraction?.confidenceLabel,
         riskScale: localInteraction?.riskScale,
-        mechanism: localEvidence?.mechanism,
-        mechanismCategory: localMechanismCategory,
-        origin: localOrigin,
-        provenanceSource: localEvidence?.provenance?.source,
-        provenanceConfidenceTier: localEvidence?.provenance?.confidenceTier,
-        practicalGuidance: localEvidence?.practicalGuidance,
-        timing: localEvidence?.timing,
-        evidenceGaps: localEvidence?.evidenceGaps,
-        evidenceTier: localEvidence?.evidenceTier,
-        fieldNotes: localEvidence?.fieldNotes
+        mechanismCategory: localMechanismCategory as MechanismCategory | undefined,
+        fieldNotes: localResolvedInteraction?.notes
       });
       setSummary(profile);
     } catch (err) {
@@ -459,7 +447,10 @@ export default function App() {
     setExplanation('');
     setSummary('');
     setError(null);
+    setLastSynthPairKey('');
   };
+
+  const isReadoutStale = showResult && currentPairKey !== lastSynthPairKey;
 
   const getIcon = (symbol: string) => {
     switch (symbol) {
@@ -547,7 +538,6 @@ export default function App() {
               onOpenChange={(isOpen) =>
                 setOpenSelect((current) => (isOpen ? 'drug1' : current === 'drug1' ? null : current))
               }
-              disabled={showResult}
               placeholder="Select sacrament, substance, or medication."
             />
             <SearchableSelect
@@ -559,34 +549,32 @@ export default function App() {
               onOpenChange={(isOpen) =>
                 setOpenSelect((current) => (isOpen ? 'drug2' : current === 'drug2' ? null : current))
               }
-              disabled={showResult}
               placeholder="Select sacrament, substance, or medication."
             />
           </div>
 
           <div className="flex flex-col gap-4">
-            {!showResult ? (
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => void handleFindOut()}
-                disabled={!drug1 && !drug2}
-                className="w-full relative group overflow-hidden rounded-2xl p-[1px] disabled:opacity-50 disabled:cursor-not-allowed mt-4"
-              >
-                <span className="absolute inset-0 bg-gradient-to-r from-emerald-500/50 via-indigo-500/50 to-emerald-500/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-md"></span>
-                <div className="relative bg-white/10 hover:bg-white/15 border border-white/20 backdrop-blur-xl rounded-2xl py-5 flex items-center justify-center gap-3 transition-colors duration-300">
-                  <span className="text-lg font-bold tracking-[0.2em] text-white uppercase">Synthesize</span>
-                  <Sparkles className="w-5 h-5 text-emerald-400 group-hover:animate-pulse" />
-                </div>
-              </motion.button>
-            ) : (
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => void handleFindOut()}
+              disabled={!drug1 && !drug2}
+              className="w-full relative group overflow-hidden rounded-2xl p-[1px] disabled:opacity-50 disabled:cursor-not-allowed mt-4"
+            >
+              <span className="absolute inset-0 bg-gradient-to-r from-emerald-500/50 via-indigo-500/50 to-emerald-500/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-md"></span>
+              <div className="relative bg-white/10 hover:bg-white/15 border border-white/20 backdrop-blur-xl rounded-2xl py-5 flex items-center justify-center gap-3 transition-colors duration-300">
+                <span className="text-lg font-bold tracking-[0.2em] text-white uppercase">Synthesize</span>
+                <Sparkles className="w-5 h-5 text-emerald-400 group-hover:animate-pulse" />
+              </div>
+            </motion.button>
+            {showResult && (
               <motion.button
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={handleReset}
-                className="w-full border border-white/20 hover:border-white/40 bg-white/5 hover:bg-white/10 rounded-2xl py-5 text-sm font-bold tracking-[0.2em] text-[var(--text-muted)] hover:text-white uppercase flex items-center justify-center gap-3 transition-all mt-4 backdrop-blur-md"
+                className="w-full border border-white/20 hover:border-white/40 bg-white/5 hover:bg-white/10 rounded-2xl py-5 text-sm font-bold tracking-[0.2em] text-[var(--text-muted)] hover:text-white uppercase flex items-center justify-center gap-3 transition-all backdrop-blur-md"
               >
                 <RefreshCw className="w-4 h-4" />
                 Reset Canvas
@@ -608,6 +596,11 @@ export default function App() {
                 <div
                   className="rounded-[2rem] p-[2px] relative overflow-hidden group shadow-2xl"
                 >
+                  {isReadoutStale && (
+                    <div className="absolute z-20 top-4 left-1/2 -translate-x-1/2 rounded-full border border-amber-400/40 bg-amber-500/15 px-4 py-1.5 text-[11px] uppercase tracking-[0.14em] font-semibold text-amber-200">
+                      Pair changed. Press Synthesize to refresh this readout.
+                    </div>
+                  )}
                   {/* Glowing border effect */}
                   <div className="absolute inset-0 opacity-50 transition-opacity duration-1000 group-hover:opacity-100" style={{ background: `linear-gradient(135deg, ${interaction.color}40, transparent, ${interaction.color}40)` }}></div>
 
@@ -676,25 +669,10 @@ export default function App() {
                   </div>
 
                   <div className="relative z-10 mb-6 flex flex-wrap gap-2">
-                    {interactionEvidence?.confidence && (
+                    {resolvedInteraction?.confidenceLabel && (
                       <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--text-muted)]">
                         <ShieldAlert className="w-3.5 h-3.5 text-indigo-300" />
-                        Confidence: {interactionEvidence.confidence.toUpperCase()}
-                      </span>
-                    )}
-                    {interactionOrigin && (
-                      <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--text-muted)]">
-                        Dataset basis: {ORIGIN_LABELS[interactionOrigin]}
-                      </span>
-                    )}
-                    {interactionEvidence?.provenance?.source && (
-                      <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--text-muted)]">
-                        Provenance: {interactionEvidence.provenance.source.replace(/_/g, ' ')}
-                      </span>
-                    )}
-                    {interactionEvidence?.provenance?.confidenceTier && (
-                      <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--text-muted)]">
-                        Provenance confidence: {interactionEvidence.provenance.confidenceTier.toUpperCase()}
+                        Confidence: {resolvedInteraction.confidenceLabel.toUpperCase()}
                       </span>
                     )}
                     {mechanismFamilyLabel && (
@@ -774,6 +752,35 @@ export default function App() {
         <p className="mx-auto mt-24 max-w-xl text-center text-sm sm:text-base italic text-[var(--text-primary)]/75">
           Local browser storage is used for favourites only. Third-party hosting providers may still process network logs.
         </p>
+
+        <ResearchModePanel
+          filters={researchFilters}
+          onChange={setResearchFilters}
+        />
+
+        <section className="max-w-4xl mx-auto mt-8">
+          {visibleResearchInteractions.length === 0 ? (
+            <p className="text-center text-sm text-[var(--text-muted)] border border-white/10 rounded-2xl px-4 py-6 bg-white/5">
+              No interactions match the current research filters.
+            </p>
+          ) : (
+            <div className="grid gap-3">
+              {visibleResearchInteractions.map((item: UIInteraction) => (
+                <article
+                  key={item.id}
+                  className="rounded-xl border border-white/10 bg-white/5 px-4 py-3"
+                >
+                  <div className="text-sm font-semibold text-[var(--text-primary)]">
+                    {item.substanceA} + {item.substanceB}
+                  </div>
+                  <div className="mt-1 text-xs text-[var(--text-muted)]">
+                    Risk: {item.riskDisplayLabel} | Mechanism: {item.mechanismDisplayLabel} | Confidence: {item.confidenceLabel}
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
+        </section>
 
         <footer className="max-w-2xl mx-auto mt-32 pt-12 border-t border-white/5 text-center relative z-10">
           <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12">

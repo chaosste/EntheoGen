@@ -1,13 +1,10 @@
-import type { MechanismCategory, RuleOrigin } from '../data/drugData';
+import type { MechanismCategory } from '../data/drugData';
 
 type EvidenceContext = {
   confidence?: string;
   riskScale?: number;
   mechanism?: string;
   mechanismCategory?: MechanismCategory;
-  origin?: RuleOrigin;
-  provenanceSource?: 'deterministic_mapping_table' | 'heuristic_fallback' | 'self_pair' | 'decomposition' | 'mechanistic_inference';
-  provenanceConfidenceTier?: 'high' | 'medium' | 'low';
   practicalGuidance?: string;
   timing?: string;
   evidenceGaps?: string;
@@ -37,21 +34,6 @@ const SPECIAL_PAIR_NOTES: Record<string, string> = {
 };
 
 const pairLabel = (a: string, b: string) => [a, b].sort().join("|");
-
-const DATASET_BASIS_TEXT: Record<RuleOrigin, string> = {
-  self: 'same selection within the dataset, so no pairwise interaction rule is applied',
-  explicit: 'a deterministic mapping table entry in the loaded dataset',
-  fallback: 'a heuristic fallback inferred from the loaded interaction family',
-  unknown: 'a current source gap in the loaded dataset'
-};
-
-const PROVENANCE_SOURCE_TEXT: Record<NonNullable<EvidenceContext['provenanceSource']>, string> = {
-  deterministic_mapping_table: 'deterministic mapping table',
-  heuristic_fallback: 'heuristic fallback',
-  self_pair: 'self pair',
-  decomposition: 'decomposition',
-  mechanistic_inference: 'mechanistic inference'
-};
 
 const MECHANISM_FAMILY_TEXT: Partial<Record<MechanismCategory, string>> = {
   serotonergic: 'serotonergic interaction pattern',
@@ -90,15 +72,6 @@ export async function getInteractionExplanation(
   const evidenceGaps = context?.evidenceGaps;
   const evidenceTier = context?.evidenceTier;
   const fieldNotes = context?.fieldNotes;
-  const datasetBasis = context?.origin
-    ? DATASET_BASIS_TEXT[context.origin]
-    : undefined;
-  const provenanceSource = context?.provenanceSource
-    ? PROVENANCE_SOURCE_TEXT[context.provenanceSource]
-    : undefined;
-  const provenanceConfidenceTier = context?.provenanceConfidenceTier
-    ? context.provenanceConfidenceTier.toUpperCase()
-    : undefined;
   const mechanismFamily = context?.mechanismCategory
     ? MECHANISM_FAMILY_TEXT[context.mechanismCategory]
     : undefined;
@@ -112,9 +85,6 @@ export async function getInteractionExplanation(
     special ? `**Specific consensus note:** ${special}` : "",
     ``,
     `**Evidence confidence:** ${confidence.toUpperCase()}`,
-    datasetBasis ? `**Dataset basis:** ${datasetBasis}.` : "",
-    provenanceSource ? `**Provenance source:** ${provenanceSource}.` : "",
-    provenanceConfidenceTier ? `**Provenance confidence:** ${provenanceConfidenceTier}` : "",
     evidenceTier ? `**Evidence tier:** ${evidenceTier}` : "",
     mechanismFamily ? `**Mechanism family:** ${mechanismFamily}.` : "",
     mechanism ? `#### Mechanism of concern\n${mechanism}` : "",
@@ -141,15 +111,6 @@ export async function getDrugSummary(
     const fieldNotes = context?.fieldNotes;
     const evidenceGaps = context?.evidenceGaps;
     const evidenceTier = context?.evidenceTier;
-    const datasetBasis = context?.origin
-      ? DATASET_BASIS_TEXT[context.origin]
-      : undefined;
-    const provenanceSource = context?.provenanceSource
-      ? PROVENANCE_SOURCE_TEXT[context.provenanceSource]
-      : undefined;
-    const provenanceConfidenceTier = context?.provenanceConfidenceTier
-      ? context.provenanceConfidenceTier.toUpperCase()
-      : undefined;
     const mechanismFamily = context?.mechanismCategory
       ? MECHANISM_FAMILY_TEXT[context.mechanismCategory]
       : undefined;
@@ -161,9 +122,6 @@ export async function getDrugSummary(
       `**Pair:** ${drug1Name} + ${drug2Name}`,
       `**Risk posture:** ${action}`,
       special ? `**Consensus note:** ${special}` : "",
-      datasetBasis ? `**Dataset basis:** ${datasetBasis}.` : "",
-      provenanceSource ? `**Provenance source:** ${provenanceSource}.` : "",
-      provenanceConfidenceTier ? `**Provenance confidence:** ${provenanceConfidenceTier}` : "",
       evidenceTier ? `**Evidence tier:** ${evidenceTier}` : "",
       mechanismFamily ? `**Mechanism family:** ${mechanismFamily}.` : "",
       ``,
