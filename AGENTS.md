@@ -1,8 +1,13 @@
-# Agent Curation Rules
+## Learned User Preferences
 
-- Natural-language interaction reports are allowed as curation input.
-- Always convert natural-language reports into structured proposals in `src/curation/interaction-updates.jsonl` before any patch generation.
-- Never apply NLP-derived changes directly to `src/data/interactionDatasetV2.json`.
-- Treat NLP extraction as low-confidence by default unless validated by stronger evidence.
-- Preserve original report text in `rationale` for traceability.
-- For any request to update a single interaction pair from a report, JSONL proposal, or manual curation note, automatically use the `EntheoGenUpdate` skill and follow its workflow without waiting for a reminder.
+- Prefer minimal, isolated patches over broad refactors.
+- Keep provenance/auth systems untouched during interaction UI/data-layer work unless explicitly requested.
+- Remove dead code only when TypeScript explicitly confirms it is unused.
+- Keep new filtering logic centralized in a single composable helper.
+- Use normalized `UIInteraction` fields for UI behavior and rendering instead of raw dataset fields.
+
+## Learned Workspace Facts
+
+- The UI interaction adapter is centered in `src/data/uiInteractions.ts`.
+- Research Mode filtering is centralized in `src/data/researchMode.ts`.
+- A dev regression assertion script exists at `scripts/testUIInteractionsAdapter.ts`.
