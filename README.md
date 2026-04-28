@@ -97,6 +97,34 @@ Community expertise helps prioritize future rule additions and dataset extension
 
 Please leave feedback in [Discussions](https://github.com/chaosste/EntheoGen/discussions/1)
 
+# Beta-0-1 data visualisations
+
+### 28.04.2026
+
+## Class-to-Class Interaction Matrix
+
+![Class-to-Class Interaction Matrix](https://github.com/chaosste/EntheoGen-Dataset-Beta-0-1/blob/main/content_downloads/beta-v-1-0-release-graphs/Class-to-Class%20Interaction%20Matrix-28_04_2026%2C%2017_58_06.png)
+
+## Most Complex Interactions
+
+![Most Complex Interactions (Multi-Mechanism](https://github.com/chaosste/EntheoGen-Dataset-Beta-0-1/blob/main/content_downloads/beta-v-1-0-release-graphs/Most%20Complex%20Interactions%20(Multi-Mechanism)-28_04_2026%2C%2017_58_25.png)
+
+## High-risk interaction rate
+
+![High-risk interaction rate](https://github.com/chaosste/EntheoGen-Dataset-Beta-0-1/blob/main/content_downloads/beta-v-1-0-release-graphs/High-risk%20interaction%20rate-28_04_2026%2C%2017_59_24.png)
+
+## Average Risk per Substance
+
+![Average Risk per Substance](https://github.com/chaosste/EntheoGen-Dataset-Beta-0-1/blob/main/content_downloads/beta-v-1-0-release-graphs/Average%20Risk%20per%20Substance-28_04_2026.png)
+
+## Risk vs Mechanism Diversity per Substance
+
+![Risk vs Mechanism Diversity per Substance](https://github.com/chaosste/EntheoGen-Dataset-Beta-0-1/blob/main/content_downloads/beta-v-1-0-release-graphs/Risk%20vs%20Mechanism%20Diversity%20per%20Substance-28_04_2026%2C%2017_58_34.png)
+
+## Mechanism Category Frequency
+
+![Mechanism Category Frequency](https://github.com/chaosste/EntheoGen-Dataset-Beta-0-1/blob/main/content_downloads/beta-v-1-0-release-graphs/Mechanism%20Category%20Frequency-28_04_2026%2C%2017_58_42.png)
+
 # Tech Stack
 | Layer | Technology Frontend |
 | --- | --- |
