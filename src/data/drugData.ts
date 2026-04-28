@@ -3,6 +3,7 @@ import {
   type InteractionPair as SharedInteractionPair
 } from './interactionDataset';
 import { PRIORITY_INTERACTION_RULES } from './priorityInteractionOverrides';
+import substancesSnapshot from './substances_snapshot.json' with { type: 'json' };
 
 export interface Drug {
   id: string;
@@ -207,271 +208,8 @@ export function classifyMechanismCategory(
   return 'unknown';
 }
 
-export const DRUGS: Drug[] = [
-  {
-    id: 'ayahuasca',
-    name: 'Ayahuasca',
-    class: 'Ceremonial Psychedelic',
-    mechanismTag: 'MAOI + DMT',
-    notes: 'Contains harmala alkaloids; interaction profile strongly MAOI-mediated.'
-  },
-  {
-    id: 'psilocybin',
-    name: 'Psilocybin Mushrooms',
-    class: 'Ceremonial Psychedelic',
-    mechanismTag: 'Serotonergic psychedelic',
-    notes: 'Classical psychedelic; medication interactions include blunting/intensification.'
-  },
-  {
-    id: 'nn_dmt',
-    name: 'N,N-DMT',
-    class: 'Ceremonial Psychedelic',
-    mechanismTag: 'Serotonergic tryptamine',
-    notes: 'Referenced as generally lower risk with ayahuasca context than 5-MeO-DMT.'
-  },
-  {
-    id: 'five_meo_dmt',
-    name: '5-MeO-DMT',
-    class: 'Ceremonial Psychedelic',
-    mechanismTag: 'Serotonergic tryptamine',
-    notes: 'Specifically flagged as dangerous with MAOIs in supplied sources.'
-  },
-  {
-    id: 'mescaline_peyote',
-    name: 'Mescaline / Peyote',
-    class: 'Ceremonial Psychedelic',
-    mechanismTag: 'Phenethylamine psychedelic',
-    notes: 'Listed with spacing guidance relative to ayahuasca.'
-  },
-  {
-    id: 'yopo',
-    name: 'Yopo',
-    class: 'Ceremonial Psychedelic',
-    mechanismTag: '5-MeO-DMT + bufotenine containing seeds',
-    notes: 'Source notes caution due active constituents.'
-  },
-  {
-    id: 'lsd',
-    name: 'LSD',
-    class: 'Ceremonial Psychedelic',
-    mechanismTag: 'Serotonergic psychedelic',
-    notes: 'Included in lower-risk ayahuasca combination examples.'
-  },
-  {
-    id: 'salvia',
-    name: 'Salvia divinorum',
-    class: 'Ceremonial Psychedelic',
-    mechanismTag: 'Atypical dissociative/dysphoric profile',
-    notes: 'Marked distinct per request; no explicit risk ratings in provided documents.'
-  },
-  {
-    id: 'belladonna',
-    name: 'Belladonna',
-    class: 'Deliriant',
-    mechanismTag: 'Anticholinergic deliriant',
-    notes: 'Marked distinct per request; no explicit risk ratings in provided documents.'
-  },
-  {
-    id: 'brugmansia',
-    name: 'Brugmansia',
-    class: 'Deliriant',
-    mechanismTag: 'Anticholinergic deliriant',
-    notes: 'Marked distinct per request; no explicit risk ratings in provided documents.'
-  },
-  {
-    id: 'kambo',
-    name: 'Kambo',
-    class: 'Ceremonial Adjunct',
-    mechanismTag: 'Ceremonial adjunct',
-    notes: 'Caution advised around co-presentation with ayahuasca.'
-  },
-  {
-    id: 'tobacco_rape',
-    name: 'Tobacco / Rapé',
-    class: 'Ceremonial Adjunct',
-    mechanismTag: 'Nicotinic stimulant (traditional adjunct)',
-    notes: 'Generally noted as acceptable with caveats on admixtures.'
-  },
-  {
-    id: 'cannabis',
-    name: 'Cannabis',
-    class: 'Ceremonial Or Recreational',
-    mechanismTag: 'Cannabinoid',
-    notes: 'Listed in lower-risk ayahuasca combinations.'
-  },
-  {
-    id: 'ketamine',
-    name: 'Ketamine',
-    class: 'Pharmaceutical Or Clinical Psychedelic',
-    mechanismTag: 'NMDA-antagonist dissociative',
-    notes: 'No formal ayahuasca interaction trials; concern is mainly confusion, sedation, and autonomic instability.'
-  },
-  {
-    id: 'alcohol',
-    name: 'Alcohol',
-    class: 'Non Ceremonial',
-    mechanismTag: 'CNS depressant',
-    notes: 'Explicitly advised against with ayahuasca in provided text.'
-  },
-  {
-    id: 'ssri',
-    name: 'SSRIs',
-    class: 'Pharmaceutical Class',
-    mechanismTag: 'Serotonin reuptake inhibition',
-    notes: 'Psilocybin chart: blunted effects; ayahuasca: serotonin syndrome risk.'
-  },
-  {
-    id: 'snri',
-    name: 'SNRIs',
-    class: 'Pharmaceutical Class',
-    mechanismTag: 'Serotonin + norepinephrine reuptake inhibition',
-    notes: 'Psilocybin chart: blunted effects; ayahuasca contraindication list includes SNRIs.'
-  },
-  {
-    id: 'tricyclic_ad',
-    name: 'Tricyclic Antidepressants',
-    class: 'Pharmaceutical Class',
-    mechanismTag: 'Mixed monoamine reuptake effects',
-    notes: 'Psilocybin chart: intensified effects; specific tricyclics listed as contraindicated with ayahuasca.'
-  },
-  {
-    id: 'maoi_pharma',
-    name: 'Pharmaceutical MAOIs',
-    class: 'Pharmaceutical Class',
-    mechanismTag: 'Monoamine oxidase inhibition',
-    notes: 'Major contraindication category around ayahuasca and serotonergic combinations.'
-  },
-  {
-    id: 'atypical_ad',
-    name: 'Atypical Antidepressants',
-    class: 'Pharmaceutical Class',
-    mechanismTag: 'Mixed serotonergic mechanisms',
-    notes: 'Buspirone, trazodone, mirtazapine in psilocybin chart mostly blunted.'
-  },
-  {
-    id: 'ndri_bupropion',
-    name: 'NDRI (Bupropion)',
-    class: 'Pharmaceutical Class',
-    mechanismTag: 'Norepinephrine + dopamine reuptake inhibition',
-    notes: 'Psilocybin chart flags reduced seizure threshold and individualized risk.'
-  },
-  {
-    id: 'amphetamine_stims',
-    name: 'Amphetamine Stimulants',
-    class: 'Pharmaceutical Or Recreational',
-    mechanismTag: 'Monoamine releasing stimulant',
-    notes: 'Explicitly high risk with MAOI context; potential hypertensive crisis/serotonin toxicity.'
-  },
-  {
-    id: 'methylphenidate',
-    name: 'Methylphenidate',
-    class: 'Pharmaceutical',
-    mechanismTag: 'Catecholaminergic stimulant',
-    notes: 'Contraindication list item with ayahuasca in source slides.'
-  },
-  {
-    id: 'cocaine',
-    name: 'Cocaine',
-    class: 'Recreational Stimulant',
-    mechanismTag: 'Monoamine reuptake inhibition',
-    notes: 'Contraindication list item with ayahuasca in source slides.'
-  },
-  {
-    id: 'mdma_2cx_dox_nbome',
-    name: 'MDMA / 2C-x / DOx / NBOMe',
-    class: 'Recreational Serotonergic',
-    mechanismTag: 'Serotonergic stimulant/psychedelic cluster',
-    notes: 'Contraindication cluster with ayahuasca in source slides.'
-  },
-  {
-    id: 'serotonergic_opioids',
-    name: 'Serotonergic Opioids (Tramadol/Methadone/Meperidine/Tapentadol)',
-    class: 'Pharmaceutical Class',
-    mechanismTag: 'Opioid + serotonergic action',
-    notes: 'Contraindication list item with ayahuasca in source slides.'
-  },
-  {
-    id: 'antipsychotics',
-    name: 'Antipsychotics',
-    class: 'Pharmaceutical Class',
-    mechanismTag: 'Dopamine/serotonin modulation',
-    notes: 'Mixed source signals; treat as elevated caution/high risk with ayahuasca.'
-  },
-  {
-    id: 'antihypertensives',
-    name: 'Antihypertensives',
-    class: 'Pharmaceutical Class',
-    mechanismTag: 'Blood pressure modulation',
-    notes: 'Mentioned as risk area and also emergency management context.'
-  },
-  {
-    id: 'benzodiazepines',
-    name: 'Benzodiazepines',
-    class: 'Pharmaceutical Class',
-    mechanismTag: 'GABAergic sedatives',
-    notes: 'Listed as generally low-risk emergency management option in supplied slides.'
-  },
-  {
-    id: 'lithium',
-    name: 'Lithium',
-    class: 'Pharmaceutical Class',
-    mechanismTag: 'Mood stabilizer / second-messenger modulation',
-    notes: 'Strong seizure signal reported in observational psychedelic co-use data.'
-  },
-  {
-    id: 'lamotrigine',
-    name: 'Lamotrigine',
-    class: 'Pharmaceutical Class',
-    mechanismTag: 'Anticonvulsant / sodium-channel modulation',
-    notes: 'Observational data suggest lower seizure concern than lithium with classic psychedelics.'
-  },
-  {
-    id: 'clonidine',
-    name: 'Clonidine',
-    class: 'Pharmaceutical Class',
-    mechanismTag: 'Alpha-2 agonist sympatholytic',
-    notes: 'More sedating and hypotensive than guanfacine in many settings.'
-  },
-  {
-    id: 'guanfacine',
-    name: 'Guanfacine',
-    class: 'Pharmaceutical Class',
-    mechanismTag: 'Alpha-2 agonist sympatholytic',
-    notes: 'Similar class to clonidine but often somewhat less sedating.'
-  },
-  {
-    id: 'beta_blockers',
-    name: 'Beta-Blockers',
-    class: 'Pharmaceutical Class',
-    mechanismTag: 'Cardiovascular rate control',
-    notes: 'Rate-limiting beta-adrenergic antagonists; distinct from calcium-channel blockers.'
-  },
-  {
-    id: 'calcium_channel_blockers',
-    name: 'Calcium Channel Blockers',
-    class: 'Pharmaceutical Class',
-    mechanismTag: 'Cardiovascular rate and pressure control',
-    notes: 'Distinct class from beta-blockers; includes agent-specific differences in conduction and vasodilation.'
-  },
-  {
-    id: 'clonidine_guanfacine',
-    name: 'Clonidine / Guanfacine',
-    class: 'Pharmaceutical Class',
-    mechanismTag: 'Alpha-2 agonist sympatholytic',
-    notes: 'Aggregate node preserved for backward compatibility; superseded by clonidine and guanfacine.',
-    deprecated: true,
-    supersededBy: ['clonidine', 'guanfacine']
-  },
-  {
-    id: 'beta_blockers_ccb',
-    name: 'Beta-Blockers / Rate-Controlling CCBs',
-    class: 'Pharmaceutical Class',
-    mechanismTag: 'Cardiovascular rate and pressure control',
-    notes: 'Aggregate node preserved for backward compatibility; superseded by beta-blockers and calcium channel blockers.',
-    deprecated: true,
-    supersededBy: ['beta_blockers', 'calcium_channel_blockers']
-  },
-];
+/** Substance list from EntheoGen-Dataset-Beta-0-1 snapshot (`npm run dataset:build-beta`). */
+export const DRUGS: Drug[] = substancesSnapshot as Drug[];
 
 const DRUG_BY_ID = new Map(DRUGS.map((drug) => [drug.id, drug] as const));
 
@@ -531,6 +269,13 @@ export const LEGEND: Record<string, InteractionMetadata> = {
     color: '#A7B0B8',
     description: 'Plausible class-level interaction supported by pharmacology but not direct clinical evidence.',
     riskScale: 2
+  },
+  DETERMINISTIC: {
+    label: 'Deterministic mapping',
+    symbol: 'WARN',
+    color: '#5A9FD4',
+    description: 'Classification from an explicit deterministic rule or mapping table.',
+    riskScale: 3
   },
   SELF: {
     label: 'Same Entity / N-A',

@@ -58,6 +58,9 @@ const RISK_DISPLAY_LABELS: Record<string, string> = {
   UNS: 'Unsafe / high risk',
   DAN: 'Dangerous / contraindicated',
   UNK: 'Unknown / insufficient data',
+  INFERRED: 'Mechanistic inference',
+  THEORETICAL: 'Theoretical interaction',
+  DETERMINISTIC: 'Established interaction mapping',
   SELF: SELF_DISPLAY
 };
 

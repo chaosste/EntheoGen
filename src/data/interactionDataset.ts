@@ -11,7 +11,10 @@ export type InteractionCode =
   | 'UNS'
   | 'DAN'
   | 'UNK'
-  | 'SELF';
+  | 'SELF'
+  | 'INFERRED'
+  | 'THEORETICAL'
+  | 'DETERMINISTIC';
 
 export interface InteractionPair {
   substance_a_id: string;

@@ -9,6 +9,8 @@
     "preview": "npm run build && wrangler dev",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
+    "dataset:build-beta": "tsx scripts/buildAppDatasetFromBeta.ts",
+    "test:beta-mapping": "tsx scripts/testBetaDatasetMapping.ts",
     "test": "npm run kb:validate && npm run validate:interactions:v2",
     "migrate:interactions:v2": "tsx scripts/migrateInteractionsToV2.ts",
     "validate:interactions:v2": "tsx scripts/validateInteractionsV2.ts",

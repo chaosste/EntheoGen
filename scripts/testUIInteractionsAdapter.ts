@@ -169,6 +169,77 @@ const cases: TestCase[] = [
       assert(result.headline === 'Operationally unsafe overlap.', 'new shape headline should map');
       assert(result.raw !== null, 'new shape raw should remain attached');
     }
+  },
+  {
+    name: 'beta THEORETICAL code',
+    row: {
+      substance_a_id: 'a',
+      substance_b_id: 'b',
+      pair_key: 'a|b',
+      interaction_code: 'THEORETICAL',
+      interaction_label: 'Theoretical / Moderate Risk',
+      risk_scale: 2,
+      summary: 'Class-level pharmacology only.',
+      confidence: 'low',
+      mechanism_category: 'unknown'
+    },
+    check: (result) => {
+      assert(result.riskLabel === 'THEORETICAL', 'riskLabel preserves beta code');
+      assert(result.riskDisplayLabel === 'Theoretical interaction', 'friendly theoretical label');
+    }
+  },
+  {
+    name: 'beta DETERMINISTIC code',
+    row: {
+      substance_a_id: 'a',
+      substance_b_id: 'b',
+      pair_key: 'a|b',
+      interaction_code: 'DETERMINISTIC',
+      interaction_label: '',
+      risk_scale: 3,
+      summary: 'Rule-based row.',
+      confidence: 'high',
+      mechanism_category: 'serotonergic'
+    },
+    check: (result) => {
+      assert(result.riskLabel === 'DETERMINISTIC', 'riskLabel preserves deterministic code');
+      assert(result.riskDisplayLabel === 'Established interaction mapping', 'friendly deterministic label');
+    }
+  },
+  {
+    name: 'beta confidence not_applicable string',
+    row: {
+      substance_a_id: 'a',
+      substance_b_id: 'b',
+      pair_key: 'a|b',
+      interaction_code: 'CAU',
+      interaction_label: 'Caution',
+      risk_scale: 3,
+      summary: 'Caution row.',
+      confidence: 'not_applicable',
+      mechanism_category: 'maoi'
+    },
+    check: (result) => {
+      assert(result.confidenceLabel === 'Unknown', 'not_applicable confidence normalizes like n/a');
+    }
+  },
+  {
+    name: 'nullable risk_score with INFERRED',
+    row: {
+      substance_a_id: 'a',
+      substance_b_id: 'b',
+      pair_key: 'a|b',
+      interaction_code: 'INFERRED',
+      interaction_label: 'Inferred',
+      risk_scale: null,
+      summary: 'Inferred without numeric score.',
+      confidence: 'medium',
+      mechanism_category: 'unknown'
+    },
+    check: (result) => {
+      assert(result.riskScore === null, 'null risk_scale yields null riskScore');
+      assert(result.riskDisplayLabel === 'Mechanistic inference', 'INFERRED display label');
+    }
   }
 ];
 
