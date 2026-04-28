@@ -1,29 +1,15 @@
 <div align="center">
 	
 <!-- BADGES:START -->
-![Schema Version](https://img.shields.io/badge/schema-v2.2.0-blue)
-![Interactions](https://img.shields.io/badge/interactions-708-informational)
-![Substances](https://img.shields.io/badge/substances-52-informational)
-![Validation](https://img.shields.io/badge/validation-strict-brightgreen)
-![Build](https://img.shields.io/badge/typescript-compile%20pass-brightgreen)
-![Status](https://img.shields.io/badge/status-evidence%20gated-orange)
-![Evidence Gate](https://img.shields.io/badge/evidence-gated-red)
-![Review Pipeline](https://img.shields.io/badge/review-human--in--loop-blue)
-![Claims Status](https://img.shields.io/badge/claims-pending%20enriched-yellow)
-![Linking](https://img.shields.io/badge/linking-awaiting%20review-lightgrey)
-![Provenance](https://img.shields.io/badge/provenance-citation%20required-blue)
-![Sources](https://img.shields.io/badge/sources-peer--review%20preferred-green)
-![Uncertainty](https://img.shields.io/badge/uncertainty-explicit-lightgrey)
-![Inference](https://img.shields.io/badge/inference-mechanistic-yellow)
-![Harm Reduction](https://img.shields.io/badge/harm--reduction-primary-critical)
-![Clinical Risk](https://img.shields.io/badge/risk-modelled-important)
-![Serotonin Toxicity](https://img.shields.io/badge/focus-serotonergic%20interactions-purple)
-![Data Model](https://img.shields.io/badge/model-knowledge%20graph-purple)
-![Deterministic](https://img.shields.io/badge/deterministic-enforced-blue)
-![Pair Matching](https://img.shields.io/badge/pair--matching-normalized-success)
-![Review Status](https://img.shields.io/badge/review-in%20progress-yellow)
-![Evidence Coverage](https://img.shields.io/badge/evidence-expanding-blue)
-![Knowledge State](https://img.shields.io/badge/state-validated%20%7C%20awaiting%20review-blueviolet)
+![Dataset](https://img.shields.io/badge/Dataset-beta--0.1-blue)
+![Interactions](https://img.shields.io/badge/Interactions-693-informational)
+![Substances](https://img.shields.io/badge/Substances-37-informational)
+![App data](https://img.shields.io/badge/App%20data-static%20JSON%20snapshot-lightgrey)
+![TypeScript](https://img.shields.io/badge/TypeScript-compile%20pass-brightgreen)
+![Checks](https://img.shields.io/badge/Checks-adapter%20%2B%20mapping%20scripts-green)
+![KB parallel](https://img.shields.io/badge/KB%20parallel-schema%20v2-blue)
+![Review stance](https://img.shields.io/badge/Review%20stance-human--in--loop-orange)
+![Use](https://img.shields.io/badge/Use-educational%20%E2%80%94%20not%20clinical%20advice-critical)
 <!-- BADGES:END -->
 	
 # 🌿 EntheoGen Plant Medicine Interaction Guide
