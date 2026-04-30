@@ -8,6 +8,7 @@ This map aligns live test commands to current EntheoGen modules.
 | --- | --- | --- |
 | `dataset_helpers` | `npm run test:dataset-helpers` | `scripts/datasetPaths.ts`, `scripts/buildAppDatasetFromBeta.ts`, `scripts/betaDatasetMapping.ts` |
 | `workflow_modules` | `npm run test:workflow` | `scripts/workflow/stateMachine.ts`, `scripts/workflow/transitionInteractionUpdateState.ts`, `scripts/workflow/interactionUpdateWorkflow.ts` |
+| `workflow_write_path_guards` | `npm run test:workflow-write-path-guards` | `scripts/workflow/writePathGuard.test.ts` (guards direct `workflow.state` write paths outside approved surfaces) |
 | `agent_output_contracts` | `npm run updates:test-parser` | `scripts/parseInteractionReports.ts` proposal output shape and workflow initialization |
 | `knowledge_base_pipeline` | `npm run kb:test` | `scripts/testKnowledgeBasePipeline.ts`, `scripts/testAlmaIngestion.ts`, `scripts/testPerplexityIngestion.ts` |
 | `external_bridge_slack` | `npm run test:slack` | `scripts/slack/slackApi.ts` request/response bridge behavior |
@@ -29,3 +30,7 @@ npm run test:suite:alignment
 - Add or remove coverage labels only when the associated command changes.
 - Obsolete construction-stage tests that depend on removed fixtures should be
   deleted instead of kept as broken placeholders.
+- Approved exceptions for direct `workflow.state` object literals are limited to:
+  `scripts/parseInteractionReports.ts` (new proposal initialization at
+  `submitted`) and `scripts/workflow/interactionUpdateWorkflow.ts` (governed
+  transition helper output).
