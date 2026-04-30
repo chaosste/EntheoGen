@@ -1,6 +1,18 @@
 # Knowledge Base Pipeline
 
-This directory is the lightweight source-to-claim pipeline for the EntheoGen interaction dataset.
+This directory stores source material, extracted claim candidates, review state,
+indexes, schemas, and validation reports for the EntheoGen interaction data.
+
+## Scope
+
+- Source surfaces: `sources/`, `indexes/`, `schemas/`, and
+  `extracted/claims/`.
+- App export/runtime surfaces are outside this directory, mainly
+  `src/data/interactionDatasetV2.json`, `src/exports/interaction_pairs.json`,
+  and adapters such as `src/data/uiInteractions.ts`.
+- Automation may extract, validate, promote explicitly reviewed claims, and link
+  reviewed source references. Humans keep final authority over claim review,
+  interpretation, safety posture, and publication-facing changes.
 
 ## Folder Layout
 
@@ -12,18 +24,20 @@ This directory is the lightweight source-to-claim pipeline for the EntheoGen int
 - `schemas/` stores the JSON Schemas used to validate source and claim records.
 - Perplexity research syntheses live under `sources/expert-guidelines/` with filenames like `perplexity_<topic_slug>_<year>.md`.
 
-The preferred extraction format is `.md` or `.txt`. PDFs can remain archival/source-of-record, but they are not part of the extraction pipeline yet.
+The preferred extraction format is `.md` or `.txt`. PDFs can remain archival
+source material, but they are not part of the extraction pipeline yet.
 
 ## Workflow
 
 1. Add or edit a source file under `knowledge-base/sources/`.
 2. Run `npm run kb:extract` to create machine-generated claim candidates in `extracted/claims/pending/`.
 3. Review the pending claims manually.
-4. Mark reviewed claims as `human_reviewed` or `rejected`.
+4. Mark reviewed claims as `human_reviewed`, `rejected`, or `needs_revision`.
 5. Run `npm run kb:promote` to move reviewed claims into `reviewed/` or `rejected/`.
 6. Run `npm run kb:link` to attach reviewed claim source references into the interaction dataset.
 7. Run `npm run kb:validate` to verify manifests, claim files, source files, and dataset references.
-8. Run `npm run kb:ingest:perplexity` to turn Perplexity research syntheses into provisional claim candidates and citation leads.
+8. Run `npm run kb:ingest:perplexity` only when adding Perplexity research
+   syntheses as provisional claim candidates and citation leads.
 
 ## Adding a Source
 
@@ -44,7 +58,8 @@ Frontmatter is optional, but recommended. When present, it can define source met
 
 The extractor scans `.md` and `.txt` files, looks for explicit interaction/risk/mechanism language, and writes candidate claims into `extracted/claims/pending/`.
 
-All machine-generated claims are provisional. They should be treated as candidates only, not validated evidence.
+All machine-generated claims are provisional. Treat them as candidates only, not
+validated evidence.
 
 ### Perplexity Research Synthesis
 
@@ -70,6 +85,10 @@ Then run:
 `npm run kb:promote`
 
 Reviewed claims move to `reviewed/`, rejected claims move to `rejected/`, and unresolved claims stay in `pending/`.
+
+Automation may move claims only when the review state is already explicit in the
+claim file. Direct bypasses around review state are defects to fix in code or
+scripts, not process exceptions to normalize in documentation.
 
 ## Linking
 
@@ -97,6 +116,35 @@ Validation checks:
 - manifest entries point to real source files
 - dataset source references resolve to known dataset sources
 - Perplexity claims stay provisional unless manually verified and corroborated by stronger evidence
+
+## Acceptance Criteria
+
+- Source changes are represented by files under `knowledge-base/sources/` and,
+  when applicable, matching manifest/index updates.
+- Claim files validate against `knowledge-base/schemas/claim.schema.json`.
+- Reviewed and rejected claims have matching review states before promotion.
+- Linked app data references known source IDs and does not treat provisional AI
+  synthesis as standalone support for stronger classification.
+- PR descriptions include what changed, verification commands, and any residual
+  uncertainty for reviewers.
+
+## Verification Commands
+
+Run the narrowest checks that cover the change:
+
+```bash
+npm run kb:validate
+npm run validate:interactions:v2
+npm run lint
+```
+
+For parser or adapter work, add targeted checks such as:
+
+```bash
+npm run updates:test-parser
+npm run kb:test
+tsx scripts/testUIInteractionsAdapter.ts
+```
 
 ## Safety Note
 

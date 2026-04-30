@@ -1,9 +1,9 @@
 # EntheoGen Repository Layout
 
-This is the canonical folder and file schematic for contributors, reviewers,
-automation operators, and project stakeholders. It focuses on source-controlled
-project structure and intentionally omits generated/vendor files such as
-`node_modules/`, `dist/`, `.git/`, `.DS_Store`, local secrets, and cache output.
+This guide describes the source-controlled repository layout contributors and
+automation should expect in this repo today. It focuses on checked-in project
+structure and intentionally omits generated/vendor files such as `node_modules/`,
+`dist/`, `.git/`, `.DS_Store`, local secrets, and cache output.
 
 ## System Map
 
@@ -28,7 +28,7 @@ flowchart LR
   app --> deploy
 ```
 
-## Canonical Tree
+## Repository Tree
 
 ```text
 EntheoGen/
@@ -50,10 +50,6 @@ EntheoGen/
 |   |-- App.tsx                       # primary interaction-guide UI shell
 |   |-- index.css                     # global styles
 |   |-- unknown.csv                   # source data artifact for unknown cases
-|   |-- assets/                       # app-bundled image assets
-|   |   |-- logo-jaguar.png
-|   |   |-- logo-leaf.png
-|   |   `-- logo-vine.png
 |   |-- components/                   # reusable React UI components
 |   |   `-- ResearchModePanel.tsx
 |   |-- data/                         # normalized interaction data layer
@@ -128,40 +124,26 @@ EntheoGen/
 |   |-- validateInteractionsV2.ts
 |   |-- validateKnowledgeBase.ts
 |   |-- testUIInteractionsAdapter.ts
+|   |-- testProvisionalInteractions.ts
 |   |-- ingest_alma_interactions.ts
 |   |-- ingest_perplexity_research.ts
 |   |-- extract_claims.ts
 |   |-- promote_reviewed_claims.ts
+|   |-- promote_eligible_reviewed_claims.ts
 |   |-- link_claims_to_interactions.ts
 |   |-- generateInteractionReports.ts
 |   |-- parseInteractionReports.ts
 |   |-- kb-utils.ts
 |   |-- perplexity-utils.ts
-|   `-- slack/
-|       |-- slackApi.ts
-|       |-- slackEnv.ts
-|       |-- slackHealthcheck.ts
-|       |-- slackPost.ts
-|       `-- slackApi.test.ts
+|   `-- run_kb_tests.ts
 |
 |-- docs/                             # contributor and project documentation
-|   |-- REPO_LAYOUT.md                # this canonical schematic
-|   |-- automation/
-|   |   `-- AUTOMATION_AGENTS.md      # live automation role boundaries
+|   |-- REPO_LAYOUT.md                # this repository layout guide
+|   |-- AUTOMATION_WORKFLOW.md        # automation scope and review boundaries
 |   `-- assets/                       # README/demo/release media
 |
 |-- public/                           # static files served by the app
-|   |-- favicon.png
 |   |-- public.html
-|   |-- entheogen/
-|   |   |-- EntheoGen-volunteer-QR-code.jpg
-|   |   |-- entheogen-asset-beta-0.1.gif
-|   |   |-- entheogen-flyer-guide.jpg
-|   |   |-- entheogen-flyer-guide.pdf
-|   |   |-- entheogen-help.jpg
-|   |   `-- entheogen-help.pdf
-|   `-- neurophenom-ai/
-|       `-- logo-neurophenom-ai.png
 |
 |-- .github/                          # GitHub metadata and CI/CD
 |   |-- FUNDING.yml
@@ -170,13 +152,7 @@ EntheoGen/
 |   `-- workflows/
 |       `-- azure-deploy.yml
 |
-|-- .cursor/                          # local Cursor hook state
-|-- .omx/                             # local oh-my-codex runtime state/logs
-|-- .wrangler/                        # local Wrangler generated state
-|
-|-- AUTOMATION_README.md              # automation overview
-|-- AUTOMATION_GOVERNANCE.md          # automation governance policy
-`-- AUTOMATION_PHASE_1_BACKLOG.md     # automation rollout backlog
+`-- .cursor/                          # local Cursor hook state
 ```
 
 ## Primary Ownership Areas
@@ -184,16 +160,26 @@ EntheoGen/
 | Area | Primary audience | Purpose |
 | --- | --- | --- |
 | `src/` | app developers, reviewers | React UI, normalized datasets, data adapters, service clients |
-| `src/data/` | data-layer maintainers | Canonical UI-facing interaction model and deterministic rule inputs |
+| `src/data/` | data-layer maintainers | UI-facing interaction model, app snapshots, and deterministic rule inputs |
 | `src/curation/` | research/curation operators | Proposed interaction updates, natural-language report intake, parsing prompts |
 | `knowledge-base/` | evidence reviewers, dataset maintainers | Source corpus, extracted claims, schemas, indexes, ingestion reports |
 | `scripts/` | maintainers, automation operators | Dataset builds, migrations, validation, ingestion, report generation |
-| `docs/automation/` | automation maintainers | Live automation roles, boundaries, output contracts, approval constraints |
 | `public/` and `docs/assets/` | project/comms owners | Static public assets, demo media, release visuals |
 | `.github/` | maintainers | GitHub issue templates and deployment workflow metadata |
-| `.omx/`, `.cursor/`, `.wrangler/` | local operators | Machine-local runtime/cache state; do not treat as canonical product data |
+| `.cursor/` | local operators | Machine-local editor state; do not treat as product data |
 
-## Canonical Data Path
+## Data Surfaces
+
+- Source surfaces live under `knowledge-base/`: source notes in `sources/`,
+  schemas in `schemas/`, claim candidates in `extracted/`, and registries in
+  `indexes/`.
+- App export/runtime surfaces live under `src/data/` and `src/exports/`:
+  `src/data/interactionDatasetV2.json`, adapter modules such as
+  `src/data/uiInteractions.ts`, and exported interaction artifacts.
+- Scripts move data between those surfaces. The usual verification commands are
+  `npm run kb:validate`, `npm run validate:interactions:v2`, and `npm run lint`.
+
+## Practical Data Path
 
 ```text
 knowledge-base/sources/
@@ -201,7 +187,7 @@ knowledge-base/sources/
   -> knowledge-base/extracted/
   -> knowledge-base/indexes/
   -> scripts/buildAppDatasetFromBeta.ts or migration/validation scripts
-  -> src/data/interactionDatasetV2.json and related adapters
+  -> src/data/interactionDatasetV2.json and src/exports/interaction_pairs.json
   -> src/data/uiInteractions.ts
   -> src/App.tsx and src/components/
 ```
@@ -214,7 +200,20 @@ knowledge-base/sources/
   `knowledge-base/`.
 - Put repeatable operational work in `scripts/`, then expose it through
   `package.json` when it becomes part of the standard workflow.
-- Put stakeholder-facing docs in `docs/`; keep automation-specific docs in
-  `docs/automation/`.
+- Put stakeholder-facing docs in `docs/`.
 - Keep secrets in local environment files only. Do not commit live credentials,
   API keys, private tokens, or personal machine paths.
+
+## Acceptance Criteria
+
+- New paths named in docs exist in the repo or are clearly marked as planned.
+- Source-surface changes under `knowledge-base/` pass `npm run kb:validate`.
+- App data changes under `src/data/` pass `npm run validate:interactions:v2`.
+- TypeScript or UI behavior changes pass `npm run lint`, plus focused tests when
+  a touched script already has a test entry.
+
+## Residual Limits
+
+This file is a human-readable map, not an automated manifest. If the tree drifts,
+update this guide in the same PR as the structural change or call out the drift
+for reviewer follow-up.
