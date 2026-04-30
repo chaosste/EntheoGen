@@ -16,11 +16,25 @@ Keep feature diffs issue-scoped and reviewable by requiring a clean (or explicit
 - `revert` (discard local-only noise)
 4. Do not begin unrelated feature edits until drift is either split/reverted or explicitly documented.
 
+## Local-Only State Guard
+
+The following files are local tooling memory and should remain untracked:
+
+- `.cursor/hooks/state/continual-learning.json`
+- `.cursor/hooks/state/continual-learning-index.json`
+
+If they appear in `git status`, remove them from the index (without deleting local copies):
+
+```bash
+git rm --cached .cursor/hooks/state/continual-learning.json .cursor/hooks/state/continual-learning-index.json
+```
+
 ## Drift Inventory (2026-04-30)
 
 | Path | Current status | Classification | Notes |
 | --- | --- | --- | --- |
-| `.cursor/hooks/state/continual-learning.json` | modified | split/revert | Local tool state; should not ride along with feature PRs. |
+| `.cursor/hooks/state/continual-learning.json` | resolved | untracked local-only | Removed from git index; now governed by `.gitignore`. |
+| `.cursor/hooks/state/continual-learning-index.json` | resolved | untracked local-only | Removed from git index; now governed by `.gitignore`. |
 | `AUTOMATION_PHASE_1_BACKLOG.md` | modified | split | Documentation update in separate scope from workflow state machine delivery. |
 | `docs/REPO_LAYOUT.md` | modified | split | Documentation layout update; keep isolated from code behavior changes. |
 | `package-lock.json` | modified | keep/split | Can be kept only when directly caused by intentional `package.json` script/dependency changes; otherwise split. |
