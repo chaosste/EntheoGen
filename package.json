@@ -30,6 +30,7 @@
     "reports:parse": "tsx scripts/parseInteractionReports.ts",
     "updates:test-parser": "tsx scripts/testParseInteractionReports.ts",
     "agents:verify-knowledge-steward": "tsx scripts/verifyKnowledgeStewardContract.ts",
+    "agents:verify-safety": "tsx scripts/verifySafetyAgentContracts.ts",
     "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
