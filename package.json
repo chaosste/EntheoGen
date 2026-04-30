@@ -31,6 +31,7 @@
     "reports:interactions": "tsx scripts/generateInteractionReports.ts",
     "reports:parse": "tsx scripts/parseInteractionReports.ts",
     "updates:test-parser": "tsx scripts/testParseInteractionReports.ts",
+    "workspace:baseline": "tsx scripts/checkWorkspaceBaseline.ts",
     "slack:healthcheck": "tsx scripts/slack/slackHealthcheck.ts",
     "slack:post": "tsx scripts/slack/slackPost.ts",
     "deploy": "npm run build && wrangler deploy"
