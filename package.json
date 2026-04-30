@@ -9,6 +9,7 @@
     "preview": "npm run build && wrangler dev",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
     "dataset:build-beta": "tsx scripts/buildAppDatasetFromBeta.ts",
     "test:beta-mapping": "tsx scripts/testBetaDatasetMapping.ts",
     "test": "npm run kb:validate && npm run validate:interactions:v2",
@@ -22,6 +23,7 @@
     "kb:link": "tsx scripts/link_claims_to_interactions.ts",
     "kb:validate": "tsx scripts/validateKnowledgeBase.ts",
     "kb:test": "./node_modules/.bin/tsx scripts/run_kb_tests.ts",
+    "test:slack": "tsx scripts/slack/slackApi.test.ts",
     "json:consolidate": "tsx scripts/consolidateJsonUpdates.ts",
     "kb:ingest:alma": "tsx scripts/ingest_alma_interactions.ts",
     "kb:ingest:perplexity": "tsx scripts/ingest_perplexity_research.ts",
@@ -29,6 +31,8 @@
     "reports:interactions": "tsx scripts/generateInteractionReports.ts",
     "reports:parse": "tsx scripts/parseInteractionReports.ts",
     "updates:test-parser": "tsx scripts/testParseInteractionReports.ts",
+    "slack:healthcheck": "tsx scripts/slack/slackHealthcheck.ts",
+    "slack:post": "tsx scripts/slack/slackPost.ts",
     "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
