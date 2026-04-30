@@ -153,6 +153,8 @@ Current publication workflow surfaces in this repository:
 - Workflow-state transition guard logic:
   - `scripts/workflow/stateMachine.ts`
   - `scripts/workflow/transitionInteractionUpdateState.ts`
+  - `approved -> published` requires a non-empty transition note so publication
+    state changes carry a review/approval reference
 - Review and merge control:
   - GitHub branch + PR review process (human approval required)
 - Deployment enforcement surface:

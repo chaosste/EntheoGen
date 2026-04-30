@@ -146,11 +146,21 @@ interface TransitionContext {
   note?: string;
 }
 
+function hasMeaningfulNote(note: string | undefined): boolean {
+  return typeof note === 'string' && note.trim().length > 0;
+}
+
 export function transitionInteractionUpdateRecord(
   record: InteractionUpdateRecord,
   to: WorkflowState,
   context: TransitionContext
 ): InteractionUpdateRecord {
+  if (to === 'published' && !hasMeaningfulNote(context.note)) {
+    throw new Error(
+      `Publishing ${record.update_id} requires a non-empty review note (for example PR/approval reference).`
+    );
+  }
+
   const workflow = resolveInteractionUpdateWorkflow(record);
 
   const baseRecord: WorkflowRecord = {

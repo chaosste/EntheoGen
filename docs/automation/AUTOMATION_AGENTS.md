@@ -183,6 +183,8 @@ In this repository, publication-aligned workflow enforcement is represented by:
 
 - workflow transition guards in `scripts/workflow/stateMachine.ts` and
   `scripts/workflow/transitionInteractionUpdateState.ts`
+- explicit publication traceability: `approved -> published` requires a
+  non-empty transition note (for example PR/review reference)
 - GitHub branch/PR review
 - Azure deployment workflow in `.github/workflows/azure-deploy.yml`
 

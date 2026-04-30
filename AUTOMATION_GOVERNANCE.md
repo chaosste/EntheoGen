@@ -237,7 +237,7 @@ for `UNK` explicit when possible:
 | structured -> curator_review | Data Curator or accepted automation intake rule |
 | curator_review -> safety_review | Data Curator |
 | safety_review -> approved | Ethics Advisor |
-| approved -> published | Product Lead |
+| approved -> published | Product Lead, with publication note linking approval artifact (for example PR/review reference) |
 | production-impacting technical change | Technical Lead |
 
 Automation can prepare transition packets and identify warnings, gaps, and
@@ -351,6 +351,8 @@ Current repository enforcement path for publication-aligned workflow:
 1. Workflow state transitions must pass guard rules:
    - `scripts/workflow/stateMachine.ts`
    - `scripts/workflow/transitionInteractionUpdateState.ts`
+   - publication transitions (`approved -> published`) require a non-empty
+     review note in transition context
 2. Human approval and review occur through GitHub branch/PR review.
 3. Deployment to live environment is controlled through:
    - `.github/workflows/azure-deploy.yml`
