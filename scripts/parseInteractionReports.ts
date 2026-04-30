@@ -11,6 +11,7 @@ import type {
   MechanismCategoryV2,
   SourceClaimRefV2
 } from '../src/data/interactionSchemaV2';
+import type { WorkflowState } from './workflow/stateMachine';
 
 type ProposalStatus = 'proposed';
 type ParseConfidence = Exclude<ConfidenceLevel, 'none' | 'not_applicable'>;
@@ -43,6 +44,10 @@ interface InteractionUpdateProposal {
   reviewer_notes?: string;
   rationale: string;
   status: ProposalStatus;
+  workflow: {
+    state: WorkflowState;
+    transition_history: [];
+  };
 }
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -540,7 +545,11 @@ export function buildUpdateProposal(reportText: string, filename: string): Inter
       'evidence.evidence_gaps': evidenceGaps
     },
     rationale: reportText,
-    status: 'proposed'
+    status: 'proposed',
+    workflow: {
+      state: 'submitted',
+      transition_history: []
+    }
   };
 
   if (mechanism) proposal.requested_change['clinical_summary.mechanism'] = mechanism;

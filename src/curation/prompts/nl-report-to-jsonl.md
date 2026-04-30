@@ -12,6 +12,7 @@ Convert a natural-language pharmacology / harm-reduction interaction report into
 - Must be valid single-line JSONL.
 - Do not approve or apply the update.
 - Always set `"status": "proposed"`.
+- Always set `"workflow.state": "submitted"` with empty transition history.
 - Use canonical pair IDs from the dataset.
 - If no structured source IDs exist, use `"source_gap"`.
 - Preserve uncertainty conservatively.
@@ -46,7 +47,11 @@ Convert a natural-language pharmacology / harm-reduction interaction report into
   },
   "rationale": "<condensed rationale from report>",
   "reviewer_notes": "<anything needing human review>",
-  "status": "proposed"
+  "status": "proposed",
+  "workflow": {
+    "state": "submitted",
+    "transition_history": []
+  }
 }
 
 ## Classification mapping

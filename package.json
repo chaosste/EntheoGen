@@ -30,7 +30,10 @@
     "interactions:add-provisional": "tsx scripts/addProvisionalInteractions.ts",
     "reports:interactions": "tsx scripts/generateInteractionReports.ts",
     "reports:parse": "tsx scripts/parseInteractionReports.ts",
+    "reports:transition-workflow": "tsx scripts/workflow/transitionInteractionUpdateState.ts",
     "updates:test-parser": "tsx scripts/testParseInteractionReports.ts",
+    "test:workflow-states": "tsx scripts/workflow/stateMachine.test.ts",
+    "test:workflow-transition-integration": "tsx scripts/workflow/transitionInteractionUpdateState.test.ts",
     "slack:healthcheck": "tsx scripts/slack/slackHealthcheck.ts",
     "slack:post": "tsx scripts/slack/slackPost.ts",
     "deploy": "npm run build && wrangler deploy"
