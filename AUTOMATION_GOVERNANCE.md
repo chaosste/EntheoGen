@@ -346,6 +346,20 @@ For now, incomplete fields, weak evidence, missing provenance, `UNK` status, or
 unresolved triage notes are not automatic blockers. Humans may approve or
 publish with known warnings visible.
 
+Current repository enforcement path for publication-aligned workflow:
+
+1. Workflow state transitions must pass guard rules:
+   - `scripts/workflow/stateMachine.ts`
+   - `scripts/workflow/transitionInteractionUpdateState.ts`
+2. Human approval and review occur through GitHub branch/PR review.
+3. Deployment to live environment is controlled through:
+   - `.github/workflows/azure-deploy.yml`
+   - Azure App Service target `https://entheogen.azurewebsites.net`
+
+This repository does not currently contain an `/apps/api/routes/publish.*`
+backend route. Publication governance is therefore represented by workflow
+state enforcement plus PR/deployment controls, not a standalone publish route.
+
 The system should still prevent:
 
 - automatic publishing

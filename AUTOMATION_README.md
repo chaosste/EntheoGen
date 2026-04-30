@@ -148,6 +148,21 @@ Approval and deployment gates must not be skipped for consequential changes.
 Small non-production docs, scripts, tests, and local verification fixes do not
 need ceremony beyond clear scope and reviewable diffs.
 
+Current publication workflow surfaces in this repository:
+
+- Workflow-state transition guard logic:
+  - `scripts/workflow/stateMachine.ts`
+  - `scripts/workflow/transitionInteractionUpdateState.ts`
+- Review and merge control:
+  - GitHub branch + PR review process (human approval required)
+- Deployment enforcement surface:
+  - `.github/workflows/azure-deploy.yml` (build + deploy pipeline)
+  - live target: `https://entheogen.azurewebsites.net`
+
+There is no in-repo backend route at `/apps/api/routes/publish.*` in this
+repository layout. Publication flow here is enforced through the workflow state
+machine, review controls, and deployment pipeline above.
+
 ## Role-Based Automation
 
 Automation is aligned to human roles. It supports role responsibilities without
@@ -208,6 +223,25 @@ approve scientific interpretation, safety classification, and publication.
 Canonical dataset files should be named in the task or issue when a change
 depends on them. Do not assume a source workspace's file layout matches this
 repository.
+
+Current canonical dataset helper surfaces in this repo are:
+
+- `scripts/datasetPaths.ts` for canonical file path resolution.
+- `scripts/buildAppDatasetFromBeta.ts` (`npm run dataset:build-beta`) for
+  Beta CSV export into app snapshots.
+- `scripts/consolidateJsonUpdates.ts` (`npm run json:consolidate`) for merging
+  update artifacts into canonical dataset/index/schema files.
+
+Canonical dataset files currently used by those helpers:
+
+- `src/data/interactionDatasetV2.json`
+- `src/data/substances_snapshot.json`
+- `src/exports/interaction_pairs.json`
+- `knowledge-base/indexes/source_manifest.json`
+- `knowledge-base/indexes/source_tags.json`
+- `knowledge-base/indexes/citation_registry.json`
+- `knowledge-base/schemas/source.schema.json`
+- `knowledge-base/schemas/claim.schema.json`
 
 ## Automation Components
 

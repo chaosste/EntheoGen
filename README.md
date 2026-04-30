@@ -151,14 +151,21 @@ npm run build
 
 Export dataset:
 ```
-npm run export:interactions
+npm run dataset:paths
+npm run dataset:build-beta /path/to/EntheoGen-Dataset-Beta-0-1/data
 ```
 
-Run evaluation harness:
+`dataset:build-beta` writes `src/data/substances_snapshot.json` and
+`src/exports/interaction_pairs.json`.
+
+Run aligned test suites:
+```bash
+npm test
+npm run test:suite:alignment
 ```
-npm run eval:fixtures
-npm run eval:oracle
-```
+
+Coverage labels and command mapping are documented in
+`docs/testing/TEST_SUITE_MAP.md`.
 
 Related Projects
 

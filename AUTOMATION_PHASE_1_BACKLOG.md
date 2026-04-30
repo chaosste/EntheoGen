@@ -87,7 +87,7 @@ or normal development.
 
 ### P1-2 Reference Hygiene
 
-**Linear alignment:** NEW-35, NEW-24, NEW-26, NEW-42, Product Lead
+**Linear alignment:** NEW-35, Product Lead
 
 **Current touchpoints:**
 
@@ -289,7 +289,7 @@ wrong records and turn them into actionable fixes.
 
 ### P1-8 Workflow Signal Documentation
 
-**Linear alignment:** NEW-35, Product Lead
+**Linear alignment:** NEW-35, NEW-24, NEW-42, Product Lead
 
 **Current touchpoints:**
 

@@ -140,7 +140,6 @@ EntheoGen/
 │   └── slack/
 │       ├── slackApi.ts
 │       ├── slackEnv.ts
-│       ├── slackHealthcheck.ts
 │       ├── slackPost.ts
 │       └── slackApi.test.ts
 │
