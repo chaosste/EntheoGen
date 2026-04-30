@@ -7,6 +7,11 @@ Automation supports EntheoGen. It does not control EntheoGen.
 Linear defines work. Codex executes tasks. Humans approve outcomes. The system
 enforces results.
 
+Linear issue states are operational signals: `Backlog`, `Todo`, `In Progress`,
+`In Review`, `Done`, `Canceled`, and `Duplicate`. Automation may move work
+between these states when scoped to the issue, but those transitions are not
+human approval for dataset, publication, safety, or production outcomes.
+
 ## Automation Role
 
 Automation supports workflow execution, role augmentation, and structured output
@@ -47,7 +52,7 @@ Automation must not:
 - Mutate production without explicit scope and approval.
 - Publish autonomously.
 - Modify schemas or databases unless explicitly scoped by a Linear issue.
-- Transition workflows autonomously.
+- Treat workflow-state updates as approval decisions.
 - Bypass human approval gates.
 
 ## Components

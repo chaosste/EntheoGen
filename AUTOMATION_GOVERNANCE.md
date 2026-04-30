@@ -151,7 +151,23 @@ reviewable working-tree diff is enough unless the user asks for a branch or PR.
 
 ### Workflow States
 
-Common states may include:
+Linear is the control plane for implementation work. The current issue states
+are:
+
+| Linear state | Meaning |
+| --- | --- |
+| Backlog | Accepted work that is not scheduled for active execution. |
+| Todo | Ready work that can be picked up next. |
+| In Progress | Work actively being implemented or investigated. |
+| In Review | Work waiting for human, PR, or issue review. |
+| Done | Work completed and verified for the requested scope. |
+| Canceled | Work intentionally stopped without completion. |
+| Duplicate | Work represented by another issue. |
+
+These Linear states describe work execution. They do not approve dataset,
+publication, safety, or production outcomes by themselves.
+
+Dataset and review records may use domain states such as:
 
 - submitted
 - structured
@@ -167,6 +183,8 @@ State names are workflow aids, not shackles. A record may move to `blocked`,
 
 ### Transition Rules
 
+- Linear issue transitions should reflect the actual work status and keep
+  ownership visible.
 - Publication and approval transitions must follow the defined workflow.
 - Exceptions and corrective transitions must be documented.
 - High-risk flags, missing data, and uncertainty must be surfaced clearly for

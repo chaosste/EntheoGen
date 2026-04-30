@@ -59,6 +59,11 @@ Linear defines work, ownership, state, and approval requirements. It is the
 workflow authority, not a substitute for human judgement and not an execution
 engine by itself.
 
+The current Linear issue states are `Backlog`, `Todo`, `In Progress`,
+`In Review`, `Done`, `Canceled`, and `Duplicate`. These states track work
+execution and review readiness. They do not grant dataset approval, publication
+approval, safety approval, or production deployment authority.
+
 ### Bounded Execution
 
 Codex should stay within the intent of assigned work. It may inspect the repo,
@@ -126,15 +131,15 @@ Typical consequential change flow:
 ```text
 User or team need
 ↓
-Linear issue or explicit scoped task
+Linear issue or explicit scoped task (Backlog/Todo)
 ↓
-Codex implementation and verification
+Codex implementation and verification (In Progress)
 ↓
-GitHub branch or reviewable working-tree diff
+GitHub branch or reviewable working-tree diff (In Review when ready)
 ↓
 Human review and approval
 ↓
-Approved deployment pipeline
+Approved deployment pipeline (after human approval)
 ↓
 Live Azure application
 ```
