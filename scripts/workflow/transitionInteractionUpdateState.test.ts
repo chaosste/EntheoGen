@@ -90,6 +90,112 @@ const run = async (): Promise<void> => {
       'state skipping must be rejected'
     );
 
+    const forgedApprovedNoHistory = {
+      ...baseRecord,
+      workflow: {
+        state: 'approved',
+        transition_history: []
+      }
+    };
+
+    await writeFile(updatesPath, `${JSON.stringify(forgedApprovedNoHistory)}\n`, 'utf8');
+    await assertRejects(
+      () =>
+        transitionInteractionUpdateStateInFile({
+          filePath: updatesPath,
+          updateId: 'u1',
+          to: 'published',
+          actor: 'workflow-test'
+        }),
+      'forged state without workflow history must be rejected'
+    );
+
+    const forgedMismatchedHistory = {
+      ...baseRecord,
+      workflow: {
+        state: 'approved',
+        transition_history: [
+          {
+            from: 'submitted',
+            to: 'structured',
+            actor: 'forger',
+            at: '2026-04-30T00:00:00.000Z'
+          }
+        ]
+      }
+    };
+
+    await writeFile(updatesPath, `${JSON.stringify(forgedMismatchedHistory)}\n`, 'utf8');
+    await assertRejects(
+      () =>
+        transitionInteractionUpdateStateInFile({
+          filePath: updatesPath,
+          updateId: 'u1',
+          to: 'published',
+          actor: 'workflow-test'
+        }),
+      'mismatched state and transition history must be rejected'
+    );
+
+    await writeFile(updatesPath, `${JSON.stringify(baseRecord)}\n`, 'utf8');
+    await transitionInteractionUpdateStateInFile({
+      filePath: updatesPath,
+      updateId: 'u1',
+      to: 'structured',
+      actor: 'workflow-test'
+    });
+    await transitionInteractionUpdateStateInFile({
+      filePath: updatesPath,
+      updateId: 'u1',
+      to: 'curator_review',
+      actor: 'workflow-test'
+    });
+    await transitionInteractionUpdateStateInFile({
+      filePath: updatesPath,
+      updateId: 'u1',
+      to: 'safety_review',
+      actor: 'workflow-test'
+    });
+    await transitionInteractionUpdateStateInFile({
+      filePath: updatesPath,
+      updateId: 'u1',
+      to: 'approved',
+      actor: 'workflow-test'
+    });
+
+    await assertRejects(
+      () =>
+        transitionInteractionUpdateStateInFile({
+          filePath: updatesPath,
+          updateId: 'u1',
+          to: 'published',
+          actor: 'workflow-test'
+        }),
+      'publishing without review note must be rejected'
+    );
+
+    await transitionInteractionUpdateStateInFile({
+      filePath: updatesPath,
+      updateId: 'u1',
+      to: 'published',
+      actor: 'workflow-test',
+      note: 'Approved for publication via PR #123'
+    });
+
+    const afterPublished = JSON.parse((await readFile(updatesPath, 'utf8')).trim()) as {
+      workflow?: {
+        state: string;
+        transition_history: Array<{ to: string; note?: string }>;
+      };
+    };
+    assert(afterPublished.workflow?.state === 'published', 'expected transition to published');
+    const publishEntry = afterPublished.workflow?.transition_history.at(-1);
+    assert(publishEntry?.to === 'published', 'expected publish transition entry');
+    assert(
+      publishEntry?.note === 'Approved for publication via PR #123',
+      'expected publish transition to retain review note'
+    );
+
     console.log('Interaction update workflow transition integration tests passed.');
   } finally {
     await rm(tempDir, { recursive: true, force: true });

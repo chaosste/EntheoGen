@@ -237,7 +237,7 @@ for `UNK` explicit when possible:
 | structured -> curator_review | Data Curator or accepted automation intake rule |
 | curator_review -> safety_review | Data Curator |
 | safety_review -> approved | Ethics Advisor |
-| approved -> published | Product Lead |
+| approved -> published | Product Lead, with publication note linking approval artifact (for example PR/review reference) |
 | production-impacting technical change | Technical Lead |
 
 Automation can prepare transition packets and identify warnings, gaps, and
@@ -345,6 +345,22 @@ Before publication or approval, the workflow should show the responsible human:
 For now, incomplete fields, weak evidence, missing provenance, `UNK` status, or
 unresolved triage notes are not automatic blockers. Humans may approve or
 publish with known warnings visible.
+
+Current repository enforcement path for publication-aligned workflow:
+
+1. Workflow state transitions must pass guard rules:
+   - `scripts/workflow/stateMachine.ts`
+   - `scripts/workflow/transitionInteractionUpdateState.ts`
+   - publication transitions (`approved -> published`) require a non-empty
+     review note in transition context
+2. Human approval and review occur through GitHub branch/PR review.
+3. Deployment to live environment is controlled through:
+   - `.github/workflows/azure-deploy.yml`
+   - Azure App Service target `https://entheogen.azurewebsites.net`
+
+This repository does not currently contain an `/apps/api/routes/publish.*`
+backend route. Publication governance is therefore represented by workflow
+state enforcement plus PR/deployment controls, not a standalone publish route.
 
 The system should still prevent:
 

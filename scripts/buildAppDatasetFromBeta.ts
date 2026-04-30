@@ -5,6 +5,7 @@
  *
  * Usage:
  *   npx tsx scripts/buildAppDatasetFromBeta.ts [path/to/beta/data]
+ *   npx tsx scripts/buildAppDatasetFromBeta.ts --print-paths
  * Default beta data dir: ../../EntheoGen-Dataset-Beta-0-1/data (sibling of EntheoGen repo)
  */
 
@@ -18,6 +19,11 @@ import {
   mapBetaClassificationToAppCode,
   normalizeBetaConfidence
 } from './betaDatasetMapping';
+import {
+  getBetaCsvPaths,
+  getCanonicalDatasetPaths,
+  getDefaultBetaDataDir
+} from './datasetPaths';
 
 type AppInteractionCode =
   | 'LOW'
@@ -32,6 +38,7 @@ type AppInteractionCode =
   | 'DETERMINISTIC';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const root = path.resolve(__dirname, '..');
 
 type CsvRow = Record<string, string>;
 
@@ -130,14 +137,30 @@ function buildSubstances(rows: CsvRow[]) {
 }
 
 function main() {
-  const betaDataDir =
-    process.argv[2] ??
-    path.join(__dirname, '..', '..', 'EntheoGen-Dataset-Beta-0-1', 'data');
+  const args = process.argv.slice(2);
+  const printPathsOnly = args.includes('--print-paths');
+  const betaDataDir = args.find((arg) => !arg.startsWith('--')) ?? getDefaultBetaDataDir(root);
+  const betaCsv = getBetaCsvPaths(betaDataDir);
+  const canonical = getCanonicalDatasetPaths(root);
 
-  const substancesPath = path.join(betaDataDir, 'substances.csv');
-  const interactionsPath = path.join(betaDataDir, 'interactions.csv');
+  if (printPathsOnly) {
+    console.log(
+      JSON.stringify(
+        {
+          beta_csv_inputs: betaCsv,
+          canonical_outputs: {
+            substancesSnapshot: canonical.substancesSnapshot,
+            interactionPairsExport: canonical.interactionPairsExport
+          }
+        },
+        null,
+        2
+      )
+    );
+    return;
+  }
 
-  if (!fs.existsSync(substancesPath) || !fs.existsSync(interactionsPath)) {
+  if (!fs.existsSync(betaCsv.substancesCsv) || !fs.existsSync(betaCsv.interactionsCsv)) {
     throw new Error(
       `Beta dataset CSVs not found under "${betaDataDir}". ` +
         `Pass the data directory as the first argument, e.g. ` +
@@ -145,14 +168,14 @@ function main() {
     );
   }
 
-  const substanceRows = readCsvObjects(substancesPath);
-  const interactionRows = readCsvObjects(interactionsPath);
+  const substanceRows = readCsvObjects(betaCsv.substancesCsv);
+  const interactionRows = readCsvObjects(betaCsv.interactionsCsv);
 
   const substances = buildSubstances(substanceRows);
   const interactions = buildInteractions(interactionRows);
 
-  const outSubstances = path.join(__dirname, '..', 'src', 'data', 'substances_snapshot.json');
-  const outInteractions = path.join(__dirname, '..', 'src', 'exports', 'interaction_pairs.json');
+  const outSubstances = canonical.substancesSnapshot;
+  const outInteractions = canonical.interactionPairsExport;
 
   fs.writeFileSync(outSubstances, `${JSON.stringify(substances, null, 2)}\n`, 'utf8');
   fs.writeFileSync(outInteractions, `${JSON.stringify(interactions, null, 2)}\n`, 'utf8');

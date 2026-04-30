@@ -54,6 +54,7 @@ Automation must not:
 - Modify schemas or databases unless explicitly scoped by a Linear issue.
 - Treat workflow-state updates as approval decisions.
 - Bypass human approval gates.
+- Bypass workflow transition guards for publication-aligned state changes.
 
 ## Components
 
@@ -175,3 +176,16 @@ object instead of failing silently:
 - Data inconsistency -> Data Curator
 - Workflow ambiguity -> Product Lead
 - System issue -> Technical Lead
+
+## Publication Path Notes
+
+In this repository, publication-aligned workflow enforcement is represented by:
+
+- workflow transition guards in `scripts/workflow/stateMachine.ts` and
+  `scripts/workflow/transitionInteractionUpdateState.ts`
+- explicit publication traceability: `approved -> published` requires a
+  non-empty transition note (for example PR/review reference)
+- GitHub branch/PR review
+- Azure deployment workflow in `.github/workflows/azure-deploy.yml`
+
+There is no `/apps/api/routes/publish.*` path in the current repo layout.

@@ -1,6 +1,7 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
+import { getCanonicalDatasetPaths } from './datasetPaths';
 
 type Json = Record<string, unknown> | unknown[] | string | number | boolean | null;
 
@@ -45,13 +46,14 @@ type ClaimPackage = {
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
 
+const canonicalPaths = getCanonicalDatasetPaths(root);
 const canonical = {
-  interactions: path.join(root, 'src/data/interactionDatasetV2.json'),
-  sourceManifest: path.join(root, 'knowledge-base/indexes/source_manifest.json'),
-  sourceTags: path.join(root, 'knowledge-base/indexes/source_tags.json'),
-  citationRegistry: path.join(root, 'knowledge-base/indexes/citation_registry.json'),
-  sourceSchema: path.join(root, 'knowledge-base/schemas/source.schema.json'),
-  claimSchema: path.join(root, 'knowledge-base/schemas/claim.schema.json')
+  interactions: canonicalPaths.interactionDatasetV2,
+  sourceManifest: canonicalPaths.sourceManifest,
+  sourceTags: canonicalPaths.sourceTags,
+  citationRegistry: canonicalPaths.citationRegistry,
+  sourceSchema: canonicalPaths.sourceSchema,
+  claimSchema: canonicalPaths.claimSchema
 };
 
 const updateCandidates = [

@@ -1,5 +1,6 @@
 import {
   applyWorkflowTransition,
+  validateWorkflowTransition,
   type WorkflowRecord,
   type WorkflowState
 } from './stateMachine';
@@ -57,12 +58,74 @@ function normalizeTransitionHistory(value: unknown): InteractionUpdateWorkflowTr
     .map((entry) => ({ ...entry }));
 }
 
+function assertValidTransitionHistory(
+  updateId: string,
+  state: WorkflowState,
+  transitionHistory: InteractionUpdateWorkflowTransition[]
+): void {
+  if (transitionHistory.length === 0) {
+    if (state !== 'submitted') {
+      throw new Error(
+        `Invalid workflow for ${updateId}: non-submitted state (${state}) must include transition history.`
+      );
+    }
+    return;
+  }
+
+  for (let i = 0; i < transitionHistory.length; i += 1) {
+    const transition = transitionHistory[i];
+    const decision = validateWorkflowTransition(transition.from, transition.to);
+    if (!decision.allowed) {
+      throw new Error(
+        `Invalid workflow history for ${updateId} at step ${i + 1}: ${decision.reason ?? `${transition.from} -> ${transition.to}`}`
+      );
+    }
+
+    if (i === 0 && transition.from !== 'submitted') {
+      throw new Error(
+        `Invalid workflow history for ${updateId}: first transition must start at submitted (got ${transition.from}).`
+      );
+    }
+
+    if (i > 0) {
+      const previous = transitionHistory[i - 1];
+      if (previous.to !== transition.from) {
+        throw new Error(
+          `Invalid workflow history for ${updateId}: step ${i} ends at ${previous.to} but step ${i + 1} starts at ${transition.from}.`
+        );
+      }
+    }
+  }
+
+  const last = transitionHistory[transitionHistory.length - 1];
+  if (last.to !== state) {
+    throw new Error(
+      `Invalid workflow for ${updateId}: current state (${state}) does not match history tail (${last.to}).`
+    );
+  }
+}
+
 export function resolveInteractionUpdateWorkflow(record: InteractionUpdateRecord): InteractionUpdateWorkflowData {
   const explicit = record.workflow;
-  if (explicit && isWorkflowState(explicit.state)) {
+  if (explicit && typeof explicit === 'object') {
+    const candidate = explicit as unknown as Record<string, unknown>;
+    if (!isWorkflowState(candidate.state)) {
+      throw new Error(`Unsupported explicit workflow state for ${record.update_id}: ${String(candidate.state)}`);
+    }
+
+    if (candidate.transition_history !== undefined && !Array.isArray(candidate.transition_history)) {
+      throw new Error(`Invalid workflow transition_history for ${record.update_id}: expected array.`);
+    }
+
+    const transitionHistory = normalizeTransitionHistory(candidate.transition_history);
+    if (Array.isArray(candidate.transition_history) && transitionHistory.length !== candidate.transition_history.length) {
+      throw new Error(`Invalid workflow transition_history entry for ${record.update_id}: malformed transition object detected.`);
+    }
+
+    assertValidTransitionHistory(record.update_id, candidate.state, transitionHistory);
     return {
-      state: explicit.state,
-      transition_history: normalizeTransitionHistory(explicit.transition_history)
+      state: candidate.state,
+      transition_history: transitionHistory
     };
   }
 
@@ -83,11 +146,21 @@ interface TransitionContext {
   note?: string;
 }
 
+function hasMeaningfulNote(note: string | undefined): boolean {
+  return typeof note === 'string' && note.trim().length > 0;
+}
+
 export function transitionInteractionUpdateRecord(
   record: InteractionUpdateRecord,
   to: WorkflowState,
   context: TransitionContext
 ): InteractionUpdateRecord {
+  if (to === 'published' && !hasMeaningfulNote(context.note)) {
+    throw new Error(
+      `Publishing ${record.update_id} requires a non-empty review note (for example PR/approval reference).`
+    );
+  }
+
   const workflow = resolveInteractionUpdateWorkflow(record);
 
   const baseRecord: WorkflowRecord = {

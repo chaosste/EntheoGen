@@ -50,6 +50,9 @@ const run = async (): Promise<void> => {
   );
 
   assert(proposal.status === expected.status, 'status must remain proposed');
+  assert(proposal.workflow.state === 'submitted', 'workflow.state must initialize to submitted');
+  assert(Array.isArray(proposal.workflow.transition_history), 'workflow.transition_history must be an array');
+  assert(proposal.workflow.transition_history.length === 0, 'workflow.transition_history must initialize empty');
   assert(proposal.source_refs.some((ref) => ref.source_id === expected.source_ref_fallback), 'source_gap fallback expected');
 
   console.log('Parser fixture test passed.');
