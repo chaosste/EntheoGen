@@ -1,0 +1,355 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://entheogen.local/agents/safety_sentinel/output-contract.json",
+  "title": "Safety Sentinel Pipeline Output",
+  "description": "Draft-only safety signal and routing context for human-owned review.",
+  "type": "object",
+  "required": [
+    "output_type",
+    "agent",
+    "contract_version",
+    "role",
+    "pipeline_status",
+    "boundaries",
+    "input_context",
+    "safety_signal",
+    "review_routing",
+    "linear_escalation",
+    "workflow_effect",
+    "evidence",
+    "validation_notes",
+    "prohibited_assertions_check"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "output_type": {
+      "const": "safety_sentinel_pipeline_signal"
+    },
+    "agent": {
+      "const": "safety_sentinel"
+    },
+    "contract_version": {
+      "const": "ent-015-v1"
+    },
+    "role": {
+      "const": "draft_signal_only"
+    },
+    "pipeline_status": {
+      "type": "string",
+      "enum": [
+        "signal_for_human_review",
+        "no_signal_detected",
+        "needs_triage"
+      ]
+    },
+    "boundaries": {
+      "type": "object",
+      "required": [
+        "automation_may",
+        "humans_must_approve",
+        "prohibited"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "automation_may": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "humans_must_approve": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "prohibited": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "input_context": {
+      "type": "object",
+      "required": [
+        "item_id",
+        "item_type",
+        "source_surface"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "item_id": {
+          "type": "string"
+        },
+        "item_type": {
+          "type": "string",
+          "enum": [
+            "interaction_update_proposal",
+            "claim_candidate",
+            "source_note",
+            "beta_feedback",
+            "documentation",
+            "other"
+          ]
+        },
+        "source_surface": {
+          "type": "string",
+          "enum": [
+            "src/curation/interaction-updates.jsonl",
+            "knowledge-base/extracted/claims/pending",
+            "knowledge-base/sources",
+            "README.md",
+            "docs",
+            "external_review_context",
+            "other"
+          ]
+        }
+      }
+    },
+    "safety_signal": {
+      "type": "object",
+      "required": [
+        "flag_category",
+        "severity",
+        "rationale",
+        "signal_confidence",
+        "rule_ids"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "flag_category": {
+          "$ref": "#/$defs/flagCategory"
+        },
+        "severity": {
+          "$ref": "#/$defs/severity"
+        },
+        "rationale": {
+          "type": "string"
+        },
+        "signal_confidence": {
+          "type": "string",
+          "enum": [
+            "high",
+            "medium",
+            "low"
+          ]
+        },
+        "rule_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "review_routing": {
+      "type": "object",
+      "required": [
+        "required_human_reviewer",
+        "review_owner",
+        "review_reason",
+        "secondary_reviewers"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "required_human_reviewer": {
+          "$ref": "#/$defs/reviewOwner"
+        },
+        "review_owner": {
+          "$ref": "#/$defs/reviewOwner"
+        },
+        "review_reason": {
+          "type": "string"
+        },
+        "secondary_reviewers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/reviewOwner"
+          }
+        }
+      }
+    },
+    "linear_escalation": {
+      "type": "object",
+      "required": [
+        "create_linear_draft",
+        "linear_team",
+        "linear_labels",
+        "linear_title",
+        "linear_description",
+        "linear_priority",
+        "owner",
+        "approval_required_before_submission"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "create_linear_draft": {
+          "type": "boolean"
+        },
+        "linear_team": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "linear_labels": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/workflowLabel"
+          }
+        },
+        "linear_title": {
+          "type": "string"
+        },
+        "linear_description": {
+          "type": "string"
+        },
+        "linear_priority": {
+          "type": "string",
+          "enum": [
+            "none",
+            "low",
+            "medium",
+            "high",
+            "urgent"
+          ]
+        },
+        "owner": {
+          "$ref": "#/$defs/reviewOwner"
+        },
+        "approval_required_before_submission": {
+          "const": true
+        }
+      }
+    },
+    "workflow_effect": {
+      "type": "object",
+      "required": [
+        "suggested_workflow_label",
+        "should_block_until_review",
+        "block_reason",
+        "may_auto_apply"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "suggested_workflow_label": {
+          "$ref": "#/$defs/workflowLabel"
+        },
+        "should_block_until_review": {
+          "type": "boolean"
+        },
+        "block_reason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "may_auto_apply": {
+          "const": false
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "required": [
+        "evidence_span_or_trigger",
+        "source_locator",
+        "uncertainty_notes"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "evidence_span_or_trigger": {
+          "type": "string"
+        },
+        "source_locator": {
+          "type": "string"
+        },
+        "uncertainty_notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "validation_notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "prohibited_assertions_check": {
+      "type": "object",
+      "required": [
+        "does_not_claim_autonomous_escalation",
+        "does_not_hide_review_ownership",
+        "does_not_claim_clinical_decision",
+        "does_not_auto_block_or_apply"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "does_not_claim_autonomous_escalation": {
+          "const": true
+        },
+        "does_not_hide_review_ownership": {
+          "const": true
+        },
+        "does_not_claim_clinical_decision": {
+          "const": true
+        },
+        "does_not_auto_block_or_apply": {
+          "const": true
+        }
+      }
+    }
+  },
+  "$defs": {
+    "flagCategory": {
+      "type": "string",
+      "enum": [
+        "high_interaction_risk",
+        "ambiguous_guidance",
+        "missing_warning",
+        "overclaiming_evidence",
+        "participant_distress_signal",
+        "consent_or_data_handling_issue",
+        "indigenous_knowledge_sensitivity",
+        "legal_or_policy_concern"
+      ]
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "low",
+        "moderate",
+        "high",
+        "critical"
+      ]
+    },
+    "workflowLabel": {
+      "type": "string",
+      "enum": [
+        "safety_signal",
+        "human_review_required",
+        "ethics_advisor_review",
+        "data_curator_review",
+        "product_lead_review",
+        "beta_coordinator_review",
+        "linear_escalation_draft",
+        "source_gap",
+        "evidence_uncertain"
+      ]
+    },
+    "reviewOwner": {
+      "type": "string",
+      "enum": [
+        "ethics_advisor",
+        "product_lead",
+        "data_curator",
+        "beta_coordinator"
+      ]
+    }
+  }
+}
