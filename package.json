@@ -12,6 +12,8 @@
     "typecheck": "tsc --noEmit",
     "dataset:build-beta": "tsx scripts/buildAppDatasetFromBeta.ts",
     "dataset:paths": "tsx scripts/buildAppDatasetFromBeta.ts --print-paths",
+    "changelog:dataset": "tsx scripts/generateDatasetChangelog.ts",
+    "test:changelog": "tsx scripts/testDatasetChangelog.ts",
     "test:dataset-paths": "tsx scripts/testDatasetPaths.ts",
     "test:beta-mapping": "tsx scripts/testBetaDatasetMapping.ts",
     "test:dataset-helpers": "npm run test:dataset-paths && npm run test:beta-mapping",
