@@ -14,9 +14,9 @@ This backlog is repo-grounded:
 - Do not create imagined `/apps` or `/packages` structures to satisfy a plan.
 - Do not assume a source workspace layout applies here.
 - Do not treat incomplete dataset records or `UNK` ratings as blockers by
-  default.
+default.
 - Make warnings, uncertainty, and review signals visible so the dataset can be
-  evaluated and improved.
+evaluated and improved.
 
 ## How To Use This Backlog
 
@@ -33,6 +33,21 @@ Consequential changes should be traceable through Linear and reviewable through
 GitHub when appropriate. Small docs, scripts, tests, local tooling, and
 evaluation-support changes may be made directly as reviewable working-tree
 diffs when requested.
+
+## Canonical Issue Crosswalk (NEW ↔ ENT)
+
+Use this as the source of truth for cross-references between current Linear
+issues (`NEW-*`) and prior scoped references (`ENT-*`).
+
+| Area | Linear issue(s) | ENT reference(s) | Notes |
+| --- | --- | --- | --- |
+| Workflow state alignment | NEW-24 | ENT-003, ENT-019 | NEW-24 consolidates ENT-003 + ENT-019 scope. |
+| Workflow transition enforcement follow-up | NEW-42 | ENT-003, ENT-019 (via NEW-24) | Implementation follow-up to ensure guarded state transitions in mutation paths. |
+| Canonical dataset helper alignment | NEW-25 | ENT-020 | Dataset helper/docs alignment without data model change. |
+| Publication workflow alignment | NEW-26 | ENT-021 | Publication flow alignment with approvals + PR review representation. |
+| Review/workflow umbrella | NEW-35 | (no direct ENT mapping in this backlog) | Parent workflow/review alignment family. |
+| Parent coordination umbrella | NEW-36 | (parent container) | Parent issue for NEW-24/25/26 in current plan shape. |
+| Workspace drift/baseline hygiene follow-up | NEW-43 | (no direct ENT mapping) | Branch hygiene and task-start baseline checks. |
 
 ## EPIC 1 - Governance And Automation Documentation
 
@@ -53,7 +68,7 @@ diffs when requested.
 - Remove brittle absolutes and ceremony that blocks normal work.
 - Preserve human authority for consequential decisions.
 - Keep explicit allowances for Azure, Supabase, Cloudflare/Wrangler, Slack,
-  GitHub, Linear, Cursor, Copilot, and other approved tools.
+GitHub, Linear, Cursor, Copilot, and other approved tools.
 
 **Do not invent:**
 
@@ -64,7 +79,7 @@ diffs when requested.
 **Acceptance signal:**
 
 - Docs explain how to work safely without preventing investigation, UI testing,
-  or normal development.
+or normal development.
 
 **Verification:**
 
@@ -83,7 +98,7 @@ diffs when requested.
 
 - Ensure cross-references point to files that actually exist.
 - Remove stale references to old source-workspace docs unless they are created
-  in this repo.
+in this repo.
 
 **Do not invent:**
 
@@ -183,22 +198,22 @@ diffs when requested.
 **Codex task:**
 
 - Make unknown, low-confidence, missing-evidence, and provenance gaps easier to
-  inspect.
+inspect.
 - Preserve the distinction between howling errors, missing links, unsupported
-  entries, and reasonable mechanistic inference.
+entries, and reasonable mechanistic inference.
 - Prefer visibility and triage over automatic blocking.
 
 **Do not invent:**
 
 - A governance rule that freezes `UNK` entries.
 - A requirement that every entry has peer-reviewed support before it can be
-  evaluated or published.
+evaluated or published.
 - Direct mutation of canonical data without a reviewable diff.
 
 **Acceptance signal:**
 
 - Developers and curators can identify why an entry is unknown and what kind of
-  follow-up it needs.
+follow-up it needs.
 
 **Verification:**
 
@@ -221,7 +236,7 @@ diffs when requested.
 
 - Treat UI-based dataset evaluation as first-class work.
 - Improve surfaces that help developers inspect interaction risk, uncertainty,
-  evidence status, and safety messaging.
+evidence status, and safety messaging.
 - Capture concrete UI findings as issues or review notes.
 
 **Do not invent:**
@@ -233,7 +248,7 @@ diffs when requested.
 **Acceptance signal:**
 
 - A developer can use the UI to find confusing, risky, unsupported, or obviously
-  wrong records and turn them into actionable fixes.
+wrong records and turn them into actionable fixes.
 
 **Verification:**
 
@@ -274,7 +289,7 @@ diffs when requested.
 
 ### P1-8 Workflow Signal Documentation
 
-**Linear alignment:** NEW-35, Product Lead
+**Linear alignment:** NEW-35, NEW-24, NEW-42, Product Lead
 
 **Current touchpoints:**
 
@@ -285,14 +300,14 @@ diffs when requested.
 **Codex task:**
 
 - Keep workflow language focused on visibility, reviewability, and human
-  judgement.
+judgement.
 - Ensure warnings and uncertainty are not described as automatic blockers.
 
 **Do not invent:**
 
 - A workflow engine.
 - Hard-coded state transition enforcement without an explicit implementation
-  task.
+task.
 
 **Acceptance signal:**
 
@@ -304,7 +319,7 @@ diffs when requested.
 
 ### P1-9 Review Action Alignment
 
-**Linear alignment:** NEW-35, Data Curator, Product Lead
+**Linear alignment:** NEW-35, NEW-26, Data Curator, Product Lead
 
 **Current touchpoints:**
 
@@ -316,7 +331,7 @@ diffs when requested.
 
 - Define or improve review output shapes only where they are consumed.
 - Prefer simple fields such as `needs_review`, `review_note`, `uncertainty`,
-  `source_gap`, and `suggested_follow_up` when they match current data flow.
+`source_gap`, and `suggested_follow_up` when they match current data flow.
 
 **Do not invent:**
 
@@ -344,7 +359,6 @@ diffs when requested.
 - `scripts/slack/slackEnv.ts`
 - `scripts/slack/slackApi.ts`
 - `scripts/slack/slackPost.ts`
-- `scripts/slack/slackHealthcheck.ts`
 - `scripts/slack/slackApi.test.ts`
 - `.env.example`
 - `package.json`
@@ -353,7 +367,7 @@ diffs when requested.
 
 - Keep Slack bridge behavior small, explicit, and testable.
 - Use placeholder env docs only.
-- Support health checks, posting, DMs, threads, and permalink fallback.
+- Support posting, DMs, threads, and permalink fallback.
 
 **Do not invent:**
 
@@ -364,7 +378,7 @@ diffs when requested.
 **Acceptance signal:**
 
 - The bridge can be tested without real Slack credentials and used with
-  configured credentials when explicitly requested.
+configured credentials when explicitly requested.
 
 **Verification:**
 
@@ -387,7 +401,7 @@ diffs when requested.
 
 - Keep Azure as the current live deployment target.
 - Allow scoped Supabase, Cloudflare/Wrangler, Slack, GitHub, Linear, Cursor,
-  Copilot, and other approved integrations.
+Copilot, and other approved integrations.
 - Prefer dry runs and local verification for high-impact service work.
 
 **Do not invent:**
@@ -399,7 +413,7 @@ diffs when requested.
 **Acceptance signal:**
 
 - Docs allow useful integrations without creating automatic authority or fake
-  infrastructure assumptions.
+infrastructure assumptions.
 
 **Verification:**
 
@@ -409,7 +423,7 @@ diffs when requested.
 
 ### P1-12 Knowledge Base Script Clarity
 
-**Linear alignment:** NEW-37, Data Curator
+**Linear alignment:** NEW-37, NEW-25, Data Curator
 
 **Current touchpoints:**
 
@@ -426,7 +440,7 @@ diffs when requested.
 
 - Document or improve the existing knowledge-base script flow.
 - Keep extracted facts, inferred suggestions, missing information, and
-  uncertainty separate.
+uncertainty separate.
 - Add focused tests when script behavior changes.
 
 **Do not invent:**
@@ -437,7 +451,7 @@ diffs when requested.
 **Acceptance signal:**
 
 - A developer can tell which script validates, extracts, links, promotes, or
-  audits curation data.
+audits curation data.
 
 **Verification:**
 
@@ -490,7 +504,7 @@ diffs when requested.
 
 - Keep build verification real and current.
 - Treat large bundle warnings as follow-up signals unless the task is about
-  performance or deployment.
+performance or deployment.
 
 **Do not invent:**
 

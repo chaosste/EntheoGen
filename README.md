@@ -49,27 +49,12 @@ EntheoGen's data model is mapped specifically to sacramental substances often us
 
 # Why EntheoGen is different:
 
-⚙️ Ceremonial-context interaction coverage — models sacramental psychedelic use scenarios
-
-⚙️ Deterministic pharmacological rule engine — reproducible outputs
-
-🛡️ Strict safety posture — missing evidence resolves to Unknown, never speculation
-
-🔍 Source traceability — outputs include confidence and mechanism metadata
-
-🧠 Alignment-aware dataset design — explicit abstention class for hallucination benchmarking
-
-🧪 Mechanism-level labeling — structured taxonomy for causal and ontology research
-
-📊 Slice-based benchmarking infrastructure — evaluate reasoning by mechanism and severity
-
-📦 HuggingFace-ready dataset packaging
-
-🔁 Regression safeguards — detect silent dataset drift
-
-🧱 Local evaluation harness — oracle baseline + leaderboard pipeline
-
-💾 Privacy-first architecture — no remote storage of user inputs
+- Ceremonial-context interaction coverage for plant-medicine and psychedelic use cases
+- Deterministic interaction rules and static app data snapshots
+- Evidence status, confidence, mechanism, and source-link metadata in the dataset
+- Human review before proposed evidence changes are treated as publication-ready
+- Local validation scripts for knowledge-base and interaction-dataset changes
+- Privacy-first app behavior: substance selections are not stored remotely by the app
 
 ⸻
 
@@ -130,11 +115,11 @@ Please leave feedback in [Discussions](https://github.com/chaosste/EntheoGen/dis
 | --- | --- |
 | Frontend | React + TypeScript + Vite |
 | Risk Engine | Deterministic pharmacological rule engine |
-| Dataset Pipeline | Node + TypeScript export tooling |
-| Evaluation Harness | Local fixture/scoring framework |
+| Dataset Pipeline | Node + TypeScript ingestion, validation, and migration scripts |
+| Verification | TypeScript, knowledge-base validation, interaction validation, adapter regression checks |
 | AI | Google Gemini API (explanatory summarization only) |
 | Design | Tailwind CSS, Lucide Icons |
-| Deployment | Azure App Service (Linux, Node 22) |
+| Deployment | Vite build output; Cloudflare config in `wrangler.jsonc`; Azure workflow in `.github/workflows/azure-deploy.yml` |
 
 # Quickstart
 ```
@@ -144,21 +129,31 @@ cd EntheoGen
 npm install
 npm run dev
 ```
+
+## Verification commands
+
 Build:
 ```
 npm run build
 ```
 
-Export dataset:
+Typecheck:
 ```
-npm run export:interactions
+npm run lint
 ```
 
-Run evaluation harness:
+Knowledge-base and interaction validation:
 ```
-npm run eval:fixtures
-npm run eval:oracle
+npm test
 ```
+
+Targeted knowledge-base script checks:
+```
+npm run kb:test
+```
+
+Coverage labels and command mapping are documented in
+`docs/testing/TEST_SUITE_MAP.md`.
 
 Related Projects
 

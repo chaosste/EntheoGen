@@ -12,3 +12,12 @@ coverage/
 .dev.vars*
 !.dev.vars.example
 .omx/
+
+# Local-only agent memory state
+.cursor/hooks/state/continual-learning.json
+.cursor/hooks/state/continual-learning-index.json
+
+# Local Slack capture artifacts (keep records off git)
+scripts/slack/*.local.json
+scripts/slack/*.local.jsonl
+scripts/slack/channel-records/

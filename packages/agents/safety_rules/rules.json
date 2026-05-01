@@ -1,0 +1,181 @@
+{
+  "$schema": "https://entheogen.local/agents/safety_rules/rules.json",
+  "package": "safety_rules",
+  "rule_set": "safety_rules",
+  "contract_version": "ent-014-v1",
+  "purpose": "Draft-only safety signal rules for routing review attention without creating new decision authority.",
+  "boundaries": {
+    "human_approval_required": true,
+    "automation_may": [
+      "classify and surface safety signals",
+      "attach reviewer-facing workflow labels",
+      "recommend Ethics Advisor review when thresholds are met",
+      "summarize uncertainty and evidence spans"
+    ],
+    "humans_must_approve": [
+      "interpretation of flagged safety content",
+      "escalation outcomes",
+      "consequential action",
+      "any dataset, app, or publication-facing change"
+    ],
+    "prohibited": [
+      "new decision authority",
+      "unsupported workflow states",
+      "autonomous escalation outcomes",
+      "claims that a record is safe"
+    ]
+  },
+  "workflow_labels": [
+    "safety_signal",
+    "human_review_required",
+    "ethics_advisor_review",
+    "data_curator_review",
+    "product_lead_review",
+    "beta_coordinator_review",
+    "linear_escalation_draft",
+    "source_gap",
+    "evidence_uncertain"
+  ],
+  "review_owners": [
+    "ethics_advisor",
+    "product_lead",
+    "data_curator",
+    "beta_coordinator"
+  ],
+  "severity_levels": [
+    "low",
+    "moderate",
+    "high",
+    "critical"
+  ],
+  "flag_categories": [
+    "high_interaction_risk",
+    "ambiguous_guidance",
+    "missing_warning",
+    "overclaiming_evidence",
+    "participant_distress_signal",
+    "consent_or_data_handling_issue",
+    "indigenous_knowledge_sensitivity",
+    "legal_or_policy_concern"
+  ],
+  "rules": [
+    {
+      "rule_id": "ssr_high_interaction_risk",
+      "flag_category": "high_interaction_risk",
+      "default_severity": "high",
+      "trigger": "Interaction content suggests severe toxicity, contraindication, dangerous same-session use, or under-supported downgrade of a serious risk.",
+      "review_owner": "ethics_advisor",
+      "workflow_labels": [
+        "safety_signal",
+        "human_review_required",
+        "ethics_advisor_review"
+      ],
+      "review_gate": "do_not_apply_until_human_review",
+      "linear_escalation_recommended": true
+    },
+    {
+      "rule_id": "ssr_ambiguous_guidance",
+      "flag_category": "ambiguous_guidance",
+      "default_severity": "moderate",
+      "trigger": "Guidance is unclear enough that a reader could interpret it as dosing, clinical instruction, or permission to combine substances.",
+      "review_owner": "data_curator",
+      "workflow_labels": [
+        "safety_signal",
+        "human_review_required",
+        "data_curator_review"
+      ],
+      "review_gate": "revise_before_publication_facing_use",
+      "linear_escalation_recommended": false
+    },
+    {
+      "rule_id": "ssr_missing_warning",
+      "flag_category": "missing_warning",
+      "default_severity": "moderate",
+      "trigger": "A draft names a plausible risk mechanism without making the uncertainty, source gap, or reviewer requirement visible.",
+      "review_owner": "data_curator",
+      "workflow_labels": [
+        "safety_signal",
+        "human_review_required",
+        "source_gap"
+      ],
+      "review_gate": "revise_before_publication_facing_use",
+      "linear_escalation_recommended": false
+    },
+    {
+      "rule_id": "ssr_overclaiming_evidence",
+      "flag_category": "overclaiming_evidence",
+      "default_severity": "high",
+      "trigger": "A draft converts theoretical, source-gap, AI-synthesis, indirect, or field-observation support into stronger certainty.",
+      "review_owner": "ethics_advisor",
+      "workflow_labels": [
+        "safety_signal",
+        "human_review_required",
+        "ethics_advisor_review",
+        "evidence_uncertain"
+      ],
+      "review_gate": "do_not_apply_until_human_review",
+      "linear_escalation_recommended": true
+    },
+    {
+      "rule_id": "ssr_participant_distress_signal",
+      "flag_category": "participant_distress_signal",
+      "default_severity": "critical",
+      "trigger": "User or beta feedback indicates acute distress, self-harm risk, medical emergency language, coercion, or inability to consent.",
+      "review_owner": "ethics_advisor",
+      "workflow_labels": [
+        "safety_signal",
+        "human_review_required",
+        "ethics_advisor_review",
+        "beta_coordinator_review",
+        "linear_escalation_draft"
+      ],
+      "review_gate": "pause_follow_on_action_until_human_review",
+      "linear_escalation_recommended": true
+    },
+    {
+      "rule_id": "ssr_consent_or_data_handling_issue",
+      "flag_category": "consent_or_data_handling_issue",
+      "default_severity": "high",
+      "trigger": "Submission includes unclear consent, private participant data, sensitive identifiers, or unexpected retention/sharing implications.",
+      "review_owner": "ethics_advisor",
+      "workflow_labels": [
+        "safety_signal",
+        "human_review_required",
+        "ethics_advisor_review",
+        "product_lead_review"
+      ],
+      "review_gate": "pause_follow_on_action_until_human_review",
+      "linear_escalation_recommended": true
+    },
+    {
+      "rule_id": "ssr_indigenous_knowledge_sensitivity",
+      "flag_category": "indigenous_knowledge_sensitivity",
+      "default_severity": "high",
+      "trigger": "Content may involve ceremonial knowledge, cultural attribution, appropriation risk, restricted context, or community-sensitive claims.",
+      "review_owner": "ethics_advisor",
+      "workflow_labels": [
+        "safety_signal",
+        "human_review_required",
+        "ethics_advisor_review",
+        "product_lead_review"
+      ],
+      "review_gate": "pause_publication_facing_use_until_human_review",
+      "linear_escalation_recommended": true
+    },
+    {
+      "rule_id": "ssr_legal_or_policy_concern",
+      "flag_category": "legal_or_policy_concern",
+      "default_severity": "high",
+      "trigger": "Content raises jurisdictional, controlled-substance, participant-safety, platform-policy, or deployment-policy concerns.",
+      "review_owner": "product_lead",
+      "workflow_labels": [
+        "safety_signal",
+        "human_review_required",
+        "product_lead_review",
+        "linear_escalation_draft"
+      ],
+      "review_gate": "pause_follow_on_action_until_human_review",
+      "linear_escalation_recommended": true
+    }
+  ]
+}
