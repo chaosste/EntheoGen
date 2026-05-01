@@ -124,6 +124,25 @@ Boundaries:
 - If a service action is high-impact or irreversible, stop and surface the
   approval requirement.
 
+## Current Error Behavior
+
+This repository does not currently centralize errors under a dedicated
+`/packages/errors/` subsystem. Error handling is intentionally surface-specific:
+
+- Workflow transitions and guards throw plain `Error` messages that are printed
+  by CLI wrappers on failure.
+- Validation scripts emit prefixed diagnostics (`ERROR:`, `WARN:`, `INFO:`),
+  then summary counts and non-zero exit codes when errors exist.
+- Slack integration helper surfaces preserve Slack `ok/error` response fields on
+  successful HTTP calls and throw plain `Error` for credential/HTTP failures.
+- Slack posting CLI emits JSON success/failure payloads (`ok: true/false`) for
+  integration-safe consumption.
+- Agent-oriented automation payloads may include `errors` arrays for
+  report-level issues; those are not a universal runtime exception envelope.
+
+For canonical automation-agent contract wording, see
+`docs/automation/AUTOMATION_AGENTS.md`.
+
 ## Execution Flow
 
 Typical consequential change flow:
@@ -164,6 +183,15 @@ Current publication workflow surfaces in this repository:
 There is no in-repo backend route at `/apps/api/routes/publish.*` in this
 repository layout. Publication flow here is enforced through the workflow state
 machine, review controls, and deployment pipeline above.
+
+There is also no in-repo backend route at `/apps/api/routes/submission.*`.
+Submission intake is currently file-first via:
+
+- `scripts/parseInteractionReports.ts`
+- `src/curation/interaction-updates.jsonl`
+- `scripts/workflow/transitionInteractionUpdateState.ts`
+- `scripts/workflow/linearWorkflowAlignment.ts` for recommended Linear state and
+  owner-role sync guidance
 
 ## Role-Based Automation
 
@@ -228,22 +256,29 @@ repository.
 
 Current canonical dataset helper surfaces in this repo are:
 
-- `scripts/datasetPaths.ts` for canonical file path resolution.
+- `scripts/datasetPaths.ts` for canonical source path resolution
+  (`getCanonicalDatasetSourcePaths`) and app export path resolution
+  (`getAppDatasetExportPaths`).
 - `scripts/buildAppDatasetFromBeta.ts` (`npm run dataset:build-beta`) for
-  Beta CSV export into app snapshots.
+  Beta CSV export (`substances.csv`, `interactions.csv`) into app snapshots.
 - `scripts/consolidateJsonUpdates.ts` (`npm run json:consolidate`) for merging
   update artifacts into canonical dataset/index/schema files.
+- `scripts/generateDatasetChangelog.ts` (`npm run changelog:dataset`) for
+  PR-linked canonical change summaries used during review.
 
 Canonical dataset files currently used by those helpers:
 
 - `src/data/interactionDatasetV2.json`
-- `src/data/substances_snapshot.json`
-- `src/exports/interaction_pairs.json`
 - `knowledge-base/indexes/source_manifest.json`
 - `knowledge-base/indexes/source_tags.json`
 - `knowledge-base/indexes/citation_registry.json`
 - `knowledge-base/schemas/source.schema.json`
 - `knowledge-base/schemas/claim.schema.json`
+
+App dataset export files currently written by those helpers:
+
+- `src/data/substances_snapshot.json`
+- `src/exports/interaction_pairs.json`
 
 ## Automation Components
 
@@ -256,6 +291,9 @@ extracted facts from inferred suggestions, preserves uncertainty notes, and
 generates summaries or changelogs.
 
 Outputs are review material, not final approval.
+For dataset-facing draft proposals (`src/curation/interaction-updates.jsonl`),
+`reviewer_notes` should remain sectioned as `Extracted`, `Inferred`,
+`Uncertainty`, and `Draft-only`.
 
 ### Safety Sentinel
 
@@ -309,6 +347,8 @@ into routine automation work.
 
 - `AGENTS.md`
 - `docs/automation/AUTOMATION_AGENTS.md`
+- `docs/automation/DATASET_INTERACTION_FLOW.md`
+- `docs/automation/SUBMISSION_INTAKE_FLOW.md`
 - `AUTOMATION_GOVERNANCE.md`
 - `AUTOMATION_PHASE_1_BACKLOG.md`
 

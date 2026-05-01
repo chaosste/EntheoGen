@@ -362,6 +362,18 @@ This repository does not currently contain an `/apps/api/routes/publish.*`
 backend route. Publication governance is therefore represented by workflow
 state enforcement plus PR/deployment controls, not a standalone publish route.
 
+This repository also does not currently contain an
+`/apps/api/routes/submission.*` backend route. Submission intake is represented
+by parser + workflow files:
+
+- `scripts/parseInteractionReports.ts`
+- `src/curation/interaction-updates.jsonl`
+- `scripts/workflow/transitionInteractionUpdateState.ts`
+
+Linear status/owner alignment for workflow states is centralized in:
+
+- `scripts/workflow/linearWorkflowAlignment.ts`
+
 The system should still prevent:
 
 - automatic publishing

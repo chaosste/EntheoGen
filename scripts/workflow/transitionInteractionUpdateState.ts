@@ -2,6 +2,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { transitionInteractionUpdateRecord, type InteractionUpdateRecord } from './interactionUpdateWorkflow';
+import { getLinearWorkflowAlignment } from './linearWorkflowAlignment';
 import type { WorkflowState } from './stateMachine';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -17,6 +18,27 @@ interface TransitionFileParams {
   at?: string;
 }
 
+interface WorkflowTransitionAuditEvent {
+  event_type: 'workflow_transition_applied';
+  item_id: string;
+  actor: string;
+  timestamp: string;
+  action_context: 'workflow_state_transition';
+  rationale: string;
+  workflow: {
+    from: WorkflowState;
+    to: WorkflowState;
+    note?: string;
+    file_path: string;
+  };
+  role_action: {
+    owner_role: string;
+    linear_state: string;
+    review_action: string;
+    github_pr_flow: string;
+  };
+}
+
 const parseJsonLine = (line: string, lineNo: number): InteractionUpdateRecord => {
   try {
     const parsed = JSON.parse(line) as InteractionUpdateRecord;
@@ -30,11 +52,14 @@ const parseJsonLine = (line: string, lineNo: number): InteractionUpdateRecord =>
   }
 };
 
-export async function transitionInteractionUpdateStateInFile(params: TransitionFileParams): Promise<void> {
+export async function transitionInteractionUpdateStateInFileWithAudit(
+  params: TransitionFileParams
+): Promise<WorkflowTransitionAuditEvent> {
   const raw = await readFile(params.filePath, 'utf8');
   const lines = raw.split(/\r?\n/);
 
   let matches = 0;
+  let auditEvent: WorkflowTransitionAuditEvent | null = null;
   const nextLines = lines.map((line, index) => {
     if (!line.trim()) return line;
 
@@ -47,6 +72,33 @@ export async function transitionInteractionUpdateStateInFile(params: TransitionF
       note: params.note,
       at: params.at
     });
+    const lastTransition = transitioned.workflow?.transition_history.at(-1);
+    if (!lastTransition) {
+      throw new Error(`Transition history missing for ${params.updateId} after applying ${params.to}.`);
+    }
+
+    const alignment = getLinearWorkflowAlignment(lastTransition.to);
+    auditEvent = {
+      event_type: 'workflow_transition_applied',
+      item_id: params.updateId,
+      actor: lastTransition.actor,
+      timestamp: lastTransition.at,
+      action_context: 'workflow_state_transition',
+      rationale: alignment.rationale,
+      workflow: {
+        from: lastTransition.from,
+        to: lastTransition.to,
+        note: lastTransition.note,
+        file_path: params.filePath
+      },
+      role_action: {
+        owner_role: alignment.ownerRole,
+        linear_state: alignment.linearState,
+        review_action: alignment.reviewAction,
+        github_pr_flow: alignment.githubPrFlow
+      }
+    };
+
     return JSON.stringify(transitioned);
   });
 
@@ -58,6 +110,14 @@ export async function transitionInteractionUpdateStateInFile(params: TransitionF
   }
 
   await writeFile(params.filePath, `${nextLines.join('\n').replace(/\n*$/, '\n')}`, 'utf8');
+  if (!auditEvent) {
+    throw new Error(`Transition applied but audit event could not be constructed for id=${params.updateId}.`);
+  }
+  return auditEvent;
+}
+
+export async function transitionInteractionUpdateStateInFile(params: TransitionFileParams): Promise<void> {
+  await transitionInteractionUpdateStateInFileWithAudit(params);
 }
 
 const parseArgValue = (name: string): string | undefined => {
@@ -86,7 +146,7 @@ async function main(): Promise<void> {
     throw new Error('Missing required --actor');
   }
 
-  await transitionInteractionUpdateStateInFile({
+  const auditEvent = await transitionInteractionUpdateStateInFileWithAudit({
     filePath,
     updateId,
     to,
@@ -95,6 +155,7 @@ async function main(): Promise<void> {
   });
 
   console.log(`Transition applied: ${updateId} -> ${to}`);
+  console.log(`Audit event: ${JSON.stringify(auditEvent)}`);
 }
 
 const isMain = process.argv[1] ? pathToFileURL(path.resolve(process.argv[1])).href === import.meta.url : false;

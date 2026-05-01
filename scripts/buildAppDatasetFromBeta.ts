@@ -20,8 +20,8 @@ import {
   normalizeBetaConfidence
 } from './betaDatasetMapping';
 import {
+  getAppDatasetExportPaths,
   getBetaCsvPaths,
-  getCanonicalDatasetPaths,
   getDefaultBetaDataDir
 } from './datasetPaths';
 
@@ -141,17 +141,15 @@ function main() {
   const printPathsOnly = args.includes('--print-paths');
   const betaDataDir = args.find((arg) => !arg.startsWith('--')) ?? getDefaultBetaDataDir(root);
   const betaCsv = getBetaCsvPaths(betaDataDir);
-  const canonical = getCanonicalDatasetPaths(root);
+  const exports = getAppDatasetExportPaths(root);
 
   if (printPathsOnly) {
     console.log(
       JSON.stringify(
         {
           beta_csv_inputs: betaCsv,
-          canonical_outputs: {
-            substancesSnapshot: canonical.substancesSnapshot,
-            interactionPairsExport: canonical.interactionPairsExport
-          }
+          app_dataset_exports: exports,
+          canonical_outputs: exports
         },
         null,
         2
@@ -174,8 +172,8 @@ function main() {
   const substances = buildSubstances(substanceRows);
   const interactions = buildInteractions(interactionRows);
 
-  const outSubstances = canonical.substancesSnapshot;
-  const outInteractions = canonical.interactionPairsExport;
+  const outSubstances = exports.substancesSnapshot;
+  const outInteractions = exports.interactionPairsExport;
 
   fs.writeFileSync(outSubstances, `${JSON.stringify(substances, null, 2)}\n`, 'utf8');
   fs.writeFileSync(outInteractions, `${JSON.stringify(interactions, null, 2)}\n`, 'utf8');

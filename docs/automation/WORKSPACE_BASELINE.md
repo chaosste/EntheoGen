@@ -2,6 +2,11 @@
 
 Last updated: 2026-04-30
 
+Historical-snapshot note: the drift inventory in this file is a point-in-time
+record, not guaranteed current workspace truth. Always rely on fresh command
+output (`git status --short` and `npm run workspace:baseline`) for current
+state.
+
 ## Purpose
 
 Keep feature diffs issue-scoped and reviewable by requiring a clean (or explicitly acknowledged) workspace baseline at task start.
@@ -29,7 +34,7 @@ If they appear in `git status`, remove them from the index (without deleting loc
 git rm --cached .cursor/hooks/state/continual-learning.json .cursor/hooks/state/continual-learning-index.json
 ```
 
-## Drift Inventory (2026-04-30)
+## Drift Inventory Snapshot (2026-04-30)
 
 | Path | Current status | Classification | Notes |
 | --- | --- | --- | --- |

@@ -5,13 +5,27 @@ const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..'
 
 export interface CanonicalDatasetPaths {
   interactionDatasetV2: string;
-  interactionPairsExport: string;
-  substancesSnapshot: string;
   sourceManifest: string;
   sourceTags: string;
   citationRegistry: string;
   sourceSchema: string;
   claimSchema: string;
+  interactionPairsExport: string;
+  substancesSnapshot: string;
+}
+
+export interface CanonicalDatasetSourcePaths {
+  interactionDatasetV2: string;
+  sourceManifest: string;
+  sourceTags: string;
+  citationRegistry: string;
+  sourceSchema: string;
+  claimSchema: string;
+}
+
+export interface AppDatasetExportPaths {
+  interactionPairsExport: string;
+  substancesSnapshot: string;
 }
 
 export interface BetaCsvPaths {
@@ -25,16 +39,28 @@ export const defaultBetaCsvFilenames = {
   interactions: 'interactions.csv'
 } as const;
 
-export function getCanonicalDatasetPaths(root = repoRoot): CanonicalDatasetPaths {
+export function getCanonicalDatasetSourcePaths(root = repoRoot): CanonicalDatasetSourcePaths {
   return {
     interactionDatasetV2: path.join(root, 'src', 'data', 'interactionDatasetV2.json'),
-    interactionPairsExport: path.join(root, 'src', 'exports', 'interaction_pairs.json'),
-    substancesSnapshot: path.join(root, 'src', 'data', 'substances_snapshot.json'),
     sourceManifest: path.join(root, 'knowledge-base', 'indexes', 'source_manifest.json'),
     sourceTags: path.join(root, 'knowledge-base', 'indexes', 'source_tags.json'),
     citationRegistry: path.join(root, 'knowledge-base', 'indexes', 'citation_registry.json'),
     sourceSchema: path.join(root, 'knowledge-base', 'schemas', 'source.schema.json'),
     claimSchema: path.join(root, 'knowledge-base', 'schemas', 'claim.schema.json')
+  };
+}
+
+export function getAppDatasetExportPaths(root = repoRoot): AppDatasetExportPaths {
+  return {
+    interactionPairsExport: path.join(root, 'src', 'exports', 'interaction_pairs.json'),
+    substancesSnapshot: path.join(root, 'src', 'data', 'substances_snapshot.json')
+  };
+}
+
+export function getCanonicalDatasetPaths(root = repoRoot): CanonicalDatasetPaths {
+  return {
+    ...getCanonicalDatasetSourcePaths(root),
+    ...getAppDatasetExportPaths(root)
   };
 }
 

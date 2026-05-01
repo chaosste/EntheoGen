@@ -7,6 +7,10 @@ Automation supports EntheoGen. It does not control EntheoGen.
 Linear defines work. Codex executes tasks. Humans approve outcomes. The system
 enforces results.
 
+Terminology note: `Linear` in this document always means the Linear workflow
+application (issue/state orchestration layer). It does not refer to
+mathematical "linear" concepts (for example linear regression).
+
 Linear issue states are operational signals: `Backlog`, `Todo`, `In Progress`,
 `In Review`, `Done`, `Canceled`, and `Duplicate`. Automation may move work
 between these states when scoped to the issue, but those transitions are not
@@ -33,17 +37,29 @@ Automation outputs must:
 - Distinguish extracted facts from inferred suggestions.
 - Identify missing information.
 - Preserve uncertainty notes.
-- Emit structured errors instead of failing silently.
+- Surface errors explicitly; do not fail silently.
 
 ## Audit Compatibility
 
-Automation records should include these audit-compatible fields:
+Automation records should include these audit-compatible fields as a target
+contract:
 
 - `item_id`
 - `actor`
 - `timestamp`
 - `action_context`
 - `rationale`
+
+Current workflow transition enforcement today (`scripts/workflow/stateMachine.ts`
+and `scripts/workflow/transitionInteractionUpdateState.ts`) guarantees:
+
+- `actor` (via transition context)
+- `timestamp` (stored as transition `at`)
+- optional `note` for transition metadata
+
+`item_id`, `action_context`, and `rationale` are recommended audit fields for
+automation outputs and should be added by the producing component where
+available.
 
 ## Hard Prohibitions
 
@@ -64,6 +80,13 @@ The Knowledge Steward supports the Data Curator and Product Lead by helping
 extract, normalize, compare, and summarize knowledge artifacts. It may suggest
 updates, identify conflicts, and prepare structured review material, but humans
 approve changes.
+
+Current repo output surfaces for this component are draft-focused:
+
+- `scripts/parseInteractionReports.ts` writes `InteractionUpdateProposal` lines
+  to `src/curation/interaction-updates.jsonl`
+- `src/curation/prompts/nl-report-to-jsonl.md` defines the proposal prompt
+  contract used for proposal drafting
 
 ```json
 {
@@ -97,9 +120,29 @@ approve changes.
     "Data Curator",
     "Product Lead"
   ],
+  "review_draft": {
+    "draft_type": "interaction_update_proposal",
+    "target_artifact": "src/curation/interaction-updates.jsonl",
+    "status": "proposed",
+    "workflow_state": "submitted",
+    "proposal_fields": {
+      "pair": [
+        "ketamine",
+        "serotonergic_opioids"
+      ],
+      "requested_change": {
+        "classification.code": "CAUTION",
+        "classification.confidence": "medium"
+      },
+      "reviewer_notes": "Extracted: <facts>. Inferred: <candidate interpretation>. Uncertainty: <limitations>. Draft-only: humans must approve interpretation and downstream use."
+    }
+  },
   "errors": []
 }
 ```
+
+`reviewer_notes` in dataset-facing proposals should keep sectioned separation:
+`Extracted`, `Inferred`, `Uncertainty`, and `Draft-only`.
 
 ### Safety Sentinel
 
@@ -152,23 +195,35 @@ governance decisions.
 }
 ```
 
-## Structured Errors
+## Error Handling Surfaces (Current)
 
-When automation cannot complete a requested operation, it should emit an error
-object instead of failing silently:
+There is no single in-repo `/packages/errors/` subsystem in this repository
+today. Error handling is surface-specific and should be documented/consumed
+accordingly.
 
-```json
-{
-  "error": {
-    "code": "missing_required_input",
-    "message": "A concise human-readable explanation.",
-    "missing_information": [
-      "Specific missing input."
-    ],
-    "recoverable": true
-  }
-}
-```
+Current behavior by surface:
+
+- Workflow transition CLI (`scripts/workflow/transitionInteractionUpdateState.ts`)
+  and workflow modules (`scripts/workflow/*.ts`) throw plain `Error` messages
+  for invalid input/transition/history conditions. The CLI prints the message to
+  stderr and exits non-zero.
+- Validation CLIs (`scripts/validateKnowledgeBase.ts`,
+  `scripts/validateInteractionsV2.ts`) accumulate string diagnostics, print
+  prefixed lines (`ERROR:`, `WARN:`, `INFO:`), then emit a summary and set a
+  non-zero exit code when errors exist.
+- Integration transport helper (`scripts/slack/slackApi.ts`) throws plain
+  `Error` on missing credentials or non-2xx HTTP responses; successful HTTP
+  responses preserve Slack-style payload fields such as `ok` and `error`.
+- Integration CLI wrapper (`scripts/slack/slackPost.ts`) emits JSON output for
+  automation consumers:
+  - success: `{ "ok": true, ... }`
+  - failure: `{ "ok": false, "error": "<message>" }`
+- Agent output contracts in this document use an `errors` array for
+  payload-level reporting. That field is not a global runtime exception
+  envelope.
+
+Future standardization of richer error envelopes is allowed, but not required
+for current correctness.
 
 ## Escalation Mapping
 
@@ -187,5 +242,11 @@ In this repository, publication-aligned workflow enforcement is represented by:
   non-empty transition note (for example PR/review reference)
 - GitHub branch/PR review
 - Azure deployment workflow in `.github/workflows/azure-deploy.yml`
+- submission intake path in `scripts/parseInteractionReports.ts` writing to
+  `src/curation/interaction-updates.jsonl` and transitioning via
+  `scripts/workflow/transitionInteractionUpdateState.ts`
+- workflow-to-Linear status/owner mapping helper in
+  `scripts/workflow/linearWorkflowAlignment.ts`
 
 There is no `/apps/api/routes/publish.*` path in the current repo layout.
+There is no `/apps/api/routes/submission.*` path in the current repo layout.

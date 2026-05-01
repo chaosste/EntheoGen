@@ -3,7 +3,7 @@ import path from 'node:path';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { getCanonicalDatasetPaths } from './datasetPaths';
+import { getCanonicalDatasetSourcePaths } from './datasetPaths';
 
 const execFileAsync = promisify(execFile);
 
@@ -166,7 +166,7 @@ export function buildMarkdownChangelog(input: ChangelogInput): string {
 }
 
 export async function generateDatasetChangelog(args: CliArgs): Promise<{ outputPath: string; changedFileCount: number }> {
-  const canonicalPaths = getCanonicalDatasetPaths(root);
+  const canonicalPaths = getCanonicalDatasetSourcePaths(root);
   const canonicalFiles = (
     await Promise.all(
       Object.values(canonicalPaths).map(async (absPath) => {

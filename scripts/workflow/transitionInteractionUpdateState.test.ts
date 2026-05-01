@@ -1,7 +1,10 @@
 import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { transitionInteractionUpdateStateInFile } from './transitionInteractionUpdateState';
+import {
+  transitionInteractionUpdateStateInFile,
+  transitionInteractionUpdateStateInFileWithAudit
+} from './transitionInteractionUpdateState';
 
 const assert = (condition: boolean, message: string): void => {
   if (!condition) {
@@ -38,12 +41,26 @@ const run = async (): Promise<void> => {
 
     await writeFile(updatesPath, `${JSON.stringify(baseRecord)}\n`, 'utf8');
 
-    await transitionInteractionUpdateStateInFile({
+    const structuredTransition = await transitionInteractionUpdateStateInFileWithAudit({
       filePath: updatesPath,
       updateId: 'u1',
       to: 'structured',
       actor: 'workflow-test'
     });
+
+    assert(structuredTransition.event_type === 'workflow_transition_applied', 'expected structured audit event type');
+    assert(structuredTransition.item_id === 'u1', 'expected structured audit event item_id');
+    assert(structuredTransition.workflow.from === 'submitted', 'expected structured audit event from-state');
+    assert(structuredTransition.workflow.to === 'structured', 'expected structured audit event to-state');
+    assert(structuredTransition.role_action.owner_role.length > 0, 'expected owner role mapping in structured audit event');
+    assert(structuredTransition.role_action.linear_state.length > 0, 'expected linear state mapping in structured audit event');
+    assert(structuredTransition.role_action.review_action.length > 0, 'expected review action mapping in structured audit event');
+    assert(
+      ['not_required', 'recommended', 'required_for_publication', 'already_published_or_retired'].includes(
+        structuredTransition.role_action.github_pr_flow
+      ),
+      'expected github PR flow mapping in structured audit event'
+    );
 
     const afterStructured = JSON.parse((await readFile(updatesPath, 'utf8')).trim()) as {
       workflow?: { state: string; transition_history: unknown[] };
