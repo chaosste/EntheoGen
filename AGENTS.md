@@ -66,6 +66,12 @@ automation role boundaries, output contracts, and human-approval constraints.
   (gitignored), not committed.
 - Treat legacy `interactions_enriched` CSV exports as reference-only, not
   canonical against the live `interactions` table.
+- When normalizing Phase 1 imports or split migrations, map short codes and
+  `UNK` into existing `INFERRED`/`THEORETICAL` conventions instead of ad hoc
+  enum values.
+- After live Supabase Phase 1 edits, refresh root `substances.csv` and
+  `interactions.csv`, then run `npm run dataset:build-beta -- .` so branch
+  snapshots match production before relying on them.
 
 ## Learned Workspace Facts
 
@@ -83,3 +89,8 @@ automation role boundaries, output contracts, and human-approval constraints.
 - Dataset Beta Docker Compose runs Metabase as `metabase_local` with Postgres
   `metabase_metadata_db`; use `docker compose -f` pointed at that repo when not
   in its working directory.
+- `npm run dataset:build-beta -- .` rebuilds `src/data/substances_snapshot.json`
+  and `src/exports/interaction_pairs.json` from workspace-root
+  `substances.csv` and `interactions.csv`.
+- Legacy aggregate substance id `mdma_2cx_dox_nbome` decomposes to `mdma`,
+  `two_c_x`, `dox`, and `nbome_series` in aggregate decomposition maps.
