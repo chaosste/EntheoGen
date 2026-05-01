@@ -140,6 +140,10 @@ EntheoGen/
 |-- docs/                             # contributor and project documentation
 |   |-- REPO_LAYOUT.md                # this repository layout guide
 |   |-- AUTOMATION_WORKFLOW.md        # automation scope and review boundaries
+|   |-- automation/
+|   |   |-- SUBMISSION_HOW_TO.md       # contributor/model/agent submission guide
+|   |   |-- SUBMISSION_INTAKE_FLOW.md  # standard file-first intake path
+|   |   `-- RAPID_MANUAL_INTAKE.md    # urgent manual interaction intake path
 |   `-- assets/                       # README/demo/release media
 |
 |-- public/                           # static files served by the app
@@ -147,6 +151,7 @@ EntheoGen/
 |
 |-- .github/                          # GitHub metadata and CI/CD
 |   |-- FUNDING.yml
+|   |-- PULL_REQUEST_TEMPLATE.md
 |   |-- copilot-instructions.md
 |   |-- ISSUE_TEMPLATE/
 |   `-- workflows/

@@ -30,6 +30,11 @@ Cloudflare/Wrangler, Slack, GitHub, and Linear when the interaction is scoped,
 uses approved credentials or local configuration, and preserves human approval
 boundaries.
 
+For Steve-directed rapid manual submissions and standard natural-language
+report parsing, use `docs/automation/SUBMISSION_HOW_TO.md`. That guide is a
+reference layer only; it does not replace the Knowledge Steward output
+contract, parser scripts, workflow transition guards, or PR review.
+
 ## Output Discipline
 
 Automation outputs must:
@@ -242,6 +247,8 @@ In this repository, publication-aligned workflow enforcement is represented by:
   non-empty transition note (for example PR/review reference)
 - GitHub branch/PR review
 - Azure deployment workflow in `.github/workflows/azure-deploy.yml`
+- rapid/manual and standard intake reference in
+  `docs/automation/SUBMISSION_HOW_TO.md`
 - submission intake path in `scripts/parseInteractionReports.ts` writing to
   `src/curation/interaction-updates.jsonl` and transitioning via
   `scripts/workflow/transitionInteractionUpdateState.ts`

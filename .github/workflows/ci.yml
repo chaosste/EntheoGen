@@ -39,6 +39,9 @@ jobs:
       - name: Validation Alignment
         run: npm test
 
+      - name: Submission Intake Guard
+        run: npm run test:submission-intake
+
       - name: Alignment Suite
         run: npm run test:suite:alignment
 

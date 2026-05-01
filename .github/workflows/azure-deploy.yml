@@ -33,6 +33,12 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      - name: Submission Intake Guard
+        run: npm run test:submission-intake
+
+      - name: Interaction Data Guard
+        run: npm run validate:interactions:v2
+
       - name: Build
         run: npm run build
 
