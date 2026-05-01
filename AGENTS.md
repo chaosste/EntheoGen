@@ -64,6 +64,8 @@ automation role boundaries, output contracts, and human-approval constraints.
   raw dataset fields.
 - Keep retained memory artifacts and Slack channel record artifacts local-only
   (gitignored), not committed.
+- Treat legacy `interactions_enriched` CSV exports as reference-only, not
+  canonical against the live `interactions` table.
 
 ## Learned Workspace Facts
 
@@ -73,3 +75,11 @@ automation role boundaries, output contracts, and human-approval constraints.
   `scripts/testUIInteractionsAdapter.ts`.
 - Continual-learning state is tracked locally via
   `.cursor/hooks/state/continual-learning-index.json`.
+- Supabase Phase 1 exposes `interactions` and `substances` only; Metabase pair
+  analytics use `public.analytics_interactions_v2` until Phase 2 migrations add
+  `interaction_pairs_v2` and related normalized tables.
+- Multi-mechanism Metabase questions should explode `mechanism_categories` with
+  `jsonb_array_elements_text` in native SQL.
+- Dataset Beta Docker Compose runs Metabase as `metabase_local` with Postgres
+  `metabase_metadata_db`; use `docker compose -f` pointed at that repo when not
+  in its working directory.

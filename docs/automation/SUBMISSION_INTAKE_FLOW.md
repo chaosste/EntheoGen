@@ -43,6 +43,18 @@ For parser-generated proposal drafts, `reviewer_notes` should stay explicitly
 sectioned as `Extracted`, `Inferred`, `Uncertainty`, and `Draft-only` to keep
 candidate interpretation separate from source-grounded data.
 
+## Rapid Manual Variant
+
+For urgent Steve-directed corrections, use
+`docs/automation/RAPID_MANUAL_INTAKE.md`. That path is intended for fast
+manual handling of obvious interaction readout howlers and clear dataset holes
+through Codex, Cursor, Codex CLI, or a Linear-delegated issue. It bypasses the
+planned Knowledge Steward agent, but it does not bypass human review,
+provenance, validation, or PR approval.
+
+For a contributor/model/agent-facing operating guide covering both this path
+and the rapid manual variant, use `docs/automation/SUBMISSION_HOW_TO.md`.
+
 ## Commands
 
 ```bash

@@ -27,6 +27,7 @@ present here, describe it as proposed work instead of relying on it.
 Prefer the narrowest command that proves the change:
 
 ```sh
+npm run test:submission-intake
 npm run lint
 npm run validate:interactions:v2
 npm run kb:validate
@@ -36,3 +37,8 @@ npm test
 For documentation-only edits, at minimum check Markdown diffs for stale paths,
 commands that are not in `package.json`, and claims that imply autonomous
 publication or medical authority.
+
+For rapid manual submissions or natural-language report intake, use
+`docs/automation/SUBMISSION_HOW_TO.md` as a reference. It does not replace the
+existing parser, workflow transition scripts, prompt contracts, or review
+gates.
