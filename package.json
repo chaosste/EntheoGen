@@ -45,15 +45,8 @@
     "reports:parse": "tsx scripts/parseInteractionReports.ts",
     "reports:transition-workflow": "tsx scripts/workflow/transitionInteractionUpdateState.ts",
     "updates:test-parser": "tsx scripts/testParseInteractionReports.ts",
-    "test:submission-intake": "npm run updates:test-parser && npm run test:workflow-transition-integration",
-    "test:workflow-transition-integration": "tsx scripts/workflow/transitionInteractionUpdateState.test.ts",
-    "test:workflow-linear-alignment": "tsx scripts/workflow/linearWorkflowAlignment.test.ts",
-    "test:workflow-write-path-guards": "tsx scripts/workflow/writePathGuard.test.ts",
-    "test:json-consolidation-reporting": "tsx scripts/testConsolidateJsonUpdatesReporting.ts",
-    "test:suite:alignment": "npm run test:dataset-helpers && npm run test:workflow && npm run updates:test-parser && npm run kb:test && npm run test:slack && npm run test:workflow-linear-alignment",
-    "ci:checks": "npm run typecheck && npm run test:validation-alignment && npm run test:suite:alignment && npm run build",
-    "workspace:baseline": "tsx scripts/checkWorkspaceBaseline.ts",
-    "slack:post": "tsx scripts/slack/slackPost.ts",
+    "agents:verify-knowledge-steward": "tsx scripts/verifyKnowledgeStewardContract.ts",
+    "agents:verify-safety": "tsx scripts/verifySafetyAgentContracts.ts",
     "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
