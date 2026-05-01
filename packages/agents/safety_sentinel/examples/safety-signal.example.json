@@ -1,0 +1,87 @@
+{
+  "output_type": "safety_sentinel_pipeline_signal",
+  "agent": "safety_sentinel",
+  "contract_version": "ent-015-v1",
+  "role": "draft_signal_only",
+  "pipeline_status": "signal_for_human_review",
+  "boundaries": {
+    "automation_may": [
+      "produce safety output signals",
+      "draft Linear routing context",
+      "recommend reviewer ownership"
+    ],
+    "humans_must_approve": [
+      "escalation outcome",
+      "follow-on action",
+      "participant or publication-facing response"
+    ],
+    "prohibited": [
+      "implied autonomous escalation authority",
+      "hidden review ownership",
+      "clinical or dosing advice",
+      "claiming an item is safe"
+    ]
+  },
+  "input_context": {
+    "item_id": "interaction_update:nl_kambo_ketamine_hemodynamic_cns_stress_01",
+    "item_type": "interaction_update_proposal",
+    "source_surface": "src/curation/interaction-updates.jsonl"
+  },
+  "safety_signal": {
+    "flag_category": "high_interaction_risk",
+    "severity": "critical",
+    "rationale": "The proposal includes same-day Kambo plus ketamine risk with possible collapse, aspiration, seizure, or delayed recognition of deterioration.",
+    "signal_confidence": "medium",
+    "rule_ids": [
+      "ssr_high_interaction_risk"
+    ]
+  },
+  "review_routing": {
+    "required_human_reviewer": "ethics_advisor",
+    "review_owner": "ethics_advisor",
+    "review_reason": "Critical participant-risk signal and safety wording require Ethics Advisor ownership before follow-on action.",
+    "secondary_reviewers": [
+      "data_curator",
+      "product_lead"
+    ]
+  },
+  "linear_escalation": {
+    "create_linear_draft": true,
+    "linear_team": "ENT",
+    "linear_labels": [
+      "safety_signal",
+      "human_review_required",
+      "ethics_advisor_review",
+      "linear_escalation_draft"
+    ],
+    "linear_title": "[Safety review] Kambo plus ketamine draft interaction signal",
+    "linear_description": "Draft routing context only. Item: interaction_update:nl_kambo_ketamine_hemodynamic_cns_stress_01. Flag: high_interaction_risk. Severity: critical. Required reviewer: ethics_advisor. Evidence trigger: Strongly avoid same-session or same-day Kambo and ketamine use.",
+    "linear_priority": "urgent",
+    "owner": "ethics_advisor",
+    "approval_required_before_submission": true
+  },
+  "workflow_effect": {
+    "suggested_workflow_label": "ethics_advisor_review",
+    "should_block_until_review": true,
+    "block_reason": "Critical high-interaction-risk signal should not move forward without Ethics Advisor review.",
+    "may_auto_apply": false
+  },
+  "evidence": {
+    "evidence_span_or_trigger": "Strongly avoid same-session or same-day Kambo and ketamine use.",
+    "source_locator": "clinical_summary.practical_guidance",
+    "uncertainty_notes": [
+      "Severity is a routing signal, not a final ethical or clinical decision.",
+      "Linear fields are draft metadata until a human approves escalation handling."
+    ]
+  },
+  "validation_notes": [
+    "Verifier checks routing structure and labels, not clinical correctness.",
+    "Safety Sentinel output does not publish, apply, or approve follow-on action."
+  ],
+  "prohibited_assertions_check": {
+    "does_not_claim_autonomous_escalation": true,
+    "does_not_hide_review_ownership": true,
+    "does_not_claim_clinical_decision": true,
+    "does_not_auto_block_or_apply": true
+  }
+}

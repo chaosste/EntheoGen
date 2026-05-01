@@ -1,8 +1,33 @@
-# Natural Language Report → Interaction Update Proposal
+# Natural Language Report to Interaction Update Proposal
 
-Convert a natural-language pharmacology / harm-reduction interaction report into one valid `InteractionUpdateProposal` JSONL line for:
+Purpose: convert one natural-language pharmacology or harm-reduction report into
+one reviewable `InteractionUpdateProposal` JSONL line.
 
 `src/curation/interaction-updates.jsonl`
+
+This prompt proposes structured data only. It does not approve, apply, publish,
+or reinterpret the report beyond the evidence it provides.
+
+## Scope
+
+Use this prompt for reports that identify a substance pair, mechanism, risk
+interpretation, and supporting source context. Output is suitable for PR review
+and later human approval before any dataset change.
+
+Automation may:
+- Normalize the pair into existing dataset substance IDs when they are clear.
+- Convert report text into the JSON shape below.
+- Preserve uncertainty and source gaps explicitly.
+
+Humans must approve:
+- Whether the proposal should be applied.
+- Any classification, confidence, evidence tier, or practical guidance change.
+- Whether source references are sufficient for publication-facing data.
+
+Do not:
+- Invent source IDs, quotes, locators, or direct evidence.
+- Upgrade confidence because the report is persuasive.
+- Mark an update as approved or applied.
 
 ## Output rules
 
@@ -12,8 +37,7 @@ Convert a natural-language pharmacology / harm-reduction interaction report into
 - Must be valid single-line JSONL.
 - Do not approve or apply the update.
 - Always set `"status": "proposed"`.
-- Always set `"workflow.state": "submitted"` with empty transition history.
-- Use canonical pair IDs from the dataset.
+- Use existing pair IDs/substance IDs from the dataset when available.
 - If no structured source IDs exist, use `"source_gap"`.
 - Preserve uncertainty conservatively.
 - Keep output explicitly draft/reviewable and never frame it as final authority.
@@ -72,6 +96,8 @@ Convert a natural-language pharmacology / harm-reduction interaction report into
 - Use `"medium"` for plausible, well-supported mechanistic or clinical-practice claims.
 - Use `"low"` for sparse, speculative, or source-gap-only claims.
 - If direct data are limited, cap confidence at `"medium"`.
+- If the report depends on unverified synthesis or field observation only, cap
+  confidence at `"low"` unless a human reviewer later adds stronger sources.
 
 ## Mechanism category rules
 
@@ -93,3 +119,28 @@ Use only valid v2.1 categories:
 - psychiatric_destabilization
 - operational_or_behavioral_risk
 - unknown
+
+## Acceptance criteria
+
+- The output parses as one JSON object on one line.
+- `status` is `"proposed"`.
+- The pair uses known substance IDs where possible, or reviewer notes explain the
+  unresolved mapping.
+- Every missing or weak source link is visible in `source_refs` or
+  `reviewer_notes`.
+- No field claims that human review has already approved, applied, or published
+  the change.
+
+## Verification
+
+After adding generated output to `src/curation/interaction-updates.jsonl`, run:
+
+```sh
+npm run updates:test-parser
+npm run validate:interactions:v2
+```
+
+Expected output: parser and interaction validation commands exit successfully.
+
+Known limitation: this prompt structures a proposal; it cannot establish clinical
+truth, source adequacy, or publication readiness without reviewer approval.
