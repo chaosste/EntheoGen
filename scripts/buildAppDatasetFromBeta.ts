@@ -42,6 +42,11 @@ const root = path.resolve(__dirname, '..');
 
 type CsvRow = Record<string, string>;
 
+function cleanCsvValue(value?: string | null): string {
+  const trimmed = value?.trim() ?? '';
+  return trimmed.toUpperCase() === 'NULL' ? '' : trimmed;
+}
+
 function readCsvObjects(csvPath: string): CsvRow[] {
   const py = `
 import csv, json, sys
@@ -74,6 +79,26 @@ function parseRiskScore(value: string): number {
   return n;
 }
 
+function defaultRiskScale(interactionCode: AppInteractionCode): number {
+  if (interactionCode === 'SELF') return -1;
+  if (interactionCode === 'LOW') return 1;
+  if (interactionCode === 'LOW_MOD' || interactionCode === 'INFERRED' || interactionCode === 'THEORETICAL') return 2;
+  if (interactionCode === 'CAU' || interactionCode === 'DETERMINISTIC') return 3;
+  if (interactionCode === 'UNS') return 4;
+  if (interactionCode === 'DAN') return 5;
+  return 0;
+}
+
+function normalizeInteractionLabel(interactionCode: AppInteractionCode, label: string): string {
+  if (interactionCode === 'INFERRED' && (!label || /unknown|insufficient data/i.test(label))) {
+    return 'Mechanistic inference';
+  }
+  if (interactionCode === 'THEORETICAL' && !label) {
+    return 'Theoretical interaction';
+  }
+  return label || interactionCode;
+}
+
 function deriveOrigin(row: CsvRow): 'self' | 'explicit' | 'unknown' {
   if (row.is_self_pair?.toUpperCase() === 'TRUE' || row.classification_code === 'SELF') {
     return 'self';
@@ -89,9 +114,9 @@ function buildInteractions(rows: CsvRow[]) {
     const interaction_code = mapBetaClassificationToAppCode(row.classification_code) as AppInteractionCode;
 
     const riskNum = parseRiskScore(row.risk_score);
-    const risk_scale = Number.isFinite(riskNum) ? riskNum : 0;
+    const risk_scale = Number.isFinite(riskNum) ? riskNum : defaultRiskScale(interaction_code);
 
-    const mechanism_category = (row.primary_mechanism_category ?? 'unknown').trim() || 'unknown';
+    const mechanism_category = cleanCsvValue(row.primary_mechanism_category) || 'unknown';
 
     return {
       substance_a_id: row.substance_a_id,
@@ -99,16 +124,16 @@ function buildInteractions(rows: CsvRow[]) {
       pair_key: row.pair_key,
       origin: deriveOrigin(row),
       interaction_code,
-      interaction_label: (row.risk_label ?? '').trim() || row.classification_code,
+      interaction_label: normalizeInteractionLabel(interaction_code, cleanCsvValue(row.risk_label)),
       risk_scale,
-      summary: (row.headline ?? '').trim(),
+      summary: cleanCsvValue(row.headline),
       confidence: normalizeBetaConfidence(row.classification_confidence ?? ''),
-      mechanism: row.mechanism_summary?.trim() ? row.mechanism_summary.trim() : null,
+      mechanism: cleanCsvValue(row.mechanism_summary) || null,
       mechanism_category,
-      timing: row.timing_guidance?.trim() ? row.timing_guidance.trim() : null,
-      evidence_gaps: row.evidence_gaps?.trim() ? row.evidence_gaps.trim() : null,
+      timing: cleanCsvValue(row.timing_guidance) || null,
+      evidence_gaps: cleanCsvValue(row.evidence_gaps) || null,
       evidence_tier: null,
-      field_notes: row.field_notes?.trim() ? row.field_notes.trim() : null,
+      field_notes: cleanCsvValue(row.field_notes) || null,
       sources: 'beta-0-1-snapshot',
       source_refs: ['beta_dataset'],
       source_fingerprint: fingerprintPair(row)
@@ -118,18 +143,18 @@ function buildInteractions(rows: CsvRow[]) {
 
 function buildSubstances(rows: CsvRow[]) {
   return rows.map((row) => {
-    const deprecated = ['true', '1', 'yes'].includes(row.deprecated?.trim().toLowerCase() ?? '');
-    const supersededRaw = (row.superseded_by ?? '').trim();
+    const deprecated = ['true', '1', 'yes'].includes(cleanCsvValue(row.deprecated).toLowerCase());
+    const supersededRaw = cleanCsvValue(row.superseded_by);
     const supersededBy = supersededRaw
       ? supersededRaw.split(/[,|]/).map((s) => s.trim()).filter(Boolean)
       : undefined;
 
     return {
-      id: row.id,
-      name: row.name,
-      class: row.class ?? '',
-      mechanismTag: row.mechanism_tag ?? '',
-      notes: row.notes ?? '',
+      id: cleanCsvValue(row.id),
+      name: cleanCsvValue(row.name),
+      class: cleanCsvValue(row.class),
+      mechanismTag: cleanCsvValue(row.mechanism_tag),
+      notes: cleanCsvValue(row.notes),
       deprecated: deprecated || undefined,
       supersededBy
     };

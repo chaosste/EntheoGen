@@ -62,6 +62,8 @@ automation role boundaries, output contracts, and human-approval constraints.
 - Keep new filtering logic centralized in a single composable helper.
 - Use normalized `UIInteraction` fields for UI behavior and rendering instead of
   raw dataset fields.
+- Keep retained memory artifacts and Slack channel record artifacts local-only
+  (gitignored), not committed.
 
 ## Learned Workspace Facts
 
@@ -69,3 +71,5 @@ automation role boundaries, output contracts, and human-approval constraints.
 - Research Mode filtering is centralized in `src/data/researchMode.ts`.
 - A dev regression assertion script exists at
   `scripts/testUIInteractionsAdapter.ts`.
+- Continual-learning state is tracked locally via
+  `.cursor/hooks/state/continual-learning-index.json`.
