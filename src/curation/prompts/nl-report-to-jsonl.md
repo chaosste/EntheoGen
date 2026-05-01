@@ -40,6 +40,10 @@ Do not:
 - Use existing pair IDs/substance IDs from the dataset when available.
 - If no structured source IDs exist, use `"source_gap"`.
 - Preserve uncertainty conservatively.
+- Keep output explicitly draft/reviewable and never frame it as final authority.
+- Use `reviewer_notes` with explicit section labels in this order:
+  `Extracted: ... Inferred: ... Uncertainty: ... Draft-only: ...`
+  so extracted facts, inferred suggestions, and uncertainty remain separated.
 
 ## Required JSON shape
 
@@ -70,8 +74,12 @@ Do not:
     "evidence.evidence_gaps": "..."
   },
   "rationale": "<condensed rationale from report>",
-  "reviewer_notes": "<anything needing human review>",
-  "status": "proposed"
+  "reviewer_notes": "Extracted: <source-grounded facts>. Inferred: <candidate interpretation/suggestions>. Uncertainty: <limitations, evidence gaps, ambiguity>. Draft-only: <human approval required; no publication authority>",
+  "status": "proposed",
+  "workflow": {
+    "state": "submitted",
+    "transition_history": []
+  }
 }
 
 ## Classification mapping

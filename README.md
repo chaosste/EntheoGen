@@ -152,6 +152,9 @@ Targeted knowledge-base script checks:
 npm run kb:test
 ```
 
+Coverage labels and command mapping are documented in
+`docs/testing/TEST_SUITE_MAP.md`.
+
 Related Projects
 
 # SeshGuard — broader interaction safety checker
