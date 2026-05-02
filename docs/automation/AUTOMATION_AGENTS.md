@@ -4,8 +4,9 @@
 
 Automation supports EntheoGen. It does not control EntheoGen.
 
-Linear defines work. Codex executes tasks. Humans approve outcomes. The system
-enforces results.
+Work may come from Linear, direct user instruction, maintenance context, or
+other explicit sources. Codex executes tasks. Humans approve outcomes. The
+system enforces technical results, not project-management ceremony.
 
 Terminology note: `Linear` in this document always means the Linear workflow
 application (issue/state orchestration layer). It does not refer to
@@ -22,8 +23,9 @@ Automation supports workflow execution, role augmentation, and structured output
 generation. It does not replace human authority, approval, or governance.
 
 Automation outputs must be reviewable and non-destructive. Consequential system
-and dataset changes should be PR-based. Automation treats Linear as the workflow
-authority and operates conservatively under uncertainty.
+and dataset changes should be PR-based. Automation may use Linear as workflow
+context when available and operates conservatively under uncertainty, but a
+missing Linear issue number is not a blocker or approval signal.
 
 Automation may interact with approved services such as Azure, Supabase,
 Cloudflare/Wrangler, Slack, GitHub, and Linear when the interaction is scoped,
@@ -39,6 +41,12 @@ anchors, branch names, provenance fields, checklist completion, or
 agent/delegate labels. Those fields may support traceability, but they must not
 impede execution, review, CI, merge, or normal repository use unless Stephen
 explicitly asks for enforcement.
+
+Before adding any test, script, CI check, or package command, confirm it proves
+runtime, code, data, schema, build, or executable workflow behavior. If it would
+fail because a Linear reference, PR-template field, branch name, checklist item,
+provenance note, issue label, agent identity, or documentation anchor is missing
+or worded differently, do not add it.
 
 For Steve-directed rapid manual submissions and standard natural-language
 report parsing, use `docs/automation/SUBMISSION_HOW_TO.md`. That guide is a

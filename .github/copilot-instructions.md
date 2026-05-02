@@ -30,6 +30,12 @@ named differently, or because an agent/delegate label is absent. Treat those
 fields as optional traceability notes unless a human explicitly requests
 enforcement.
 
+Before adding any test, script, CI check, or package command, confirm it proves
+runtime, code, data, schema, build, or executable workflow behavior. Do not add
+checks that assert Linear references, PR-template wording, branch names,
+checklist completion, provenance fields, issue labels, agent identity, or
+documentation anchors.
+
 ## Repo-local verification
 
 Prefer the narrowest command that proves the change:

@@ -1,5 +1,8 @@
 # <change title>
 
+Template note: this template is reviewer guidance only. Missing fields must not
+block PR creation, CI, review, or merge.
+
 Provenance timestamp: <YYYY-MM-DDTHH:mm:ssZ>
 
 ## Control Plane
