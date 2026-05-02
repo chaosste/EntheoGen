@@ -4,7 +4,7 @@ Provenance timestamp: <YYYY-MM-DDTHH:mm:ssZ>
 
 ## Control Plane
 
-- Linear issue: <NEW-### and Linear URL, or explicit user override>
+- Work source/provenance: <Linear issue if relevant, direct user request, maintenance context, or other source>
 - Executor/delegate: <Codex | Cursor | Copilot | human>
 - Branch/commits: <branch name and commit range or key commits>
 - PR flow expectation: <not_required | recommended | required_for_publication | already_published_or_retired>
@@ -37,7 +37,7 @@ Example UI readout or reviewer-facing summary:
 
 ## Human Approval Boundary
 
-- [ ] PR references the Linear issue or explicit user override.
+- [ ] PR records available provenance without treating Linear as required.
 - [ ] Merge decision remains human-controlled.
 - [ ] Publication, deployment, safety, and dataset approval remain human-controlled.
 - [ ] Linear state and automation output are not treated as approval artifacts.
