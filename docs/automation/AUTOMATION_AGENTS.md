@@ -30,6 +30,16 @@ Cloudflare/Wrangler, Slack, GitHub, and Linear when the interaction is scoped,
 uses approved credentials or local configuration, and preserves human approval
 boundaries.
 
+Technical verification must stay separate from project-management ceremony.
+It is appropriate to test code behavior, data validity, workflow transition
+logic, build output, and runtime contracts. It is not appropriate to add tests,
+CI checks, scripts, or guards that fail because optional process metadata is
+missing or worded differently, including Linear issue numbers, PR-template
+anchors, branch names, provenance fields, checklist completion, or
+agent/delegate labels. Those fields may support traceability, but they must not
+impede execution, review, CI, merge, or normal repository use unless Stephen
+explicitly asks for enforcement.
+
 For Steve-directed rapid manual submissions and standard natural-language
 report parsing, use `docs/automation/SUBMISSION_HOW_TO.md`. That guide is a
 reference layer only; it does not replace the Knowledge Steward output
@@ -76,6 +86,8 @@ Automation must not:
 - Treat workflow-state updates as approval decisions.
 - Bypass human approval gates.
 - Bypass workflow transition guards for publication-aligned state changes.
+- Add technical checks that enforce project-management ceremony or optional
+  traceability metadata.
 
 ## Components
 

@@ -15,6 +15,15 @@ Dependencies may be added when they are needed for requested work,
 verification, or existing tooling. Keep additions narrow and explain why they
 are needed.
 
+Technical checks must verify that the code, data, build, or runtime behavior
+works. Do not make technical checks depend on project-management or process
+ceremony such as Linear issue references, PR-template wording, branch names,
+provenance fields, checklist completion, agent/delegate identity, or
+documentation anchors. Those details may be recorded as optional traceability
+metadata, but their presence or absence must never block local work, tests, CI,
+PR creation, merge review, workflow use, or repository operation unless the user
+explicitly asks for that enforcement.
+
 Broad refactors should be protected with tests before behavior-changing edits.
 Small obvious fixes, documentation edits, and simple tooling updates may be made
 directly.
