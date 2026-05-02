@@ -97,7 +97,7 @@ Build/deployment surfaces:
 
 - `vite.config.ts` configures React, Tailwind, Cloudflare plugin support, path
   aliasing, and build-time environment values.
-- `.github/workflows/azure-deploy.yml` runs install, lint, submission-intake
+- `.github/workflows/azure-deploy.yml` runs install, typecheck, submission-intake
   guard, interaction-data guard, build, artifact upload, and Azure Web App
   deployment.
 - `wrangler.jsonc` configures Cloudflare assets behavior for preview/deploy

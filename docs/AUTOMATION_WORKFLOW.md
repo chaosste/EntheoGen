@@ -19,7 +19,7 @@ not treat it as an operational dependency.
 ## Automation May Do
 
 - Open scoped branches and PRs with reviewable diffs.
-- Run local verification commands such as `npm run lint`,
+- Run local verification commands such as `npm run typecheck`,
   `npm run validate:interactions:v2`, `npm run kb:validate`, and targeted
   `tsx scripts/...` checks.
 - Generate candidate claims, provisional interaction updates, reports, and
@@ -79,10 +79,10 @@ Use the narrowest commands that cover the change:
 
 ```bash
 npm run test:submission-intake
-npm run lint
+npm run typecheck
 npm run validate:interactions:v2
 npm run kb:validate
-npx tsx scripts/testUIInteractionsAdapter.ts
+npm run test:ui-adapter
 ```
 
 ## Output Expectations

@@ -28,7 +28,7 @@ Prefer the narrowest command that proves the change:
 
 ```sh
 npm run test:submission-intake
-npm run lint
+npm run typecheck
 npm run validate:interactions:v2
 npm run kb:validate
 npm test
