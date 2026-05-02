@@ -83,7 +83,10 @@ Use this before pushing when you want a single command that tracks the **PR**
 | Command | Role |
 | --- | --- |
 | `npm run agents:verify-knowledge-steward` | Contract + example JSON for Knowledge Steward |
-| `npm run agents:verify-safety` | Safety agent contract checks |
+| `npm run agents:verify-safety` | Safety Rules + Safety Sentinel contract checks |
+
+Full agent/safety output map and review boundaries:
+`docs/automation/AGENT_AND_SAFETY_OUTPUTS.md` (Linear **NEW-34**).
 
 ## Forbidden verification (repo policy)
 

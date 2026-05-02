@@ -54,6 +54,10 @@ report parsing, use `docs/automation/SUBMISSION_HOW_TO.md`. That guide is a
 reference layer only; it does not replace the Knowledge Steward output
 contract, parser scripts, workflow transition guards, or PR review.
 
+For package paths, contracts, summary surfaces (no `summarization/` package),
+safety rule alignment, and verification commands, see
+`docs/automation/AGENT_AND_SAFETY_OUTPUTS.md` (Linear **NEW-34**).
+
 ## Output Discipline
 
 Automation outputs must:
