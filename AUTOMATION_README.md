@@ -213,7 +213,9 @@ ownership.
 
 ### Data Curator
 
-Automation supports structured drafts, duplicate detection, normalization,
+Automation supports structured drafts, **duplicate surfacing** (V2 validator
+checks, consolidation `duplicate_signals` / `review_conflicts`, intake source-id
+dedupe — not a `packages/agents/deduplication/` package), normalization,
 formatting, evidence comparison, and changelog preparation.
 
 The Data Curator retains scientific judgement and final content approval.

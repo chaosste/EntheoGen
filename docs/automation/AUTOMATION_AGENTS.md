@@ -257,6 +257,33 @@ Current behavior by surface:
 Future standardization of richer error envelopes is allowed, but not required
 for current correctness.
 
+## Duplicate detection and conflicts (current)
+
+There is **no** `packages/agents/deduplication/` package in this repository.
+Duplicate surfacing and conflict reporting are implemented in **validators**,
+**consolidation tooling**, **intake parsing**, and **agent draft contracts** —
+not a standalone deduplication microservice.
+
+Current behavior by surface:
+
+- **Canonical dataset gate:** `scripts/validateInteractionsV2.ts` rejects
+  duplicate `pair.key` entries, duplicate **active** (non-deprecated) canonical
+  pair keys, and inconsistent / duplicated validation flag groupings for a pair.
+- **Knowledge-base consolidation:** `scripts/consolidateJsonUpdates.ts` emits
+  `duplicate_signals` and `review_conflicts` on its JSON report so curators can
+  review merges, suppressed duplicate refs, and blocked inserts without a new
+  index store.
+- **NL intake:** `scripts/parseInteractionReports.ts` deduplicates structured
+  source refs when extracting proposals and dedupes non-empty note lines for
+  reviewer-facing text hygiene.
+- **Knowledge Steward drafts:** `packages/agents/knowledge_steward/` output
+  contract requires `duplicate_conflict_checks` as **candidate** duplicate /
+  conflict hypotheses for reviewers, not an automated merge decision.
+
+Humans retain approval for canonical merges, conflict resolution, and final
+record changes. For full file-level mapping and boundaries, see
+`docs/automation/BACKEND_INTERFACE.md` (*Duplicate detection and conflicts*).
+
 ## Escalation Mapping
 
 - Safety risk -> Ethics Advisor

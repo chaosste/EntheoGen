@@ -74,6 +74,9 @@ Interaction and knowledge-base validators (`scripts/validateInteractionsV2.ts`,
 errors exist. That format is the current automation-facing signal; it is **not**
 the same shape as agent JSON payload `errors[]` or browser UI strings (see
 `docs/automation/AUTOMATION_AGENTS.md`, *Error Handling Surfaces*).
+**Duplicate canonical pair keys** and related pair-shape checks are part of this
+validator surface (see `docs/automation/BACKEND_INTERFACE.md`, *Duplicate detection
+and conflicts (current)* / Linear **NEW-17**).
 
 ## Canonical Dataset V2 Shape
 
