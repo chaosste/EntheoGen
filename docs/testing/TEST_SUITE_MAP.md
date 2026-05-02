@@ -31,7 +31,9 @@ npm run test:suite:alignment
 ## Notes
 
 - There is no `/tests/` directory in this repository; executable tests live under `scripts/`.
-- Keep command references in docs and issues aligned to package scripts.
+- When touching docs or issues, update command references manually if they
+  become stale. Do not add tests that assert documentation wording, issue
+  fields, PR-template anchors, or other project-management ceremony.
 - Add or remove coverage labels only when the associated command changes.
 - Obsolete construction-stage tests that depend on removed fixtures should be
   deleted instead of kept as broken placeholders.

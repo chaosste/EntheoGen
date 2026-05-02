@@ -15,6 +15,19 @@ Dependencies may be added when they are needed for requested work,
 verification, or existing tooling. Keep additions narrow and explain why they
 are needed.
 
+Technical checks must verify that the code, data, build, or runtime behavior
+works. Do not make technical checks depend on project-management or process
+ceremony such as Linear issue references, PR-template wording, branch names,
+provenance fields, checklist completion, agent/delegate identity, or
+documentation anchors. Those details may be recorded as optional traceability
+metadata, but their presence or absence must never block local work, tests, CI,
+PR creation, merge review, workflow use, or repository operation unless the user
+explicitly asks for that enforcement.
+
+Use `guard`, `gate`, `enforce`, `required`, and `must` only for technical
+invariants or explicit human instructions. For process metadata, prefer
+`record`, `note`, `document`, `suggest`, or `prefer`.
+
 Broad refactors should be protected with tests before behavior-changing edits.
 Small obvious fixes, documentation edits, and simple tooling updates may be made
 directly.
@@ -23,6 +36,22 @@ Commit messages should explain why the change was made. Structured trailers are
 not required.
 
 ## Verification
+
+Forbidden verification: do not add tests, scripts, CI checks, package commands,
+or build steps that assert project-management ceremony. Tests may verify product
+behavior, data validity, schemas, runtime contracts, type safety, build output,
+and executable workflow logic. Tests must not verify Linear references,
+PR-template wording, branch names, checklist completion, provenance fields,
+issue labels, agent identity, or documentation anchors.
+
+Before adding any test, script, CI check, or package command, confirm:
+
+- It proves runtime, code, data, schema, build, or executable workflow behavior.
+- It cannot fail because optional process metadata is missing or worded
+  differently.
+- It cannot block useful work that otherwise functions.
+
+If any check would fail because of project-management ceremony, do not add it.
 
 Use the real commands available in this repo:
 

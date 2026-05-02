@@ -115,6 +115,81 @@ Automation/local integration surfaces:
 - Dataset and knowledge-base scripts read and write local repo artifacts under
   `src/`, `knowledge-base/`, and `scripts/`.
 
+## Error handling (current)
+
+Linear **NEW-30** / **ENT-025** alignment: there is **no** in-repo
+`/packages/errors/` package and **no** shared HTTP error envelope for the
+deployed app. Behavior is **surface-specific**; do not assume a single JSON error
+shape across browser, CLI, Slack, and agent payloads.
+
+**Browser (deployed SPA)**
+
+- `src/App.tsx` holds user-visible readout failures in React state
+  (`error: string | null`) and renders a single plain-language message in the
+  rule-based context panel.
+- Readout text comes from `src/services/geminiService.ts` (deterministic,
+  local inputs only); there is no live model API or typed error code path in
+  that layer today.
+- `console.error` is used for diagnostics (for example readout pipeline and
+  favorites JSON parse failures); those paths do **not** expose structured
+  errors to end users.
+
+**Automation, validation, integrations**
+
+- Canonical wording for CLI validation prefixes, workflow throws, Slack
+  transport vs CLI JSON, and agent payload `errors[]` lives in
+  `docs/automation/AUTOMATION_AGENTS.md` (section *Error Handling Surfaces*).
+- `scripts/slack/slackApi.ts` `callSlackApi` returns the parsed Slack JSON on
+  HTTP 2xx and **does not** throw only because Slack set `ok: false`; callers
+  that need hard failures check `.ok` (see `scripts/slack/slackPost.ts`) or map
+  errors explicitly.
+
+## Duplicate detection and conflicts (current)
+
+Linear **NEW-17** / **ENT-012** alignment: there is **no**
+`packages/agents/deduplication/` package in this repository. Duplicate and
+conflict behavior is **surface-specific**, targets the **current V2 dataset
+shape**, and keeps **reviewable** artifacts for humans (especially the Data
+Curator). No separate indexing or storage subsystem is introduced for
+deduplication beyond existing canonical JSON files and reports.
+
+**Canonical interaction dataset (`InteractionDatasetV2`)**
+
+- `scripts/validateInteractionsV2.ts` enforces unique `pair.key` across all
+  pairs, rejects **duplicate active** rows for the same canonical pair key when
+  `provenance.deprecated` is false, checks grouped validation flags for
+  internal duplicates, and aligns grouped flags with `audit.validation_flags`.
+- Validation flags such as `duplicate_active_pair` (see
+  `src/data/interactionSchemaV2.ts`) are part of the typed contract; validator
+  output surfaces them via the standard `ERROR:` / `WARN:` / `INFO:` CLI
+  diagnostics.
+
+**Knowledge-base consolidation**
+
+- `scripts/consolidateJsonUpdates.ts` merges structured update candidates into
+  canonical `interactionDatasetV2`, source manifest, citation registry, and
+  related artifacts. It records **`duplicate_signals`** (for example
+  `existing_pair_match`, `source_ref_deduplicated`, `citation_deduplicated`,
+  `claim_deduplicated`) and **`review_conflicts`** on the consolidation report
+  for curator review. Signals describe what happened; they are **not** silent
+  approval of scientific merges.
+
+**NL submission intake**
+
+- `scripts/parseInteractionReports.ts` deduplicates extracted **source_id**
+  refs when building proposals (last write per id in a `Map`), and uses
+  `dedupeNonEmpty` for reviewer-note section strings. Proposal `update_id`
+  values are deterministic hashes for traceability; **append-only**
+  `interaction-updates.jsonl` does not replace a global dedup engine for the
+  canonical dataset (validators and curator workflow gate canonical truth).
+
+**Agent draft contracts**
+
+- Knowledge Steward drafts (`packages/agents/knowledge_steward/`) require
+  `duplicate_conflict_checks` in `output-contract.json` as **review-facing**
+  structured fields. That contract supports human judgement; it does not run
+  the consolidation or V2 validators by itself.
+
 ## Decision Boundaries
 
 Automation may:

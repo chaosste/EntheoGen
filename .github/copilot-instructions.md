@@ -22,6 +22,20 @@ Do not treat external workspace playbooks, local cache folders, or absent paths
 as operational facts for this repo. If a path, script, or workflow is not
 present here, describe it as proposed work instead of relying on it.
 
+Keep technical verification separate from project-management ceremony. Tests,
+CI, scripts, and build checks should prove implementation behavior, data
+validity, or build health. They must not fail because a PR lacks a Linear issue,
+because provenance/checklist/template fields are incomplete, because a branch is
+named differently, or because an agent/delegate label is absent. Treat those
+fields as optional traceability notes unless a human explicitly requests
+enforcement.
+
+Before adding any test, script, CI check, or package command, confirm it proves
+runtime, code, data, schema, build, or executable workflow behavior. Do not add
+checks that assert Linear references, PR-template wording, branch names,
+checklist completion, provenance fields, issue labels, agent identity, or
+documentation anchors.
+
 ## Repo-local verification
 
 Prefer the narrowest command that proves the change:

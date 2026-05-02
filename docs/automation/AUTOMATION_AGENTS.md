@@ -4,8 +4,9 @@
 
 Automation supports EntheoGen. It does not control EntheoGen.
 
-Linear defines work. Codex executes tasks. Humans approve outcomes. The system
-enforces results.
+Work may come from Linear, direct user instruction, maintenance context, or
+other explicit sources. Codex executes tasks. Humans approve outcomes. The
+system enforces technical results, not project-management ceremony.
 
 Terminology note: `Linear` in this document always means the Linear workflow
 application (issue/state orchestration layer). It does not refer to
@@ -22,13 +23,30 @@ Automation supports workflow execution, role augmentation, and structured output
 generation. It does not replace human authority, approval, or governance.
 
 Automation outputs must be reviewable and non-destructive. Consequential system
-and dataset changes should be PR-based. Automation treats Linear as the workflow
-authority and operates conservatively under uncertainty.
+and dataset changes should be PR-based. Automation may use Linear as workflow
+context when available and operates conservatively under uncertainty, but a
+missing Linear issue number is not a blocker or approval signal.
 
 Automation may interact with approved services such as Azure, Supabase,
 Cloudflare/Wrangler, Slack, GitHub, and Linear when the interaction is scoped,
 uses approved credentials or local configuration, and preserves human approval
 boundaries.
+
+Technical verification must stay separate from project-management ceremony.
+It is appropriate to test code behavior, data validity, workflow transition
+logic, build output, and runtime contracts. It is not appropriate to add tests,
+CI checks, scripts, or guards that fail because optional process metadata is
+missing or worded differently, including Linear issue numbers, PR-template
+anchors, branch names, provenance fields, checklist completion, or
+agent/delegate labels. Those fields may support traceability, but they must not
+impede execution, review, CI, merge, or normal repository use unless Stephen
+explicitly asks for enforcement.
+
+Before adding any test, script, CI check, or package command, confirm it proves
+runtime, code, data, schema, build, or executable workflow behavior. If it would
+fail because a Linear reference, PR-template field, branch name, checklist item,
+provenance note, issue label, agent identity, or documentation anchor is missing
+or worded differently, do not add it.
 
 For Steve-directed rapid manual submissions and standard natural-language
 report parsing, use `docs/automation/SUBMISSION_HOW_TO.md`. That guide is a
@@ -76,6 +94,8 @@ Automation must not:
 - Treat workflow-state updates as approval decisions.
 - Bypass human approval gates.
 - Bypass workflow transition guards for publication-aligned state changes.
+- Add technical checks that enforce project-management ceremony or optional
+  traceability metadata.
 
 ## Components
 
@@ -208,6 +228,10 @@ accordingly.
 
 Current behavior by surface:
 
+- Deployed browser UI (`src/App.tsx`) keeps readout failures in React state
+  (`error: string | null`) with one user-facing string in the rule-based
+  context panel; `console.error` is used for diagnostics. Favorites JSON
+  load failures log only and do not populate `error`.
 - Workflow transition CLI (`scripts/workflow/transitionInteractionUpdateState.ts`)
   and workflow modules (`scripts/workflow/*.ts`) throw plain `Error` messages
   for invalid input/transition/history conditions. The CLI prints the message to
@@ -217,8 +241,11 @@ Current behavior by surface:
   prefixed lines (`ERROR:`, `WARN:`, `INFO:`), then emit a summary and set a
   non-zero exit code when errors exist.
 - Integration transport helper (`scripts/slack/slackApi.ts`) throws plain
-  `Error` on missing credentials or non-2xx HTTP responses; successful HTTP
-  responses preserve Slack-style payload fields such as `ok` and `error`.
+  `Error` on missing credentials or non-2xx HTTP responses. On HTTP 2xx it
+  returns the parsed Slack body as-is: Slack may set `ok: false` with an
+  `error` string without an exception; callers must inspect `.ok` when they
+  need to branch (for example `scripts/slack/slackPost.ts` after
+  `chat.postMessage`).
 - Integration CLI wrapper (`scripts/slack/slackPost.ts`) emits JSON output for
   automation consumers:
   - success: `{ "ok": true, ... }`
@@ -229,6 +256,33 @@ Current behavior by surface:
 
 Future standardization of richer error envelopes is allowed, but not required
 for current correctness.
+
+## Duplicate detection and conflicts (current)
+
+There is **no** `packages/agents/deduplication/` package in this repository.
+Duplicate surfacing and conflict reporting are implemented in **validators**,
+**consolidation tooling**, **intake parsing**, and **agent draft contracts** —
+not a standalone deduplication microservice.
+
+Current behavior by surface:
+
+- **Canonical dataset gate:** `scripts/validateInteractionsV2.ts` rejects
+  duplicate `pair.key` entries, duplicate **active** (non-deprecated) canonical
+  pair keys, and inconsistent / duplicated validation flag groupings for a pair.
+- **Knowledge-base consolidation:** `scripts/consolidateJsonUpdates.ts` emits
+  `duplicate_signals` and `review_conflicts` on its JSON report so curators can
+  review merges, suppressed duplicate refs, and blocked inserts without a new
+  index store.
+- **NL intake:** `scripts/parseInteractionReports.ts` deduplicates structured
+  source refs when extracting proposals and dedupes non-empty note lines for
+  reviewer-facing text hygiene.
+- **Knowledge Steward drafts:** `packages/agents/knowledge_steward/` output
+  contract requires `duplicate_conflict_checks` as **candidate** duplicate /
+  conflict hypotheses for reviewers, not an automated merge decision.
+
+Humans retain approval for canonical merges, conflict resolution, and final
+record changes. For full file-level mapping and boundaries, see
+`docs/automation/BACKEND_INTERFACE.md` (*Duplicate detection and conflicts*).
 
 ## Escalation Mapping
 

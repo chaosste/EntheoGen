@@ -1,6 +1,16 @@
 # <change title>
 
+Template note: this template is reviewer guidance only. Missing fields must not
+block PR creation, CI, review, or merge.
+
 Provenance timestamp: <YYYY-MM-DDTHH:mm:ssZ>
+
+## Control Plane
+
+- Work source/provenance: <Linear issue if relevant, direct user request, maintenance context, or other source>
+- Executor/delegate: <Codex | Cursor | Copilot | human>
+- Branch/commits: <branch name and commit range or key commits>
+- PR flow expectation: <not_required | recommended | required_for_publication | already_published_or_retired>
 
 ## Intake
 
@@ -20,6 +30,20 @@ Example UI readout or reviewer-facing summary:
 - [ ] Cloudflare assets behavior unchanged
 - [ ] Azure deploy guards expected to pass
 - [ ] GitHub Actions checks expected to pass
+
+## Execution Trace
+
+- Changed surfaces:
+- Commands run:
+- Generated or review artifacts:
+- Residual risks:
+
+## Human Approval Boundary
+
+- [ ] PR records available provenance without treating Linear as required.
+- [ ] Merge decision remains human-controlled.
+- [ ] Publication, deployment, safety, and dataset approval remain human-controlled.
+- [ ] Linear state and automation output are not treated as approval artifacts.
 
 ## Verification
 
