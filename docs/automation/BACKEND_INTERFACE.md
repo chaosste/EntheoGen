@@ -249,6 +249,10 @@ Prohibited in this flow:
 
 ## Verification
 
+For GitHub Actions jobs, npm scripts, and a **PR-parity** local aggregate gate
+(`npm run ci:checks`), see `docs/automation/QUALITY_AND_RELIABILITY.md`
+(Linear **NEW-37**).
+
 Run:
 
 ```bash

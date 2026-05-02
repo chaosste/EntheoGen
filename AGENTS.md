@@ -58,6 +58,9 @@ Use the real commands available in this repo:
 - `npm run typecheck` for TypeScript verification.
 - `npm run build` for production build verification.
 - `npm test` for the knowledge-base and interaction validation suite.
+- `npm run ci:checks` for the full PR-aligned gate (typecheck, validators,
+  submission-intake, alignment suite, build); see
+  `docs/automation/QUALITY_AND_RELIABILITY.md`.
 - Targeted scripts such as `npm run test:slack`, `npm run kb:validate`, or
   `npm run validate:interactions:v2` when they directly cover the change.
 

@@ -33,7 +33,9 @@ Current concrete surfaces named by this guide:
 - `scripts/consolidateJsonUpdates.ts`
 - `scripts/generateDatasetChangelog.ts`
 - `.github/workflows/azure-deploy.yml`
+- `.github/workflows/ci.yml`
 - `docs/automation/AUTOMATION_AGENTS.md`
+- `docs/automation/QUALITY_AND_RELIABILITY.md`
 - `docs/automation/SUBMISSION_HOW_TO.md`
 
 Not included:
