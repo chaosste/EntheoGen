@@ -10,6 +10,7 @@ This map aligns live test commands to current EntheoGen modules.
 | `dataset_helpers` | `npm run test:dataset-helpers` | `scripts/datasetPaths.ts`, `scripts/buildAppDatasetFromBeta.ts`, `scripts/betaDatasetMapping.ts` |
 | `workflow_modules` | `npm run test:workflow` | `scripts/workflow/stateMachine.ts`, `scripts/workflow/transitionInteractionUpdateState.ts`, `scripts/workflow/interactionUpdateWorkflow.ts` |
 | `workflow_linear_alignment` | `npm run test:workflow-linear-alignment` | `scripts/workflow/linearWorkflowAlignment.ts` canonical mapping from dataset workflow states to Linear states, owner roles, review actions, and GitHub PR flow expectations |
+| `github_pr_workflow` | `npm run test:github-pr-workflow` | `.github/PULL_REQUEST_TEMPLATE.md` Linear issue reference, execution trace, and human approval boundary anchors |
 | `workflow_write_path_guards` | `npm run test:workflow-write-path-guards` | `scripts/workflow/writePathGuard.test.ts` (guards direct `workflow.state` write paths outside approved surfaces) |
 | `agent_output_contracts` | `npm run updates:test-parser` | `scripts/parseInteractionReports.ts` proposal output shape and workflow initialization, including `reviewer_notes` separation (`Extracted`/`Inferred`/`Uncertainty`/`Draft-only`) |
 | `submission_intake` | `npm run test:submission-intake` | parser + workflow transition integration for `submission -> structured/review` handling without backend route assumptions |
@@ -22,7 +23,8 @@ This map aligns live test commands to current EntheoGen modules.
 ## Full Alignment Suite
 
 Use this when validating test-surface alignment across dataset helpers, workflow
-modules, agent output contracts, UI normalization, and external bridge checks:
+modules, GitHub PR controls, agent output contracts, UI normalization, and
+external bridge checks:
 
 ```bash
 npm run test:suite:alignment
