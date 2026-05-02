@@ -48,7 +48,7 @@ interface InteractionUpdateProposal {
     'evidence.support_type': EvidenceSupportType[];
     'evidence.evidence_gaps': string;
     'clinical_summary.mechanism'?: string;
-    'clinical_summary.practical_guidance'?: string;
+    'clinical_summary.field_notes'?: string;
     'clinical_summary.timing_guidance'?: string;
   };
   reviewer_notes?: string;
@@ -540,7 +540,7 @@ export function buildUpdateProposal(reportText: string, filename: string): Inter
   const code = extractClassification(normalized);
   const headline = extractHeadline(normalized);
   const mechanism = extractMechanismText(normalized);
-  const practicalGuidance = extractActionGuidance(normalized);
+  const fieldNotes = extractActionGuidance(normalized);
   const timingGuidance = extractTimingGuidance(normalized);
   const mechanismCategories = inferMechanismCategories(normalized);
   const mechanismPrimary = mechanismCategories[0] ?? 'unknown';
@@ -619,7 +619,7 @@ export function buildUpdateProposal(reportText: string, filename: string): Inter
   };
 
   if (mechanism) proposal.requested_change['clinical_summary.mechanism'] = mechanism;
-  if (practicalGuidance) proposal.requested_change['clinical_summary.practical_guidance'] = practicalGuidance;
+  if (fieldNotes) proposal.requested_change['clinical_summary.field_notes'] = fieldNotes;
   if (timingGuidance) proposal.requested_change['clinical_summary.timing_guidance'] = timingGuidance;
   proposal.reviewer_notes = formatReviewerNotes({
     extracted: extractedNotes,
