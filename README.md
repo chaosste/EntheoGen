@@ -139,7 +139,7 @@ npm run build
 
 Typecheck:
 ```
-npm run lint
+npm run typecheck
 ```
 
 Knowledge-base and interaction validation:
