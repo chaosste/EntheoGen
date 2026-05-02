@@ -81,6 +81,10 @@ or ordinary verification.
 For EntheoGen automation components, follow
 `docs/automation/AUTOMATION_AGENTS.md`. That specification defines the live
 automation role boundaries, output contracts, and human-approval constraints.
+Automation may use scoped approved tools such as Azure, Supabase,
+Cloudflare/Wrangler, Slack, GitHub, Linear, Cursor, GitHub Copilot, and other
+approved local or hosted tools when they support the requested work and preserve
+human approval boundaries.
 
 ## Learned User Preferences
 

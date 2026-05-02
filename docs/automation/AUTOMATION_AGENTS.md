@@ -27,9 +27,10 @@ and dataset changes should be PR-based. Automation may use Linear as workflow
 context when available and operates conservatively under uncertainty, but a
 missing Linear issue number is not a blocker or approval signal.
 
-Automation may interact with approved services such as Azure, Supabase,
-Cloudflare/Wrangler, Slack, GitHub, and Linear when the interaction is scoped,
-uses approved credentials or local configuration, and preserves human approval
+Automation may interact with approved services and tools such as Azure,
+Supabase, Cloudflare/Wrangler, Slack, GitHub, Linear, Cursor, GitHub Copilot,
+and other approved local or hosted tools when the interaction is scoped, uses
+approved credentials or local configuration, and preserves human approval
 boundaries.
 
 Technical verification must stay separate from project-management ceremony.
@@ -90,7 +91,9 @@ Automation must not:
 
 - Mutate production without explicit scope and approval.
 - Publish autonomously.
-- Modify schemas or databases unless explicitly scoped by a Linear issue.
+- Modify schemas, databases, auth rules, or infrastructure unless explicitly
+  scoped by a user request, issue, PR, or approved maintenance lane and kept
+  reviewable.
 - Treat workflow-state updates as approval decisions.
 - Bypass human approval gates.
 - Bypass workflow transition guards for publication-aligned state changes.
@@ -311,3 +314,32 @@ In this repository, publication-aligned workflow enforcement is represented by:
 
 There is no `/apps/api/routes/publish.*` path in the current repo layout.
 There is no `/apps/api/routes/submission.*` path in the current repo layout.
+
+## Acceptance And Verification
+
+This automation guidance is current when it:
+
+- names real repo surfaces rather than inferred packages or services
+- separates automation actions from human approval decisions
+- keeps Azure, Supabase, Cloudflare/Wrangler, Slack, GitHub, Linear, Cursor,
+  GitHub Copilot, and other approved tools available within scoped boundaries
+- allows investigation, UI testing, validation, docs updates, and normal local
+  development without requiring project-management ceremony
+- reserves hard prohibitions for consequential outcomes, secrets, production
+  mutation, publication, and approval bypasses
+
+For documentation-only updates, verify with:
+
+```sh
+git diff --check
+```
+
+Expected output: the command exits successfully with no whitespace errors.
+
+Residual limitations:
+
+- This document describes operational boundaries; executable behavior is still
+  proven by the relevant scripts, tests, builds, validators, or deployment
+  logs.
+- Human approval remains necessary for safety, publication, interpretation,
+  production, and other consequential decisions.

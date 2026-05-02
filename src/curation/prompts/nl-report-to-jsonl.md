@@ -44,6 +44,12 @@ Do not:
 - Use `reviewer_notes` with explicit section labels in this order:
   `Extracted: ... Inferred: ... Uncertainty: ... Draft-only: ...`
   so extracted facts, inferred suggestions, and uncertainty remain separated.
+- Use current dataset-facing summary fields: `clinical_summary.headline`,
+  `clinical_summary.mechanism`, `clinical_summary.timing_guidance`, and
+  `clinical_summary.field_notes`.
+- Put reviewer-facing action posture, monitoring, and practical cautions in
+  `clinical_summary.field_notes`; do not emit the stale
+  `clinical_summary.practical_guidance` key.
 
 ## Required JSON shape
 
@@ -66,7 +72,8 @@ Do not:
     "classification.confidence": "medium",
     "clinical_summary.headline": "...",
     "clinical_summary.mechanism": "...",
-    "clinical_summary.practical_guidance": "...",
+    "clinical_summary.timing_guidance": "...",
+    "clinical_summary.field_notes": "...",
     "mechanism.primary_category": "...",
     "mechanism.categories": ["..."],
     "evidence.tier": "...",

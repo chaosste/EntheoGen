@@ -21,6 +21,21 @@ Included:
 - Dataset interaction through controlled, reviewable workflows.
 - Integrations with approved tools and services.
 
+Current concrete surfaces named by this guide:
+
+- `scripts/parseInteractionReports.ts`
+- `src/curation/interaction-updates.jsonl`
+- `scripts/workflow/stateMachine.ts`
+- `scripts/workflow/transitionInteractionUpdateState.ts`
+- `scripts/workflow/linearWorkflowAlignment.ts`
+- `scripts/datasetPaths.ts`
+- `scripts/buildAppDatasetFromBeta.ts`
+- `scripts/consolidateJsonUpdates.ts`
+- `scripts/generateDatasetChangelog.ts`
+- `.github/workflows/azure-deploy.yml`
+- `docs/automation/AUTOMATION_AGENTS.md`
+- `docs/automation/SUBMISSION_HOW_TO.md`
+
 Not included:
 
 - Autonomous replacement of human decision authority.
@@ -333,13 +348,37 @@ not make or approve them.
 
 Automation alignment is healthy when:
 
-- Linear or an explicit user request defines the work and owner.
+- Linear, an explicit user request, or another scoped maintenance context
+  defines the work and owner.
 - Codex can build, fix, verify, and document bounded changes.
 - Consequential changes are reviewable through GitHub or equivalent review.
 - Human approval gates are preserved.
 - The approved deployment pipeline controls live deployment.
 - The dataset remains a protected authoritative baseline.
 - Automation improves workflow without taking over authority.
+
+## Acceptance And Verification
+
+This guidance is aligned when a reader can identify:
+
+- the present-tense repo surfaces involved in automation work
+- what automation may do without extra ceremony
+- what humans must approve before consequential outcomes
+- what automation is prohibited from doing autonomously
+- the command or observable evidence that verifies a change
+- any residual risk, limitation, or missing infrastructure
+
+For documentation-only guidance updates, verification is:
+
+```sh
+git diff --check
+```
+
+Expected output: the command exits successfully with no whitespace errors.
+
+Residual limitation: this document describes current repo behavior and approval
+boundaries. It does not prove production safety, dataset correctness, clinical
+truth, publication readiness, or external-service health.
 
 ## Ongoing Work
 

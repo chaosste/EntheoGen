@@ -8,6 +8,13 @@ implementation, integrations, dataset evaluation, reliability work, and system
 changes. It should protect real decision points without blocking investigation,
 hands-on testing, or normal development.
 
+Current governance surfaces in this repo include Linear issue states, GitHub
+review history, `.github/workflows/azure-deploy.yml`,
+`scripts/workflow/stateMachine.ts`,
+`scripts/workflow/transitionInteractionUpdateState.ts`,
+`scripts/workflow/linearWorkflowAlignment.ts`, dataset validators, and the
+automation documents under `docs/automation/`.
+
 ## Governance Model
 
 EntheoGen uses a hybrid governance model:
@@ -435,6 +442,25 @@ Governance is functioning when:
 - Codex outputs are reviewable
 - Cursor and Copilot outputs remain attributable when used
 - incomplete dataset records can be evaluated and improved instead of frozen
+
+## Verification And Residual Risk
+
+For guidance-only governance updates, verify the edited text with:
+
+```sh
+git diff --check
+```
+
+Expected output: the command exits successfully with no whitespace errors.
+
+Residual risks:
+
+- Governance text does not replace executable workflow checks in
+  `scripts/workflow/`.
+- Linear state, PR review, and deployment history remain separate systems that
+  can drift until humans or automation reconcile them.
+- Incomplete evidence, `UNK` records, and missing provenance remain review
+  signals rather than automatic blockers.
 
 ## Core Principle
 
