@@ -62,6 +62,10 @@ For backend vs static app, dataset paths, validators, and audit/trace surfaces
 (with explicit non-present `packages/*` paths), see
 `docs/automation/BACKEND_AND_DATA_FOUNDATIONS.md` (Linear **NEW-32**).
 
+For intake (file-first submission), Linear/GitHub control plane, and what is
+**not** an in-repo integration package, see
+`docs/automation/INTAKE_AND_INTEGRATION.md` (Linear **NEW-33**).
+
 ## Output Discipline
 
 Automation outputs must:

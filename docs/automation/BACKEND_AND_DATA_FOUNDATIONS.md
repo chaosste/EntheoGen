@@ -21,6 +21,8 @@ These Linear/GitHub paths are **out of scope** as packages or servers today:
 - **Authoritative doc:** `docs/automation/BACKEND_INTERFACE.md` (runtime shape,
   Azure, absence of server API routes, service boundaries).
 - **Quality / CI commands:** `docs/automation/QUALITY_AND_RELIABILITY.md`.
+- **Intake / Linear / GitHub control plane (no integration packages):**
+  `docs/automation/INTAKE_AND_INTEGRATION.md` (Linear **NEW-33**).
 
 ## Dataset read/write (pointer)
 

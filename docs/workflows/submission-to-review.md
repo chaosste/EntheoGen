@@ -5,6 +5,9 @@ control plane, Codex for scoped implementation and verification, GitHub for
 reviewable change history, humans for approval, and Azure for approved
 deployment.
 
+Grouped index (absent `packages/integrations/*`, submission route myths):
+`docs/automation/INTAKE_AND_INTEGRATION.md` (Linear **NEW-33**).
+
 ## Scope
 
 This document is scoped to the real repo surfaces that currently define
