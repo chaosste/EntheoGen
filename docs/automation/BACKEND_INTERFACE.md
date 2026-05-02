@@ -39,6 +39,10 @@ to Azure App Service. The repo does not currently define Express, Fastify,
 Next.js API routes, Azure Functions, Cloudflare Worker request handlers, or an
 `apps/api/` package.
 
+Supabase (and Metabase on top of it) is for analytics and graphs, not the live
+runtime data plane for this SPA—the browser uses bundled static artifacts from
+this repo’s build, not Supabase at request time.
+
 Current application flow:
 
 ```text
