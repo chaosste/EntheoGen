@@ -7,9 +7,10 @@ Knowledge Steward agent is in service.
 For the cross-workflow contributor/model/agent reference, see
 `docs/automation/SUBMISSION_HOW_TO.md`.
 
-This is a human-directed workflow. Codex, Cursor, Codex CLI, or a delegated
-Linear issue may structure the evidence and draft the change, but they do not
-approve safety interpretation, publication, or release.
+This is a human-directed workflow: the owner retains final sign-off for
+consequential outcomes. Codex, Cursor, Codex CLI, or a delegated Linear issue may
+structure the evidence and draft the change, but they do not approve safety
+interpretation, publication, or release.
 
 ## Priorities
 

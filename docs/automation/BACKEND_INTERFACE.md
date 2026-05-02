@@ -3,6 +3,10 @@
 Purpose: this repository currently ships a Vite React app to Azure, with no
 in-repo backend API package or server route layer.
 
+For a grouped index of backend, dataset, validation, and audit **surfaces**
+(with explicit “not present” paths such as `apps/api/`), see
+`docs/automation/BACKEND_AND_DATA_FOUNDATIONS.md` (Linear **NEW-32**).
+
 ## Scope
 
 The Linear issue references `/apps/api/`, but this repository currently has no
@@ -34,6 +38,10 @@ The deployed application is a static web app artifact built by Vite and deployed
 to Azure App Service. The repo does not currently define Express, Fastify,
 Next.js API routes, Azure Functions, Cloudflare Worker request handlers, or an
 `apps/api/` package.
+
+Supabase (and Metabase on top of it) is for analytics and graphs, not the live
+runtime data plane for this SPA—the browser uses bundled static artifacts from
+this repo’s build, not Supabase at request time.
 
 Current application flow:
 
@@ -248,6 +256,10 @@ Prohibited in this flow:
   behavior changes are introduced by this documentation update.
 
 ## Verification
+
+For GitHub Actions jobs, npm scripts, and a **PR-parity** local aggregate gate
+(`npm run ci:checks`), see `docs/automation/QUALITY_AND_RELIABILITY.md`
+(Linear **NEW-37**).
 
 Run:
 

@@ -4,6 +4,11 @@ Purpose: give developers, contributors, models, and coding agents one
 reference for EntheoGen submission intake without replacing the existing
 agentic workflows, prompts, scripts, or approval gates.
 
+Canonical **tone** and **submission product** boundaries in Linear:
+[Tone and direction guidance](https://linear.app/new-psychonaut/document/tone-and-direction-guidance-51ab8ce0ad71),
+[Submission intake how-to](https://linear.app/new-psychonaut/document/submission-intake-how-to-e14174e53d28).
+This file stays the **repo-technical** companion (paths, commands, tests).
+
 This guide points to two related paths:
 
 - rapid manual intake for Steve-directed urgent fixes:

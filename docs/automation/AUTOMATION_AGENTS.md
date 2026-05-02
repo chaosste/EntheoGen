@@ -54,6 +54,22 @@ report parsing, use `docs/automation/SUBMISSION_HOW_TO.md`. That guide is a
 reference layer only; it does not replace the Knowledge Steward output
 contract, parser scripts, workflow transition guards, or PR review.
 
+For package paths, contracts, summary surfaces (no `summarization/` package),
+safety rule alignment, and verification commands, see
+`docs/automation/AGENT_AND_SAFETY_OUTPUTS.md` (Linear **NEW-34**).
+
+For backend vs static app, dataset paths, validators, and audit/trace surfaces
+(with explicit non-present `packages/*` paths), see
+`docs/automation/BACKEND_AND_DATA_FOUNDATIONS.md` (Linear **NEW-32**).
+
+For intake (file-first submission), Linear/GitHub control plane, and what is
+**not** an in-repo integration package, see
+`docs/automation/INTAKE_AND_INTEGRATION.md` (Linear **NEW-33**).
+
+For **canonical tone and submission framing** (Linear) versus **repo-technical**
+Markdown, see `AUTOMATION_README.md` (*Documentation direction*) and the links
+there (Linear **NEW-31** alignment pass).
+
 ## Output Discipline
 
 Automation outputs must:

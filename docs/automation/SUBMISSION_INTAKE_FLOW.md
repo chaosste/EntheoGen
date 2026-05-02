@@ -3,6 +3,10 @@
 This repository does not contain a backend route at
 `/apps/api/routes/submission.*`. Intake is file-first and workflow-governed.
 
+Product tone and submission boundaries in Linear:
+[Tone and direction guidance](https://linear.app/new-psychonaut/document/tone-and-direction-guidance-51ab8ce0ad71),
+[Submission intake how-to](https://linear.app/new-psychonaut/document/submission-intake-how-to-e14174e53d28).
+
 ## Scope
 
 - Source reports: `src/curation/nl-reports/incoming/`
