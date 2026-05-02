@@ -82,7 +82,7 @@ npm run test:submission-intake
 npm run lint
 npm run validate:interactions:v2
 npm run kb:validate
-npx tsx scripts/testUIInteractionsAdapter.ts
+npm run test:ui-adapter
 ```
 
 ## Output Expectations
