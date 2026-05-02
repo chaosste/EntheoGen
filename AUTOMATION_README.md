@@ -7,6 +7,22 @@ The current system is treated as live and operational. Work should preserve
 stability and avoid unnecessary foundational redesign, while still allowing
 normal product, data, tooling, and reliability improvements.
 
+## Documentation direction (NEW-31)
+
+Canonical **tone**, **submission framing**, and **boundary** language for
+product-facing work live in Linear:
+
+- [Tone and direction guidance](https://linear.app/new-psychonaut/document/tone-and-direction-guidance-51ab8ce0ad71)
+- [Submission intake how-to](https://linear.app/new-psychonaut/document/submission-intake-how-to-e14174e53d28)
+
+Repo Markdown should stay aligned with those documents and with **current
+paths** in `docs/automation/BACKEND_AND_DATA_FOUNDATIONS.md`,
+`docs/automation/INTAKE_AND_INTEGRATION.md`, and
+`docs/automation/QUALITY_AND_RELIABILITY.md`. Automation **supports** proposals,
+parsing, verification, and review packets; **the human owner** retains final
+approval for consequential dataset, safety, and deployment outcomes (see
+`docs/governance.md`).
+
 ## Scope
 
 This is not a build or setup guide. It defines how work is executed, how roles

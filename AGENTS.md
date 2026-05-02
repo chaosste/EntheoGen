@@ -86,6 +86,9 @@ For EntheoGen automation components, follow
 automation role boundaries, output contracts, and human-approval constraints.
 Agent package locations, safety contracts, and verifier commands are summarized
 in `docs/automation/AGENT_AND_SAFETY_OUTPUTS.md`.
+
+For **Linear-first tone and submission boundaries** versus repo Markdown, see
+`AUTOMATION_README.md` (*Documentation direction*).
 Automation may use scoped approved tools such as Azure, Supabase,
 Cloudflare/Wrangler, Slack, GitHub, Linear, Cursor, GitHub Copilot, and other
 approved local or hosted tools when they support the requested work and preserve

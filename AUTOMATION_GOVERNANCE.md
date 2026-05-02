@@ -19,7 +19,9 @@ automation documents under `docs/automation/`.
 
 EntheoGen uses a hybrid governance model:
 
-- Humans retain authority over critical decisions.
+- Humans retain authority over critical decisions (in the usual setup, one
+  owner may carry every role label in Linear; that does not move approval to
+  automation).
 - Systems provide structure, consistency, validation, and audit support.
 - Automation helps build, inspect, test, summarize, and prepare reviewable work.
 

@@ -64,7 +64,7 @@ Transitions from a static dataset to a **strictly evidence-gated knowledge syste
 
 Enforces **human-reviewed, citation-backed claims** before any interaction is linked
 
-Introduces **deterministic validation + transparent audit pipelines** (no silent failures)
+Uses **deterministic validation** and **governed workflow scripts** that emit structured audit output for transitions (not a separate “audit product” stack)
 
 Separates **mechanistic inference from verified evidence** to preserve harm-reduction integrity
 

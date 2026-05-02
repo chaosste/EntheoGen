@@ -66,6 +66,10 @@ For intake (file-first submission), Linear/GitHub control plane, and what is
 **not** an in-repo integration package, see
 `docs/automation/INTAKE_AND_INTEGRATION.md` (Linear **NEW-33**).
 
+For **canonical tone and submission framing** (Linear) versus **repo-technical**
+Markdown, see `AUTOMATION_README.md` (*Documentation direction*) and the links
+there (Linear **NEW-31** alignment pass).
+
 ## Output Discipline
 
 Automation outputs must:

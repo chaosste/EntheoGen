@@ -8,6 +8,10 @@ deployment.
 Grouped index (absent `packages/integrations/*`, submission route myths):
 `docs/automation/INTAKE_AND_INTEGRATION.md` (Linear **NEW-33**).
 
+Canonical tone and submission product language:
+[Tone and direction guidance](https://linear.app/new-psychonaut/document/tone-and-direction-guidance-51ab8ce0ad71),
+[Submission intake how-to](https://linear.app/new-psychonaut/document/submission-intake-how-to-e14174e53d28).
+
 ## Scope
 
 This document is scoped to the real repo surfaces that currently define

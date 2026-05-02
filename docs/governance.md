@@ -32,6 +32,11 @@ Terminology note: `Linear` here means the Linear workflow application (issue and
 - Workflow scripts enforce dataset transition rules and transition-history integrity.
 - Humans retain approval authority for safety, publication, and production-impacting outcomes.
 
+**Single-owner default:** one person may hold every Linear role in practice; the
+role names still describe accountability **lanes** in
+`scripts/workflow/linearWorkflowAlignment.ts`, not implied headcount. Automation
+does not grant those approvals on anyone’s behalf.
+
 Typical consequential flow:
 
 ```text
