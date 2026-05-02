@@ -16,7 +16,10 @@ that read, write, validate, or review dataset artifacts:
 - `scripts/generateDatasetChangelog.ts` PR-linked canonical change summary
 - `scripts/consolidateJsonUpdates.ts` canonical dataset/index/schema merge path
 - root `substances.csv` and `interactions.csv` snapshot inputs when
-  `npm run dataset:build-beta -- .` is used
+  `npm run dataset:build-beta -- .` is used (Supabase table exports often land
+  as **`substances_rows.csv`** / **`interactions_rows.csv`**; rename or copy
+  into the **`substances.csv`** / **`interactions.csv`** filenames the builder
+  reads, unless the script contract is intentionally extended)
 - `src/data/interactionDataset.ts` and `src/data/drugData.ts` app read surfaces
 - `src/exports/interaction_pairs.json` and `src/data/substances_snapshot.json`
   app snapshot artifacts

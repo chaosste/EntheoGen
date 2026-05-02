@@ -37,6 +37,7 @@ Current concrete surfaces named by this guide:
 - `docs/automation/AUTOMATION_AGENTS.md`
 - `docs/automation/QUALITY_AND_RELIABILITY.md`
 - `docs/automation/AGENT_AND_SAFETY_OUTPUTS.md`
+- `docs/automation/BACKEND_AND_DATA_FOUNDATIONS.md`
 - `docs/automation/SUBMISSION_HOW_TO.md`
 
 Not included:

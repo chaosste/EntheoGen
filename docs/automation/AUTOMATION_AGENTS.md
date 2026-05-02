@@ -58,6 +58,10 @@ For package paths, contracts, summary surfaces (no `summarization/` package),
 safety rule alignment, and verification commands, see
 `docs/automation/AGENT_AND_SAFETY_OUTPUTS.md` (Linear **NEW-34**).
 
+For backend vs static app, dataset paths, validators, and audit/trace surfaces
+(with explicit non-present `packages/*` paths), see
+`docs/automation/BACKEND_AND_DATA_FOUNDATIONS.md` (Linear **NEW-32**).
+
 ## Output Discipline
 
 Automation outputs must:

@@ -3,6 +3,10 @@
 Purpose: this repository currently ships a Vite React app to Azure, with no
 in-repo backend API package or server route layer.
 
+For a grouped index of backend, dataset, validation, and audit **surfaces**
+(with explicit “not present” paths such as `apps/api/`), see
+`docs/automation/BACKEND_AND_DATA_FOUNDATIONS.md` (Linear **NEW-32**).
+
 ## Scope
 
 The Linear issue references `/apps/api/`, but this repository currently has no
