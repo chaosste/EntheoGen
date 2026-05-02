@@ -107,9 +107,11 @@ human approval boundaries.
 - When normalizing Phase 1 imports or split migrations, map short codes and
   `UNK` into existing `INFERRED`/`THEORETICAL` conventions instead of ad hoc
   enum values.
-- After live Supabase Phase 1 edits, refresh root `substances.csv` and
-  `interactions.csv`, then run `npm run dataset:build-beta -- .` so branch
-  snapshots match production before relying on them.
+- After live Supabase Phase 1 edits, refresh CSVs from the base tables: exports
+  are typically named **`interactions_rows.csv`** and **`substances_rows.csv`**.
+  Align them into workspace-root **`interactions.csv`** and **`substances.csv`**
+  (same columns the build expects), then run `npm run dataset:build-beta -- .`
+  so branch snapshots match production before relying on them.
 
 ## Learned Workspace Facts
 
@@ -127,8 +129,19 @@ human approval boundaries.
 - Dataset Beta Docker Compose runs Metabase as `metabase_local` with Postgres
   `metabase_metadata_db`; use `docker compose -f` pointed at that repo when not
   in its working directory.
-- `npm run dataset:build-beta -- .` rebuilds `src/data/substances_snapshot.json`
-  and `src/exports/interaction_pairs.json` from workspace-root
-  `substances.csv` and `interactions.csv`.
+- `npm run dataset:build-beta -- .` reads workspace-root **`interactions.csv`**
+  and **`substances.csv`** (not the Supabase default export names
+  `interactions_rows.csv` / `substances_rows.csv` unless renamed or copied) and
+  rebuilds `src/data/substances_snapshot.json` and
+  `src/exports/interaction_pairs.json`.
 - Legacy aggregate substance id `mdma_2cx_dox_nbome` decomposes to `mdma`,
   `two_c_x`, `dox`, and `nbome_series` in aggregate decomposition maps.
+- Phase 1 `public.interactions`: `classification_confidence` is **text** tiers
+  (`low`/`medium`/`high`/etc.), **`risk_score`** is an integer scale (typically
+  **1–5** plus null/`is_self_pair` quirks), not 0–1 probabilities—for ad hoc SQL
+  and Metabase, bucket and cast accordingly; joined substance labels must attach
+  to **`LEAST`/`GREATEST`**-sorted IDs when canonicalizing `(a,b)` order.
+- `npm run test:suite:alignment` includes `npm run test:ui-adapter` as part of
+  the alignment suite leveraged by `ci:checks`; Cursor Cloud Agent base images
+  for this repo are defined under `.cursor/` (`environment.json` and
+  `Dockerfile`).
