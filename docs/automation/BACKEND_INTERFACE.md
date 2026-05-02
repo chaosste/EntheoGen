@@ -115,6 +115,35 @@ Automation/local integration surfaces:
 - Dataset and knowledge-base scripts read and write local repo artifacts under
   `src/`, `knowledge-base/`, and `scripts/`.
 
+## Error handling (current)
+
+Linear **NEW-30** / **ENT-025** alignment: there is **no** in-repo
+`/packages/errors/` package and **no** shared HTTP error envelope for the
+deployed app. Behavior is **surface-specific**; do not assume a single JSON error
+shape across browser, CLI, Slack, and agent payloads.
+
+**Browser (deployed SPA)**
+
+- `src/App.tsx` holds user-visible readout failures in React state
+  (`error: string | null`) and renders a single plain-language message in the
+  rule-based context panel.
+- Readout text comes from `src/services/geminiService.ts` (deterministic,
+  local inputs only); there is no live model API or typed error code path in
+  that layer today.
+- `console.error` is used for diagnostics (for example readout pipeline and
+  favorites JSON parse failures); those paths do **not** expose structured
+  errors to end users.
+
+**Automation, validation, integrations**
+
+- Canonical wording for CLI validation prefixes, workflow throws, Slack
+  transport vs CLI JSON, and agent payload `errors[]` lives in
+  `docs/automation/AUTOMATION_AGENTS.md` (section *Error Handling Surfaces*).
+- `scripts/slack/slackApi.ts` `callSlackApi` returns the parsed Slack JSON on
+  HTTP 2xx and **does not** throw only because Slack set `ok: false`; callers
+  that need hard failures check `.ok` (see `scripts/slack/slackPost.ts`) or map
+  errors explicitly.
+
 ## Decision Boundaries
 
 Automation may:

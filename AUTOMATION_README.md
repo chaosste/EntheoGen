@@ -129,12 +129,17 @@ Boundaries:
 This repository does not currently centralize errors under a dedicated
 `/packages/errors/` subsystem. Error handling is intentionally surface-specific:
 
+- Deployed browser UI (`src/App.tsx`) uses React `error: string | null` plus a
+  single user-facing readout message; diagnostics go to `console.error` (no
+  shared JSON error envelope in the SPA).
 - Workflow transitions and guards throw plain `Error` messages that are printed
   by CLI wrappers on failure.
 - Validation scripts emit prefixed diagnostics (`ERROR:`, `WARN:`, `INFO:`),
   then summary counts and non-zero exit codes when errors exist.
-- Slack integration helper surfaces preserve Slack `ok/error` response fields on
-  successful HTTP calls and throw plain `Error` for credential/HTTP failures.
+- Slack integration helper (`scripts/slack/slackApi.ts`) throws on missing
+  tokens or non-2xx HTTP; on HTTP 2xx it returns Slack JSON including `ok` /
+  `error` fields without throwing when Slack sets `ok: false` (callers check
+  `.ok` where required).
 - Slack posting CLI emits JSON success/failure payloads (`ok: true/false`) for
   integration-safe consumption.
 - Agent-oriented automation payloads may include `errors` arrays for

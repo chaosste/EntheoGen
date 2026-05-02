@@ -208,6 +208,10 @@ accordingly.
 
 Current behavior by surface:
 
+- Deployed browser UI (`src/App.tsx`) keeps readout failures in React state
+  (`error: string | null`) with one user-facing string in the rule-based
+  context panel; `console.error` is used for diagnostics. Favorites JSON
+  load failures log only and do not populate `error`.
 - Workflow transition CLI (`scripts/workflow/transitionInteractionUpdateState.ts`)
   and workflow modules (`scripts/workflow/*.ts`) throw plain `Error` messages
   for invalid input/transition/history conditions. The CLI prints the message to
@@ -217,8 +221,11 @@ Current behavior by surface:
   prefixed lines (`ERROR:`, `WARN:`, `INFO:`), then emit a summary and set a
   non-zero exit code when errors exist.
 - Integration transport helper (`scripts/slack/slackApi.ts`) throws plain
-  `Error` on missing credentials or non-2xx HTTP responses; successful HTTP
-  responses preserve Slack-style payload fields such as `ok` and `error`.
+  `Error` on missing credentials or non-2xx HTTP responses. On HTTP 2xx it
+  returns the parsed Slack body as-is: Slack may set `ok: false` with an
+  `error` string without an exception; callers must inspect `.ok` when they
+  need to branch (for example `scripts/slack/slackPost.ts` after
+  `chat.postMessage`).
 - Integration CLI wrapper (`scripts/slack/slackPost.ts`) emits JSON output for
   automation consumers:
   - success: `{ "ok": true, ... }`
