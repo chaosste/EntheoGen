@@ -1,7 +1,7 @@
 # Schema Reference (Current Repo)
 
-Purpose: this document describes the schema contracts currently used by the live
-EntheoGen codebase and canonical dataset artifacts.
+Purpose: this document describes the schema contracts currently used by the
+deployed EntheoGen app, app snapshot exports, and canonical dataset artifacts.
 
 ## Scope
 
@@ -11,8 +11,12 @@ This schema reference is intentionally scoped to concrete in-repo surfaces:
   `src/data/interactionSchemaV2.ts`
 - Canonical interaction dataset artifact:
   `src/data/interactionDatasetV2.json`
+- App snapshot artifacts consumed by the deployed app:
+  `src/exports/interaction_pairs.json` and
+  `src/data/substances_snapshot.json`
 - Runtime readers of dataset artifacts:
-  `src/data/interactionDataset.ts` and `src/data/drugData.ts`
+  `src/data/interactionDataset.ts`, `src/data/drugData.ts`, and
+  `src/data/uiInteractions.ts`
 - Knowledge-base JSON Schemas:
   `knowledge-base/schemas/source.schema.json` and
   `knowledge-base/schemas/claim.schema.json`
@@ -21,12 +25,18 @@ This schema reference is intentionally scoped to concrete in-repo surfaces:
   `knowledge-base/indexes/citation_registry.json`
 - Active schema/shape validators:
   `scripts/validateInteractionsV2.ts` and `scripts/validateKnowledgeBase.ts`
+- Dataset path helper:
+  `scripts/datasetPaths.ts`
+- App snapshot build path:
+  `scripts/buildAppDatasetFromBeta.ts`
 
 Out of scope:
 
 - schema redesign
 - dataset content edits
 - migration proposals not represented in current implementation
+- database migration or Supabase table changes
+- deployed backend/API route changes
 
 ## Current Contract Surfaces
 
@@ -37,6 +47,24 @@ Out of scope:
 | `knowledge-base/schemas/source.schema.json` | JSON Schema for source manifest entries | `scripts/validateKnowledgeBase.ts` |
 | `knowledge-base/schemas/claim.schema.json` | JSON Schema for extracted claims | `scripts/validateKnowledgeBase.ts` |
 | `src/exports/interaction_pairs.json` and `src/data/substances_snapshot.json` | App snapshot artifacts consumed at runtime | Generated via `scripts/buildAppDatasetFromBeta.ts`; typed through runtime readers |
+
+The deployed app reads static bundled artifacts. It does not currently depend on
+a runtime backend schema endpoint for interaction lookups.
+
+## Current Artifact Roles
+
+- Canonical interaction source: `src/data/interactionDatasetV2.json`.
+- App interaction snapshot: `src/exports/interaction_pairs.json`.
+- App substance snapshot: `src/data/substances_snapshot.json`.
+- Knowledge-base source schema:
+  `knowledge-base/schemas/source.schema.json`.
+- Knowledge-base claim schema:
+  `knowledge-base/schemas/claim.schema.json`.
+
+The canonical dataset and app snapshots are related but not identical. The
+canonical V2 dataset stores structured classification, evidence, provenance,
+audit, and validation metadata. The app snapshots store the flattened fields the
+deployed UI reads for interaction display and substance lookup.
 
 ## Canonical Dataset V2 Shape
 
@@ -55,6 +83,8 @@ Top-level object (`src/data/interactionDatasetV2.json`):
 - `class`: optional string
 - `mechanism_tag`: optional string
 - `notes`: optional string
+- `deprecated`: optional boolean
+- `superseded_by`: optional string array
 
 `sources[]` (`SourceV2`):
 
@@ -70,22 +100,52 @@ Top-level object (`src/data/interactionDatasetV2.json`):
 
 - `key`: canonical pair key string
 - `substances`: tuple of two substance IDs
-- `classification`: object (`code`, `status`, `confidence`, `risk_score`,
-  optional `label`, optional `risk_assessment`)
+- `classification`: object:
+  - `code`: `InteractionCodeV2`
+  - `status`: `InteractionStatus`
+  - `confidence`: `ConfidenceLevel`
+  - `risk_score`: number or `null`
+  - `label`: optional string
+  - `risk_assessment`: optional object with `level` and optional `rationale`
 - `clinical_summary`: object with required `headline`; optional `mechanism`,
   optional `timing_guidance`, optional `field_notes`
 - `mechanism`: object with `primary_category` and `categories[]`
-- `evidence`: object with required `tier`, required singular `support_type`,
-  required `source_refs[]`, optional `status`, optional `review_state`,
-  optional `review_notes`, optional `evidence_gaps`, optional
-  `evidence_strength`
-- `provenance`: derivation and migration metadata
-- `override_metadata`: override tracking
-- `audit`: validation and review metadata
-- `validation`: grouped validation flags by severity; validator currently
+- `evidence`: object:
+  - `tier`: `EvidenceTierV2`
+  - `support_type`: singular `EvidenceSupportType`
+  - `source_refs`: array of source/claim references
+  - `evidence_strength`: optional `EvidenceStrengthV2`
+  - `status`: optional `EvidenceStatusV2` in the TypeScript contract, required
+    by the current validator for non-self pairs
+  - `review_state`: optional `ReviewStateV2` in the TypeScript contract,
+    required by the current validator for non-self pairs
+  - `review_notes`: optional string or `null`
+  - `evidence_gaps`: optional string or `null`
+- `provenance`: derivation, source-linking, and migration metadata. The current
+  validator requires `source`, `confidence_tier`,
+  `source_linking_method`, and `source_linking_confidence` for non-self pairs.
+- `override_metadata`: override tracking with required `applied` boolean
+- `audit`: validation and review metadata with `validation_flags[]` and
+  `review_status`
+- `validation`: grouped validation flags by severity; the current validator
   requires this for non-self pairs (`SELF` pairs are the exception)
 - optional passthrough fields currently used by data workflows:
   `source_text`, `source_fingerprint`
+
+Current validator rules to preserve for downstream automation:
+
+- pair keys must be the sorted canonical `a|b` form
+- active non-deprecated pair keys must be unique
+- pair substances must exist in `substances[]`
+- non-self pairs may not use `UNKNOWN` classification or `risk_score: 0`
+- `SELF` pairs must use `classification.code: SELF` and risk score `-1`
+- `THEORETICAL` pairs must use `evidence.tier: theoretical`
+- `INFERRED` pairs must have `risk_score: null`
+- non-self pairs must have a non-`unknown` primary mechanism category
+- `mechanism.primary_category` must be present in `mechanism.categories[]`
+- source references must point to IDs in `sources[]`, except explicit
+  provisional gap-fill handling
+- grouped `validation.flags` must match flat `audit.validation_flags`
 
 ## Enumerated Values (Runtime Contract)
 
@@ -114,6 +174,60 @@ Primary enum sets are defined in `src/data/interactionSchemaV2.ts`:
 - Validation severity buckets: `critical`, `warning`, `info`
 - Validation flag set: defined by `VALIDATION_FLAGS_V2` and consumed by
   both flat `audit.validation_flags` and grouped `validation.flags`
+
+Observed canonical dataset values as of the current artifact include
+`CAUTION`, `DANGEROUS`, `DETERMINISTIC`, `INFERRED`, `LOW_MOD`, `SELF`,
+`THEORETICAL`, and `UNSAFE` classification codes. The enum contract allows
+additional values listed above even when a value is not present in the current
+artifact.
+
+## App Snapshot Contracts
+
+`src/exports/interaction_pairs.json` is the flattened interaction snapshot read
+through `src/data/interactionDataset.ts`, `src/data/drugData.ts`, and
+`src/data/uiInteractions.ts`.
+
+Each app interaction row currently uses:
+
+- `substance_a_id`: string
+- `substance_b_id`: string
+- `pair_key`: canonical pair key string
+- `origin`: `self`, `explicit`, `fallback`, or `unknown`
+- `interaction_code`: app/runtime code such as `LOW`, `LOW_MOD`, `CAU`, `UNS`,
+  `DAN`, `UNK`, `SELF`, `INFERRED`, `THEORETICAL`, or `DETERMINISTIC`
+- `interaction_label`: display label string
+- `risk_scale`: number
+- `summary`: display summary string
+- `confidence`: display/source confidence string; current snapshot values
+  include `high`, `medium`, `low`, and `n/a`
+- `mechanism`: string or `null`
+- `mechanism_category`: category string used for UI normalization
+- `timing`: string or `null`
+- `evidence_gaps`: string or `null`
+- `evidence_tier`: string or `null`
+- `field_notes`: string or `null`
+- `sources`: string
+- `source_refs`: string array
+- `source_fingerprint`: string
+
+`src/data/substances_snapshot.json` is the flattened substance snapshot read by
+`src/data/drugData.ts`.
+
+Each app substance row currently uses:
+
+- `id`: string
+- `name`: string
+- `class`: string
+- `mechanismTag`: string
+- `notes`: string
+- `deprecated`: optional boolean
+- `supersededBy`: optional string array
+
+The UI normalization layer in `src/data/uiInteractions.ts` is the preferred
+surface for display behavior. It turns raw app snapshot fields into
+`UIInteraction` fields such as `riskDisplayLabel`, `mechanismDisplayLabel`, and
+`confidenceLabel`; downstream UI code should prefer those normalized fields over
+raw dataset fields.
 
 ## Knowledge-Base Schema Contracts
 
@@ -148,7 +262,8 @@ Read pathways:
 
 - App runtime reads `src/exports/interaction_pairs.json`,
   `src/data/interactionDatasetV2.json`, and `src/data/substances_snapshot.json`
-  via `src/data/interactionDataset.ts` and `src/data/drugData.ts`.
+  via `src/data/interactionDataset.ts`, `src/data/drugData.ts`, and
+  `src/data/uiInteractions.ts`.
 - Validation and ingestion scripts read canonical dataset and knowledge-base
   artifacts from `src/data/` and `knowledge-base/`.
 
@@ -159,6 +274,8 @@ Write pathways:
   as `scripts/consolidateJsonUpdates.ts` and domain ingestion/linking scripts.
 - Schema definition files are updated only when a scoped schema change issue is
   explicitly approved.
+- Root `substances.csv` and `interactions.csv` can be used as snapshot build
+  inputs when `npm run dataset:build-beta -- .` is intentionally in scope.
 
 ## Boundaries And Approvals
 
@@ -167,18 +284,24 @@ Automation may:
 - validate schema conformance with the existing scripts
 - generate schema-alignment documentation
 - prepare review artifacts showing affected schema surfaces
+- inspect current field sets and enum usage in canonical artifacts
+- generate PR-linked changelog evidence for canonical source changes
 
 Humans must approve:
 
 - changes to schema files or enum contracts
 - canonical dataset structure changes
 - any migration that may impact deployed behavior or downstream automation
+- interpretation-level classification or evidence changes
+- production deployment decisions after schema-affecting work
 
 Prohibited in this issue scope:
 
 - introducing new schema subsystems
 - modifying schema implementations while claiming docs-only alignment
 - silently changing canonical artifact structure outside reviewable workflows
+- changing app snapshot artifacts, CSV inputs, or knowledge-base artifacts as
+  part of this documentation-only alignment
 
 ## Risk-Based Guidance
 
@@ -190,16 +313,26 @@ Prohibited in this issue scope:
   over TypeScript optionality and record the condition explicitly.
 - Treat fields with `additionalProperties: true` as extensible but not
   unconstrained; document observed usage before adding new keys.
+- When downstream automation needs display behavior, use normalized
+  `UIInteraction` fields instead of raw snapshot fields.
+- When downstream automation needs canonical evidence or provenance behavior,
+  use `InteractionDatasetV2` fields and validation scripts rather than app
+  snapshot display fields.
 
 ## Acceptance Criteria (Testable Now)
 
 - `docs/schema.md` maps directly to active schema sources in this repository.
+- The doc distinguishes canonical V2 dataset schema from deployed app snapshot
+  schemas.
 - Field definitions are explicit and consistent with current TypeScript and JSON
   schema contracts.
+- Validator-required conditions are called out separately from TypeScript
+  optional fields where they differ.
 - The doc states boundaries for automation, human approval, and prohibited
   actions.
 - The doc includes runnable verification commands and expected outcomes.
-- No schema or dataset content changes are required to satisfy this issue.
+- This documentation update changes no implementation, schema, dataset, CSV, or
+  app snapshot artifacts.
 
 ## Verification
 
@@ -209,6 +342,7 @@ Run:
 npm run typecheck
 npm run test:interactions:validate
 npm run test:kb:validate
+npm run test:ui-adapter
 ```
 
 Expected outputs:
@@ -218,13 +352,21 @@ Expected outputs:
   `Validation complete. errors=0 ...` (warnings/info may be non-zero).
 - `npm run test:kb:validate` prints
   `KB validation complete. errors=0 ...`.
+- `npm run test:ui-adapter` prints
+  `UI interaction adapter assertions passed.`
 
 Residual risks and limitations:
 
 - Runtime TypeScript contracts and JSON Schema contracts are complementary but
   not perfectly symmetrical.
+- TypeScript optionality and validator-required conditions differ for some V2
+  fields; downstream automation should treat validator behavior as the release
+  gate.
 - `additionalProperties: true` in knowledge-base schemas allows extension keys,
   so downstream consumers should rely on required/enumerated fields plus
   validator behavior.
 - Record counts and timestamps in canonical artifacts change over time; this doc
   describes structure and enforcement surfaces, not fixed content values.
+- Supabase migration files may define future or adjacent database surfaces, but
+  this document describes the deployed app snapshot and canonical in-repo schema
+  artifacts used by current validation.
