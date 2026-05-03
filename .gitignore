@@ -17,6 +17,9 @@ coverage/
 .cursor/hooks/state/continual-learning.json
 .cursor/hooks/state/continual-learning-index.json
 
+# Supabase dashboard CSV snapshots (duplicates of workspace root; local import convenience)
+exports/supabase_*/*.csv
+
 # Local Slack capture artifacts (keep records off git)
 scripts/slack/*.local.json
 scripts/slack/*.local.jsonl
