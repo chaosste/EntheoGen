@@ -115,6 +115,11 @@ human approval boundaries.
   Align them into workspace-root **`interactions.csv`** and **`substances.csv`**
   (same columns the build expects), then run `npm run dataset:build-beta -- .`
   so branch snapshots match production before relying on them.
+- Remove throwaway one-off CSV or dataset patch scripts after a successful run
+  instead of leaving them in the repo.
+- Comments posted through Cursor’s Linear integration appear as the
+  authenticated Linear user (OAuth); expect that attribution unless a separate
+  automation identity is wired.
 
 ## Learned Workspace Facts
 
@@ -136,7 +141,9 @@ human approval boundaries.
   and **`substances.csv`** (not the Supabase default export names
   `interactions_rows.csv` / `substances_rows.csv` unless renamed or copied) and
   rebuilds `src/data/substances_snapshot.json` and
-  `src/exports/interaction_pairs.json`.
+  `src/exports/interaction_pairs.json`; the export’s per-pair mechanism field
+  reflects **`primary_mechanism_category`**, while CSV **`mechanism_categories`**
+  arrays can be richer for downstream and Metabase until exports mirror them.
 - Legacy aggregate substance id `mdma_2cx_dox_nbome` decomposes to `mdma`,
   `two_c_x`, `dox`, and `nbome_series` in aggregate decomposition maps.
 - Phase 1 `public.interactions`: `classification_confidence` is **text** tiers
@@ -147,4 +154,6 @@ human approval boundaries.
 - `npm run test:suite:alignment` includes `npm run test:ui-adapter` as part of
   the alignment suite leveraged by `ci:checks`; Cursor Cloud Agent base images
   for this repo are defined under `.cursor/` (`environment.json` and
-  `Dockerfile`).
+  `Dockerfile`); private repos listed in `environment.json`
+  **`repositoryDependencies`** must be cloneable by the GitHub account linked to
+  Cloud Agent or remote agent provisioning may fail.
