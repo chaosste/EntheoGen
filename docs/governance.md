@@ -47,6 +47,39 @@ Linear issue or explicit scoped task
 -> approved deployment path
 ```
 
+## Pre-Beta Operational Handoff (Development Pre-Beta Test)
+
+This section applies to the pre-beta run of the Development Pre-Beta Test
+project. Use the project documentation and Linear as the source of truth for
+workflow progress, ownership, and review status.
+
+Role boundaries for this pre-beta cycle:
+
+- **Linear**: workflow progress and ownership tracking authority.
+- **sb1397**: sole human approval and review owner for this test.
+- **cursor**: structuring, drafting, and analysis support only.
+- **codex**: codebase alteration tasks and verification.
+- **githubcopilot**: PR drafting and review support (summaries, checklists,
+  diff organization).
+
+Lightweight handoff sequence:
+
+```text
+Linear issue or scoped task
+-> cursor drafts/analysis (if needed)
+-> codex implements + verifies changes
+-> githubcopilot prepares PR-ready summary/diff
+-> sb1397 reviews and approves
+-> Linear status updated + next step recorded
+```
+
+Handoff rules (keep explicit and reviewable):
+
+- Every handoff records the current owner and next action in Linear.
+- Link any PR, doc edit, or verification output in the Linear update.
+- Keep diffs small and reversible; call out any risk or uncertainty.
+- No automation claims approval authority; sb1397 provides final review.
+
 ## Role Responsibilities (Current)
 
 - Product Lead: scope, release timing, and publication approval ownership.
