@@ -53,7 +53,7 @@ npm test
 ```
 Broader CI-style gate: npm run ci:checks (see docs/automation/QUALITY_AND_RELIABILITY.md).
 
-Where to read more
+## Where to read more
 
 | Topic | Doc |
 |----------|------|
@@ -66,8 +66,8 @@ Where to read more
 | Contributor / agent rules | AGENTS.md |
 
 Wiki and discussions
-Project wiki — release notes and narrative history
-Discussions — feedback and community input
+[Project wiki](https://github.com/chaosste/EntheoGen/wiki) — release notes and narrative history
+[Discussions](https://github.com/chaosste/EntheoGen/discussions/1) — feedback and community input
 
 *(Adjust interaction/substance counts and badges to match whatever you ship; current DB-aligned counts are in the low 40s substances and 794 interaction rows.)*
 
