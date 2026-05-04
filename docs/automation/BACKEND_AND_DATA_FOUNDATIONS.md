@@ -33,6 +33,7 @@ These Linear/GitHub paths are **out of scope** as packages or servers today:
   exports often arrive as `interactions_rows.csv` / `substances_rows.csv`;
   `dataset:build-beta` expects `interactions.csv` / `substances.csv` in the
   chosen data directory (repo root when using `-- .`).
+- **Live DB ↔ workspace CSV + Metabase model bundle:** `docs/automation/SUPABASE_PHASE1_CSV_PIPELINE.md` and `npm run supabase:phase1-csv-pipeline`.
 
 ## Validation behavior (pointer)
 
