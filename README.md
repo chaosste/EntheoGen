@@ -57,7 +57,7 @@ Broader CI-style gate: npm run ci:checks (see docs/automation/QUALITY_AND_RELIAB
 
 | Topic | Doc |
 |----------|------|
-| Automation roles and safety | docs/automation/AUTOMATION_AGENTS.md, docs/automation/AGENT_AND_SAFETY_OUTPUTS.md |
+| **Supabase: install `interactions_enriched` view (paste in SQL Editor)** | **docs/metabase/supabase-install-interactions-enriched-view.sql** |
 | Automation roles and safety | docs/automation/AUTOMATION_AGENTS.md, docs/automation/AGENT_AND_SAFETY_OUTPUTS.md |
 | Intake and submissions | docs/automation/INTAKE_AND_INTEGRATION.md, docs/automation/SUBMISSION_HOW_TO.md |
 | Backend / data foundations | docs/automation/BACKEND_AND_DATA_FOUNDATIONS.md |

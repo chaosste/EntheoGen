@@ -1,20 +1,24 @@
--- Metabase model: interactions_enriched (Phase 1 Supabase)
--- NEW-88 / NEW-89 / NEW-90 — pair + bucket definitions: docs/metabase/PAIR_AND_BUCKET_DEFINITIONS.md
+-- =============================================================================
+-- Supabase → SQL → New query → paste this whole file → Run.
 --
--- Canonical name in repo and Supabase: public.interactions_enriched (one definition).
+-- Path: docs/metabase/supabase-install-interactions-enriched-view.sql
+-- (Obvious name so you are not hunting timestamped migration filenames.)
 --
--- Semantics:
---   - pair_key must match least(a,b) || '|' || greatest(a,b) (non-matching rows excluded).
---   - Raw row order: substance_a_id / substance_b_id; normalized analytics: substance_1_* / substance_2_* via LEAST/GREATEST joins.
---   - is_comparable_pair: filter Metabase dashboards with is_comparable_pair = true to exclude self-pairs from pair charts (self rows remain in the result set).
---   - risk_severity_bucket: critical|high|moderate|low|unknown|self_pair (Phase 1 numeric risk_score 1–5; use a 1–5 axis in charts, not 0–1).
---   - risk_bucket: same value as risk_severity_bucket (legacy name for existing saved questions).
---   - classification_confidence TEXT → confidence_bucket
---   - mechanism_categories JSONB array
---
--- Paste into Metabase → Native query → model name interactions_enriched
--- Or: CREATE OR REPLACE VIEW public.interactions_enriched AS <this select>
+-- Supabase CLI migrations mirror this body:
+--   supabase/migrations/20260504080000_public_interactions_enriched_view.sql
+-- If you change the view, update BOTH files to match.
+-- =============================================================================
 
+-- Postgres 42P16: CREATE OR REPLACE VIEW cannot change column names/order vs an
+-- existing view. Drop dependents first, then recreate.
+drop view if exists public.interactions_enriched_current cascade;
+drop view if exists public.interactions_enriched cascade;
+
+-- Canonical analytics view: public.interactions_enriched
+-- Definition must stay aligned with docs/metabase/interactions_enriched.sql
+-- (Metabase paste + Supabase Table Editor).
+
+create view public.interactions_enriched as
 select
   enriched.*,
   enriched.risk_severity_bucket as risk_bucket
@@ -83,3 +87,13 @@ from (
       greatest(i.substance_a_id, i.substance_b_id)
     )
 ) enriched;
+
+comment on view public.interactions_enriched is
+  'Phase 1 pair analytics (normalized LEAST/GREATEST, pair_key hygiene, risk buckets). Mirror docs/metabase/interactions_enriched.sql.';
+
+-- Legacy name used in older dashboards / Table Editor: same rows as canonical view.
+create view public.interactions_enriched_current as
+select * from public.interactions_enriched;
+
+comment on view public.interactions_enriched_current is
+  'Alias of public.interactions_enriched for backward compatibility; prefer interactions_enriched.';

@@ -7,7 +7,7 @@ This repo ships a **local automation** for keeping workspace-root **`interaction
 | Command | What it does |
 |---------|----------------|
 | `npm run supabase:phase1-csv-pipeline -- export` | `SELECT` from Supabase/Postgres → writes **`interactions.csv`** and **`substances.csv`** at the **repo root**. |
-| `npm run supabase:phase1-csv-pipeline -- emit-bundle` | Copies **`docs/metabase/interactions_enriched.sql`** and **`interactions_enriched_v2.sql`** → **`scripts/automation/generated/`** (gitignored local bundle). No DB access. |
+| `npm run supabase:phase1-csv-pipeline -- emit-bundle` | Copies **`docs/metabase/interactions_enriched.sql`** → **`scripts/automation/generated/interactions_enriched.sql`** (gitignored local bundle). Removes a stale **`interactions_enriched_v2.sql`** in that folder if present. No DB access. |
 | `npm run supabase:phase1-csv-pipeline -- all` | Runs **export** then **emit-bundle**. |
 
 **Environment (export only):** set **`DATABASE_URL`** or **`SUPABASE_DB_URL`** in **`.env.local`** (gitignored). Use a connection string that can `SELECT` from `public` (pooled or direct). Do not commit secrets.
@@ -25,8 +25,8 @@ After a successful swap, run **`npm run dataset:build-beta -- .`** so JSON snaps
 
 ## Metabase model SQL
 
-- Canonical queries: [docs/metabase/interactions_enriched.sql](../metabase/interactions_enriched.sql) (v1), [docs/metabase/interactions_enriched_v2.sql](../metabase/interactions_enriched_v2.sql) (NEW-90 versioning; Metabase model cutover).
-- After `emit-bundle`, duplicates are written under `scripts/automation/generated/` for packaging with the generated runbook.
+- Canonical query: [docs/metabase/interactions_enriched.sql](../metabase/interactions_enriched.sql) (normalized pair ids, `pair_key` hygiene, `is_comparable_pair`, `risk_severity_bucket`, `risk_bucket` alias).
+- After `emit-bundle`, the file is written under `scripts/automation/generated/` for packaging with the generated runbook.
 
 Metabase UI steps and model naming: [docs/metabase/README.md](../metabase/README.md).
 
@@ -45,7 +45,7 @@ When adapting **generic “interaction dashboard” SQL** (e.g. Linear doc *Meta
 | **`substances.category`** | Column is **`class`** (text). |
 | **`severity` column** | Use **`risk_label`**, **`risk_score`**, and/or **`classification_code`**. |
 
-The committed **`interactions_enriched.sql`** model already encodes the rows above (normalized pair ids, text confidence bucket, integer-style risk bucket, `jsonb` mechanism counts, deprecated filter).
+The committed **`interactions_enriched.sql`** model already encodes the rows above (normalized pair ids, text confidence bucket, integer-style `risk_severity_bucket` / `risk_bucket`, `jsonb` mechanism counts, deprecated filter). Pair semantics and bucket cutpoints for sign-off: [PAIR_AND_BUCKET_DEFINITIONS.md](../metabase/PAIR_AND_BUCKET_DEFINITIONS.md) (**NEW-88**).
 
 ---
 

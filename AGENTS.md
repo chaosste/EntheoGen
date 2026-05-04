@@ -127,6 +127,19 @@ human approval boundaries.
 - When the user attaches an implementation plan with todos already created, do
   not edit the plan file itself; mark existing todos in progress instead of
   recreating them.
+- Metabase / Phase 1 dashboards: exclude **self-pairs** from analysis by default
+  (**`is_comparable_pair = true`** on `interactions_enriched`; self rows remain
+  in the model); use
+  **`risk_score` on a 1–5 numeric axis**, not 0–1;
+  show **NULL as “N/A”** where easy; use **natural UI labels** on most charts
+  when straightforward; prefer **best use of the current dataset** without
+  blocking on sign-off for routine exclusions or display conventions (see
+  `docs/metabase/README.md`). When validating exports or saved questions against
+  `interactions_enriched.sql`, map **normalized** `substance_1_id` /
+  `substance_2_id` (LEAST/GREATEST order), not raw `substance_a` / `substance_b`
+  row order, and keep **`risk_bucket`** consistent with that SQL/README cutoffs
+  (or rename divergent calculated tiers so they are not confused with
+  `risk_score`).
 
 ## Learned Workspace Facts
 
@@ -139,8 +152,11 @@ human approval boundaries.
 - Private student beta launch runbooks and cross-tool alignment notes live under
   `docs/private-student-beta/` (environments, GitLab guardrails, Linear/Jira
   sync, workflow links).
-- Supabase Phase 1 exposes `interactions` and `substances` only; Metabase pair
-  analytics use `public.analytics_interactions_v2` until Phase 2 migrations add
+- Supabase Phase 1 exposes `interactions` and `substances` base tables; canonical
+  pair analytics SQL is **`public.interactions_enriched`** (see
+  `docs/metabase/interactions_enriched.sql` and
+  `supabase/migrations/*_public_interactions_enriched_view.sql`). Some environments
+  may still use `public.analytics_interactions_v2` until Phase 2 migrations add
   `interaction_pairs_v2` and related normalized tables.
 - Multi-mechanism Metabase questions should explode `mechanism_categories` with
   `jsonb_array_elements_text` in native SQL.
@@ -148,7 +164,14 @@ human approval boundaries.
   `metabase_metadata_db`; use `docker compose -f` pointed at that repo when not
   in its working directory. If `docker compose up` fails because the metadata
   container name is already in use, remove or rename the conflicting container
-  before starting the stack again.
+  before starting the stack again. In EntheoGen, `docs/metabase` is model SQL
+  and README only (no Compose stack there); live analytics use a Metabase
+  database connection to Supabase Phase 1, and local `interactions.csv` truth
+  reaches Metabase through the Phase 1 CSV pipeline, not by dropping CSVs into
+  `docs/metabase`. When replacing **`public.interactions_enriched`** in Postgres,
+  **`CREATE OR REPLACE VIEW`** cannot change existing column names or order
+  (**`42P16`**); use **`DROP VIEW … CASCADE`** then **`CREATE VIEW`** (as in the
+  repo migration) or keep the prior signature identical.
 - `npm run dataset:build-beta -- .` reads workspace-root **`interactions.csv`**
   and **`substances.csv`** (not the Supabase default export names
   `interactions_rows.csv` / `substances_rows.csv` unless renamed or copied) and
