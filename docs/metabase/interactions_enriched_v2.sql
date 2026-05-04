@@ -5,10 +5,11 @@
 --   - Explicit substance_a_id / substance_b_id (raw row order) alongside normalized substance_1_* / substance_2_*.
 --   - risk_severity_bucket: same CASE logic as v1 risk_bucket; prefer this name for new dashboards (avoids confusion with legacy exports that used "high" loosely).
 --   - Enforces canonical pair_key = least || '|' || greatest (rows violating this are excluded).
---   - Excludes self-pairs (is_self_pair) so dashboards inherit a comparable-interaction grain by default.
+--   - is_comparable_pair: true when two distinct substances (not a self-pair). Default Metabase filters to
+--     is_comparable_pair = true for pair analytics; self rows remain in the model for reference / edge QA.
 --
 -- Facts (unchanged from v1):
---   - risk_score NUMERIC (typically 1–5 on real pairs; nullable — use a 1–5 axis in charts, not 0–1)
+--   - risk_score NUMERIC (typically 1–5; self-pairs often -1; nullable — use a 1–5 axis in charts, not 0–1)
 --   - classification_confidence TEXT
 --   - mechanism_categories JSONB array
 
@@ -22,7 +23,7 @@ select
   s_high.name as substance_2_name,
   s_low.class as substance_1_class,
   s_high.class as substance_2_class,
-  i.is_self_pair,
+  not coalesce(i.is_self_pair, false) as is_comparable_pair,
   i.classification_code,
   i.classification_confidence,
   case lower(coalesce(i.classification_confidence, ''))
@@ -36,6 +37,7 @@ select
   i.risk_score,
   i.risk_label,
   case
+    when i.is_self_pair then 'self_pair'
     when i.risk_score is null then 'unknown'
     when i.risk_score >= 5 then 'critical'
     when i.risk_score >= 4 then 'high'
@@ -60,7 +62,6 @@ join public.substances s_high
   on s_high.id = greatest(i.substance_a_id, i.substance_b_id)
 where not s_low.deprecated
   and not s_high.deprecated
-  and not coalesce(i.is_self_pair, false)
   and i.pair_key = concat_ws(
     '|',
     least(i.substance_a_id, i.substance_b_id),

@@ -39,7 +39,7 @@ Use **[interactions_enriched_v2.sql](./interactions_enriched_v2.sql)** for **new
 
 These are **defaults for analytics quality**, not a governance gate: routine chart tweaks and exclusions do **not** need explicit sign-off.
 
-- **Self-pairs:** **`interactions_enriched_v2`** excludes `is_self_pair` at the model so most dashboards stay on **comparable substance pairs** only. Legacy **`interactions_enriched.sql` (v1)** may still surface self rows; prefer v2 for new work. If you maintain a Supabase **`VIEW`**, refresh its body when this repo’s v2 SQL changes.
+- **Self-pairs:** **`interactions_enriched_v2`** keeps self rows in the result set but adds **`is_comparable_pair`** (`true` when not a self-pair). Set a **default Metabase segment / filter** `is_comparable_pair = true` on most charts so pair analytics stay comparable; self rows remain available for reference. Legacy **`interactions_enriched.sql` (v1)** may still surface self rows without that flag; prefer v2 for new work. If you maintain a Supabase **`VIEW`**, refresh its body when this repo’s v2 SQL changes.
 - **`risk_score`:** Use the Phase **1–5** (integer-style) numeric axis and aggregations. **Do not** remap to **0–1** for charts or exports — that scale dropped most of the signal in older pipelines.
 - **Nulls:** Show **`NULL`** as **“N/A”** (or equivalent) in Metabase column display names / custom expressions where it is quick to do.
 - **Labels:** Prefer **natural, UI-friendly** column titles and category labels on charts (Metabase field display names, axis labels) where it is straightforward.

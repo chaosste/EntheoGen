@@ -127,8 +127,9 @@ human approval boundaries.
 - When the user attaches an implementation plan with todos already created, do
   not edit the plan file itself; mark existing todos in progress instead of
   recreating them.
-- Metabase / Phase 1 dashboards: exclude **self-pairs** from analysis (v2 model
-  does this at source); use **`risk_score` on a 1–5 numeric axis**, not 0–1;
+- Metabase / Phase 1 dashboards: exclude **self-pairs** from analysis by default
+  (**`is_comparable_pair = true`** on v2; self rows remain in the model); use
+  **`risk_score` on a 1–5 numeric axis**, not 0–1;
   show **NULL as “N/A”** where easy; use **natural UI labels** on most charts
   when straightforward; prefer **best use of the current dataset** without
   blocking on sign-off for routine exclusions or display conventions (see
