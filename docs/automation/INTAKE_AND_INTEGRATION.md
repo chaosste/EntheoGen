@@ -40,6 +40,7 @@ that ingests HTTP uploads inside this repo.
 | Alignment helper | `scripts/workflow/linearWorkflowAlignment.ts` |
 | Automation policy (no ceremony gates) | `AGENTS.md`, `AUTOMATION_README.md`, `AUTOMATION_GOVERNANCE.md`, `AUTOMATION_AGENTS.md` (**NEW-38**) |
 | Foundations (backend, data) | `docs/automation/BACKEND_AND_DATA_FOUNDATIONS.md` |
+| Supabase Phase 1 CSV export, backup/staging SQL, Metabase guardrails | `docs/automation/SUPABASE_PHASE1_CSV_PIPELINE.md` |
 | Documentation tone and submission product (Linear) | [Tone and direction guidance](https://linear.app/new-psychonaut/document/tone-and-direction-guidance-51ab8ce0ad71), [Submission intake how-to](https://linear.app/new-psychonaut/document/submission-intake-how-to-e14174e53d28) |
 
 ## Approval boundaries (explicit)
