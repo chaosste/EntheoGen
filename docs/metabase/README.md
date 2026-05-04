@@ -31,9 +31,19 @@ Use **[interactions_enriched_v2.sql](./interactions_enriched_v2.sql)** for **new
 2. Confirm row count: it **drops** rows where `pair_key` ≠ `least(id)|greatest(id)` (data hygiene). If the count is unexpectedly low, fix `pair_key` in `public.interactions` before relying on v2.
 3. Save as a model named e.g. **`interactions_enriched_v2`** (keep the legacy **`interactions_enriched`** model until questions are migrated).
 4. In new questions, group on **`substance_1_id` / `substance_1_name`** (normalized), not raw `substance_a_id` unless you intentionally want row storage order.
-5. Use **`risk_severity_bucket`** (`critical` / `high` / `moderate` / `low` / `unknown` / `self_pair`) — not legacy export columns named `Risk Bucket` that used different semantics.
+5. Use **`risk_severity_bucket`** (`critical` / `high` / `moderate` / `low` / `unknown`; self-pairs are **out of scope** for this model) — not legacy export columns named `Risk Bucket` that used different semantics.
 
 `npm run supabase:phase1-csv-pipeline -- emit-bundle` copies both **`interactions_enriched.sql`** and **`interactions_enriched_v2.sql`** into `scripts/automation/generated/` for runbooks.
+
+### Dashboard and display conventions (Phase 1)
+
+These are **defaults for analytics quality**, not a governance gate: routine chart tweaks and exclusions do **not** need explicit sign-off.
+
+- **Self-pairs:** **`interactions_enriched_v2`** excludes `is_self_pair` at the model so most dashboards stay on **comparable substance pairs** only. Legacy **`interactions_enriched.sql` (v1)** may still surface self rows; prefer v2 for new work. If you maintain a Supabase **`VIEW`**, refresh its body when this repo’s v2 SQL changes.
+- **`risk_score`:** Use the Phase **1–5** (integer-style) numeric axis and aggregations. **Do not** remap to **0–1** for charts or exports — that scale dropped most of the signal in older pipelines.
+- **Nulls:** Show **`NULL`** as **“N/A”** (or equivalent) in Metabase column display names / custom expressions where it is quick to do.
+- **Labels:** Prefer **natural, UI-friendly** column titles and category labels on charts (Metabase field display names, axis labels) where it is straightforward.
+- **Dataset scope:** Prefer getting the **best insight from the current Phase 1 dataset** over blocking dashboards on future schema work.
 
 ### Optional follow-on models
 
