@@ -172,13 +172,13 @@ function emitBundle(): void {
   const enrichedDst = path.join(genDir, 'interactions_enriched.sql');
   fs.copyFileSync(enrichedSrc, enrichedDst);
 
-  const enrichedV2Src = path.join(root, 'docs', 'metabase', 'interactions_enriched_v2.sql');
-  const enrichedV2Dst = path.join(genDir, 'interactions_enriched_v2.sql');
-  fs.copyFileSync(enrichedV2Src, enrichedV2Dst);
+  const legacyV2 = path.join(genDir, 'interactions_enriched_v2.sql');
+  if (fs.existsSync(legacyV2)) {
+    fs.unlinkSync(legacyV2);
+  }
 
   const rel = (p: string) => path.relative(root, p);
   console.log(`Wrote ${rel(enrichedDst)}`);
-  console.log(`Wrote ${rel(enrichedV2Dst)}`);
   console.log(
     'See docs/automation/SUPABASE_PHASE1_CSV_PIPELINE.md for backup → staging → swap and Metabase guardrails.'
   );

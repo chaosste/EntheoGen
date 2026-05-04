@@ -2,6 +2,10 @@
 
 End-to-end CSV backup, staging reload, and Metabase SQL copy: see [SUPABASE_PHASE1_CSV_PIPELINE.md](../automation/SUPABASE_PHASE1_CSV_PIPELINE.md).
 
+## Pair normalization and buckets (NEW-88)
+
+Confirmed definitions and how they map to SQL columns: **[PAIR_AND_BUCKET_DEFINITIONS.md](./PAIR_AND_BUCKET_DEFINITIONS.md)**.
+
 ## `interactions_enriched` model (NEW-89)
 
 The Linear draft in [Metabase table, graph and model layer creation](https://linear.app/new-psychonaut/document/metabase-table-graph-and-model-layer-creation-34b332599de1) used **0–1 `risk_score`** and **numeric `classification_confidence`**. Phase 1 Postgres uses:
@@ -12,6 +16,18 @@ The Linear draft in [Metabase table, graph and model layer creation](https://lin
 
 Canonical pair labels for joins: **`LEAST` / `GREATEST`** on substance ids (see [AGENTS.md](../../AGENTS.md) learned workspace facts).
 
+### Install `public.interactions_enriched` on Supabase
+
+If the Table Editor only shows **`interactions_enriched_current`** (or nothing with the exact name **`interactions_enriched`**), use the **obviously named** install script (not buried under migration timestamps):
+
+1. Open **Supabase** → **SQL** → **New query**.
+2. Paste the full contents of **[`docs/metabase/supabase-install-interactions-enriched-view.sql`](./supabase-install-interactions-enriched-view.sql)** and **Run**.
+3. Refresh **Table Editor**. You should see **`interactions_enriched`**. The script also redefines **`interactions_enriched_current`** as `SELECT * FROM public.interactions_enriched` so anything that still points at `_current` stays valid.
+
+The same SQL lives under `supabase/migrations/20260504080000_public_interactions_enriched_view.sql` for **`supabase db push`** / linked-remote workflows only—**for hand pasting, use the `docs/metabase/supabase-install-…` file above.**
+
+If PostgREST or a client cannot read the new view, grant explicitly, for example: `GRANT SELECT ON public.interactions_enriched TO authenticated, service_role;` (adjust roles to your policy).
+
 ### Create the model in Metabase
 
 1. Connect Metabase to the Supabase Postgres database (read-only user recommended).
@@ -21,25 +37,25 @@ Canonical pair labels for joins: **`LEAST` / `GREATEST`** on substance ids (see 
 5. Set **primary key** / entity keys in the model UI to `pair_key` if Metabase prompts for grain.
 6. Build charts from the **model** so pair normalization, buckets, and deprecated filtering stay consistent.
 
-### Model versioning (`interactions_enriched_v2`, NEW-90)
+### Single canonical SQL (NEW-89 / NEW-90)
 
-Older Metabase/CSV exports (for example **2026-04-28** snapshots) often used **fractional `risk_score`**, a **`risk_bucket` column that does not match** Phase 1 integer cutpoints, **empty text `classification_confidence`**, or **names not aligned to normalized ids**. Phase 1 Postgres and the app use **integer-like `risk_score` (1–5, null, self-pair -1)**, **text confidence**, and **canonical `pair_key`**.
+Older Metabase/CSV exports (for example **2026-04-28** snapshots) often used **fractional `risk_score`**, a **`risk_bucket` label that did not match** Phase 1 integer cutpoints, **empty text `classification_confidence`**, or **names not aligned to normalized ids**. Phase 1 Postgres and the app use **integer-like `risk_score` (1–5, null, self-pair -1)**, **text confidence**, and **canonical `pair_key`**.
 
-Use **[interactions_enriched_v2.sql](./interactions_enriched_v2.sql)** for **new** Metabase models and dashboards:
+**[interactions_enriched.sql](./interactions_enriched.sql)** is the only maintained definition. Use it for Metabase models, Supabase `VIEW`s, and runbooks:
 
-1. **New** → **SQL query** → paste `interactions_enriched_v2.sql` → run.
-2. Confirm row count: it **drops** rows where `pair_key` ≠ `least(id)|greatest(id)` (data hygiene). If the count is unexpectedly low, fix `pair_key` in `public.interactions` before relying on v2.
-3. Save as a model named e.g. **`interactions_enriched_v2`** (keep the legacy **`interactions_enriched`** model until questions are migrated).
-4. In new questions, group on **`substance_1_id` / `substance_1_name`** (normalized), not raw `substance_a_id` unless you intentionally want row storage order.
-5. Use **`risk_severity_bucket`** (`critical` / `high` / `moderate` / `low` / `unknown`; self-pairs are **out of scope** for this model) — not legacy export columns named `Risk Bucket` that used different semantics.
+1. **New** → **SQL query** → paste `interactions_enriched.sql` → run.
+2. Confirm row count: the query **drops** rows where `pair_key` ≠ `least(id)|greatest(id)` (data hygiene). If the count is unexpectedly low, fix `pair_key` in `public.interactions` first.
+3. Save as a model named **`interactions_enriched`** (or `CREATE OR REPLACE VIEW public.interactions_enriched AS …` with the same body).
+4. In questions, group on **`substance_1_id` / `substance_1_name`** (normalized), not raw `substance_a_id`, unless you intentionally want row storage order.
+5. Prefer **`risk_severity_bucket`** for new charts; **`risk_bucket`** is the same value (alias for older saved questions). Do not reuse legacy export columns named `Risk Bucket` that used different semantics.
 
-`npm run supabase:phase1-csv-pipeline -- emit-bundle` copies both **`interactions_enriched.sql`** and **`interactions_enriched_v2.sql`** into `scripts/automation/generated/` for runbooks.
+`npm run supabase:phase1-csv-pipeline -- emit-bundle` copies **`interactions_enriched.sql`** into `scripts/automation/generated/` for packaging with the generated runbook.
 
 ### Dashboard and display conventions (Phase 1)
 
 These are **defaults for analytics quality**, not a governance gate: routine chart tweaks and exclusions do **not** need explicit sign-off.
 
-- **Self-pairs:** **`interactions_enriched_v2`** keeps self rows in the result set but adds **`is_comparable_pair`** (`true` when not a self-pair). Set a **default Metabase segment / filter** `is_comparable_pair = true` on most charts so pair analytics stay comparable; self rows remain available for reference. Legacy **`interactions_enriched.sql` (v1)** may still surface self rows without that flag; prefer v2 for new work. If you maintain a Supabase **`VIEW`**, refresh its body when this repo’s v2 SQL changes.
+- **Self-pairs:** The model keeps self rows but exposes **`is_comparable_pair`** (`true` when not a self-pair). Set a **default Metabase segment / filter** `is_comparable_pair = true` on most charts so pair analytics stay comparable; self rows remain available for reference. If you maintain a Supabase **`VIEW`**, refresh its body when this repo’s SQL changes.
 - **`risk_score`:** Use the Phase **1–5** (integer-style) numeric axis and aggregations. **Do not** remap to **0–1** for charts or exports — that scale dropped most of the signal in older pipelines.
 - **Nulls:** Show **`NULL`** as **“N/A”** (or equivalent) in Metabase column display names / custom expressions where it is quick to do.
 - **Labels:** Prefer **natural, UI-friendly** column titles and category labels on charts (Metabase field display names, axis labels) where it is straightforward.
@@ -47,10 +63,10 @@ These are **defaults for analytics quality**, not a governance gate: routine cha
 
 ### Optional follow-on models
 
-Once `interactions_enriched` (or v2) exists as a Metabase model, downstream saved questions can use:
+Once `interactions_enriched` exists as a Metabase model, downstream saved questions can use:
 
 - **Substance risk profile**: `GROUP BY substance_1_id, substance_1_name` with `avg(risk_score)`, counts, `high` share — **union** both ends of the pair if you need undirected substance totals (or aggregate on `substance_1_id` only if you adopt a fixed undirected convention).
-- **Mechanism × risk**: `GROUP BY primary_mechanism_category, risk_severity_bucket` (v2) or `risk_bucket` (v1 SQL alias).
+- **Mechanism × risk**: `GROUP BY primary_mechanism_category, risk_severity_bucket` (or `risk_bucket`; same values).
 - **Class × class**: `GROUP BY substance_1_class, substance_2_class`.
 
 ### Deprecated / legacy rows
