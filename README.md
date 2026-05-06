@@ -1,36 +1,23 @@
 <div align="center">
-	
-<!-- BADGES:START -->
+
 ![Dataset](https://img.shields.io/badge/Dataset-beta--0.1-blue)
-![Interactions](https://img.shields.io/badge/Interactions-693-informational)
-![Substances](https://img.shields.io/badge/Substances-37-informational)
+![Interactions](https://img.shields.io/badge/Interactions-~794-informational)
+![Substances](https://img.shields.io/badge/Substances-~41-informational)
 ![App data](https://img.shields.io/badge/App%20data-static%20JSON%20snapshot-lightgrey)
 ![TypeScript](https://img.shields.io/badge/TypeScript-compile%20pass-brightgreen)
-![Checks](https://img.shields.io/badge/Checks-adapter%20%2B%20mapping%20scripts-green)
-![KB parallel](https://img.shields.io/badge/KB%20parallel-schema%20v2-blue)
-![Review stance](https://img.shields.io/badge/Review%20stance-human--in--loop-orange)
-![Use](https://img.shields.io/badge/Use-educational%20%E2%80%94%20not%20clinical%20advice-critical)
-<!-- BADGES:END -->
-	
-# 🌿 EntheoGen Plant Medicine Interaction Guide
 
-**Evidence-Grounded Interaction Engine + Alignment-Aware Comparison Dataset**
+# EntheoGen — plant medicine interaction guide
 
-*Deterministic pharmacological safety modeling for intentional psychedelic use*
+**Evidence-grounded, deterministic interaction readouts for intentional psychedelic contexts.**
 
-**Live demos:** 
-
-[www.entheogen.newpsychonaut.com](https://www.entheogen.newpsychonaut.com/) 
-· 
-[www.entheogen.azurewebsites.net](https://entheogen.azurewebsites.net)
+Live demos: [entheogen.newpsychonaut.com](https://www.entheogen.newpsychonaut.com/) · [Azure](https://entheogen.azurewebsites.net)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
-
-  <img src="docs/assets/entheogen-asset-beta-0.1.gif" width="600" alt="EntheoGen release demo" />
 </div>
 
 ---
 
+## Important
 # Important!
 
 EntheoGen does **not** provide clinical medical advice.
@@ -78,38 +65,29 @@ Unlike generative AI tools, EntheoGen interaction classifications remain strictl
 
 Academic literature is still sparse in some areas of plant-medicine interaction pharmacology.
 
-Community expertise helps prioritize future rule additions and dataset extensions.
+EntheoGen is **educational**, not clinical advice. For harm reduction and medical decisions, consult a qualified professional.
 
-Please leave feedback in [Discussions](https://github.com/chaosste/EntheoGen/discussions/1)
+---
 
-# Beta-0-1 data visualisations
+## What this version is
 
-### 28.04.2026
+**Beta‑0‑1 (app)** still ships as **static JSON** built from curated CSVs—no live database required for the public interaction guide. See [Beta‑0‑1 release notes (wiki)](https://github.com/chaosste/EntheoGen/wiki/EntheoGen-Beta%E2%80%900%E2%80%901).
 
-## Class-to-Class Interaction Matrix
+**Since that baseline**, the repo has gained clearer **automation and data-operation docs**, optional **Supabase Phase 1** alignment for analytics and exports (not a runtime dependency for the SPA), and operational notes for **parallel programmes** (e.g. private beta launch) without changing the core “snapshot in, UI out” contract.
 
-![Class-to-Class Interaction Matrix](https://github.com/chaosste/EntheoGen-Dataset-Beta-0-1/blob/main/content_downloads/beta-v-1-0-release-graphs/Class-to-Class%20Interaction%20Matrix-28_04_2026%2C%2017_58_06.png)
+---
 
-## Most Complex Interactions
+## Data flow (unchanged core)
 
-![Most Complex Interactions (Multi-Mechanism](https://github.com/chaosste/EntheoGen-Dataset-Beta-0-1/blob/main/content_downloads/beta-v-1-0-release-graphs/Most%20Complex%20Interactions%20(Multi-Mechanism)-28_04_2026%2C%2017_58_25.png)
+| Artifact | Role |
+|----------|------|
+| `interactions.csv`, `substances.csv` | Workspace inputs for regeneration |
+| `npm run dataset:build-beta -- .` | Builds `src/data/substances_snapshot.json`, `src/exports/interaction_pairs.json` |
+| `src/data/uiInteractions.ts` | Adapter to `UIInteraction` for the UI |
 
-## High-risk interaction rate
+After CSV edits, rebuild snapshots and commit JSON before you treat a branch as release-ready.
 
-![High-risk interaction rate](https://github.com/chaosste/EntheoGen-Dataset-Beta-0-1/blob/main/content_downloads/beta-v-1-0-release-graphs/High-risk%20interaction%20rate-28_04_2026%2C%2017_59_24.png)
-
-## Average Risk per Substance
-
-![Average Risk per Substance](https://github.com/chaosste/EntheoGen-Dataset-Beta-0-1/blob/main/content_downloads/beta-v-1-0-release-graphs/Average%20Risk%20per%20Substance-28_04_2026.png)
-
-## Risk vs Mechanism Diversity per Substance
-
-![Risk vs Mechanism Diversity per Substance](https://github.com/chaosste/EntheoGen-Dataset-Beta-0-1/blob/main/content_downloads/beta-v-1-0-release-graphs/Risk%20vs%20Mechanism%20Diversity%20per%20Substance-28_04_2026%2C%2017_58_34.png)
-
-## Mechanism Category Frequency
-
-![Mechanism Category Frequency](https://github.com/chaosste/EntheoGen-Dataset-Beta-0-1/blob/main/content_downloads/beta-v-1-0-release-graphs/Mechanism%20Category%20Frequency-28_04_2026%2C%2017_58_42.png)
-
+---
 # Tech Stack
 | Layer | Technology Frontend |
 | --- | --- |
@@ -121,12 +99,13 @@ Please leave feedback in [Discussions](https://github.com/chaosste/EntheoGen/dis
 | Design | Tailwind CSS, Lucide Icons |
 | Deployment | Vite build output; Cloudflare config in `wrangler.jsonc`; Azure workflow in `.github/workflows/azure-deploy.yml` |
 
-# Quickstart
-```
-git clone https://github.com/chaosste/EntheoGen.git
-cd EntheoGen
+## Developer quickstart
 
+```bash
 npm install
+npm run dataset:build-beta -- .
+npm run typecheck
+npm test
 npm run dev
 ```
 
@@ -136,7 +115,19 @@ Build:
 ```
 npm run build
 ```
+Broader CI-style gate: npm run ci:checks (see docs/automation/QUALITY_AND_RELIABILITY.md).
 
+## Where to read more
+
+| Topic | Doc |
+|----------|------|
+| **Supabase: install `interactions_enriched` view (paste in SQL Editor)** | **docs/metabase/supabase-install-interactions-enriched-view.sql** |
+| Automation roles and safety | docs/automation/AUTOMATION_AGENTS.md, docs/automation/AGENT_AND_SAFETY_OUTPUTS.md |
+| Intake and submissions | docs/automation/INTAKE_AND_INTEGRATION.md, docs/automation/SUBMISSION_HOW_TO.md |
+| Backend / data foundations | docs/automation/BACKEND_AND_DATA_FOUNDATIONS.md |
+| Repo layout | docs/REPO_LAYOUT.md |
+| Private student beta (ops) | docs/private-student-beta/README.md |
+| Contributor / agent rules | AGENTS.md |
 Typecheck:
 ```
 npm run lint
@@ -152,35 +143,8 @@ Targeted knowledge-base script checks:
 npm run kb:test
 ```
 
-Related Projects
+Wiki and discussions
+[Project wiki](https://github.com/chaosste/EntheoGen/wiki) — release notes and narrative history
+[Discussions](https://github.com/chaosste/EntheoGen/discussions/1) — feedback and community input
 
-# SeshGuard — broader interaction safety checker
-https://github.com/chaosste/SeshGuard
-
-# NeuroPhenom-AI — diachronic subjective-experience clinical interface
-https://github.com/chaosste/NeuroPhenom-AI
-
-# Anubis — psychedelic trip-report interview system
-https://github.com/chaosste/Anubis
-
-Safety Posture & Disclaimer
-
-EntheoGen provides educational harm-reduction guidance only.
-
-It is not a substitute for professional medical, psychological, or therapeutic advice.
-
-If no explicit interaction evidence exists, EntheoGen returns:
-
-Unknown / Insufficient Data
-
-In moments of clinical emergency, seek urgent professional medical care.
-
-<div align="center">
-
-Built by Steve Beale
-[www.newpsychonaut.com](https://www.newpsychonaut.com/)
-
-© 2026 Stephen Beale · MIT License
-
-</div>
-```
+---

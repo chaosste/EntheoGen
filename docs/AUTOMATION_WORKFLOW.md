@@ -19,6 +19,7 @@ not treat it as an operational dependency.
 ## Automation May Do
 
 - Open scoped branches and PRs with reviewable diffs.
+- Run local verification commands such as `npm run typecheck`,
 - Run local verification commands such as `npm run lint`,
   `npm run validate:interactions:v2`, `npm run kb:validate`, and targeted
   `tsx scripts/...` checks.
@@ -26,6 +27,9 @@ not treat it as an operational dependency.
   changelog-style summaries for reviewer approval.
 - Record residual risks when evidence is sparse, generated artifacts were not
   rebuilt, or a command could not be run.
+- Use the rapid/manual submission path documented in
+  `docs/automation/SUBMISSION_HOW_TO.md` when Steve or Linear delegates a
+  specific urgent interaction correction.
 
 ## Humans Must Approve
 
@@ -75,6 +79,11 @@ A change is ready for review when:
 Use the narrowest commands that cover the change:
 
 ```bash
+npm run test:submission-intake
+npm run typecheck
+npm run validate:interactions:v2
+npm run kb:validate
+npm run test:ui-adapter
 npm run lint
 npm run validate:interactions:v2
 npm run kb:validate
