@@ -6,6 +6,8 @@ new abstractions.
 
 Do not commit secrets, tokens, private keys, or live credentials. Use placeholder
 values in examples and documentation.
+For Doppler-first workspace layout (private hub repo, `doppler run`, keys never
+in git), follow `.cursor/skills/doppler-workspace/SKILL.md`.
 
 Do not revert user or branch changes unless explicitly asked. If unrelated
 changes are present, leave them alone; if they affect the task, work with them
@@ -104,7 +106,8 @@ human approval boundaries.
 - Use normalized `UIInteraction` fields for UI behavior and rendering instead of
   raw dataset fields.
 - Keep retained memory artifacts and Slack channel record artifacts local-only
-  (gitignored), not committed.
+  (gitignored), not committed; when `.env` gains new local-only keys or paths,
+  extend `.gitignore` so those additions are not committed.
 - Treat legacy `interactions_enriched` CSV exports as reference-only, not
   canonical against the live `interactions` table.
 - When normalizing Phase 1 imports or split migrations, map short codes and
@@ -114,12 +117,31 @@ human approval boundaries.
   are typically named **`interactions_rows.csv`** and **`substances_rows.csv`**.
   Align them into workspace-root **`interactions.csv`** and **`substances.csv`**
   (same columns the build expects), then run `npm run dataset:build-beta -- .`
-  so branch snapshots match production before relying on them.
+  so branch snapshots match production before relying on them. When swapping
+  bulk rows through the Supabase SQL Editor only (no local `psql`), prefer a
+  staging table plus `INSERT … SELECT` matched to the live table’s exact column
+  list over ad hoc or CLI-only import paths.
 - Remove throwaway one-off CSV or dataset patch scripts after a successful run
   instead of leaving them in the repo.
 - Comments posted through Cursor’s Linear integration appear as the
   authenticated Linear user (OAuth); expect that attribution unless a separate
   automation identity is wired.
+- When the user attaches an implementation plan with todos already created, do
+  not edit the plan file itself; mark existing todos in progress instead of
+  recreating them.
+- Metabase / Phase 1 dashboards: exclude **self-pairs** from analysis by default
+  (**`is_comparable_pair = true`** on `interactions_enriched`; self rows remain
+  in the model); use
+  **`risk_score` on a 1–5 numeric axis**, not 0–1;
+  show **NULL as “N/A”** where easy; use **natural UI labels** on most charts
+  when straightforward; prefer **best use of the current dataset** without
+  blocking on sign-off for routine exclusions or display conventions (see
+  `docs/metabase/README.md`). When validating exports or saved questions against
+  `interactions_enriched.sql`, map **normalized** `substance_1_id` /
+  `substance_2_id` (LEAST/GREATEST order), not raw `substance_a` / `substance_b`
+  row order, and keep **`risk_bucket`** consistent with that SQL/README cutoffs
+  (or rename divergent calculated tiers so they are not confused with
+  `risk_score`).
 
 ## Learned Workspace Facts
 
@@ -129,14 +151,29 @@ human approval boundaries.
   `scripts/testUIInteractionsAdapter.ts`.
 - Continual-learning state is tracked locally via
   `.cursor/hooks/state/continual-learning-index.json`.
-- Supabase Phase 1 exposes `interactions` and `substances` only; Metabase pair
-  analytics use `public.analytics_interactions_v2` until Phase 2 migrations add
+- Private student beta launch runbooks and cross-tool alignment notes live under
+  `docs/private-student-beta/` (environments, GitLab guardrails, Linear/Jira
+  sync, workflow links).
+- Supabase Phase 1 exposes `interactions` and `substances` base tables; canonical
+  pair analytics SQL is **`public.interactions_enriched`** (see
+  `docs/metabase/interactions_enriched.sql` and
+  `supabase/migrations/*_public_interactions_enriched_view.sql`). Some environments
+  may still use `public.analytics_interactions_v2` until Phase 2 migrations add
   `interaction_pairs_v2` and related normalized tables.
 - Multi-mechanism Metabase questions should explode `mechanism_categories` with
   `jsonb_array_elements_text` in native SQL.
 - Dataset Beta Docker Compose runs Metabase as `metabase_local` with Postgres
   `metabase_metadata_db`; use `docker compose -f` pointed at that repo when not
-  in its working directory.
+  in its working directory. If `docker compose up` fails because the metadata
+  container name is already in use, remove or rename the conflicting container
+  before starting the stack again. In EntheoGen, `docs/metabase` is model SQL
+  and README only (no Compose stack there); live analytics use a Metabase
+  database connection to Supabase Phase 1, and local `interactions.csv` truth
+  reaches Metabase through the Phase 1 CSV pipeline, not by dropping CSVs into
+  `docs/metabase`. When replacing **`public.interactions_enriched`** in Postgres,
+  **`CREATE OR REPLACE VIEW`** cannot change existing column names or order
+  (**`42P16`**); use **`DROP VIEW … CASCADE`** then **`CREATE VIEW`** (as in the
+  repo migration) or keep the prior signature identical.
 - `npm run dataset:build-beta -- .` reads workspace-root **`interactions.csv`**
   and **`substances.csv`** (not the Supabase default export names
   `interactions_rows.csv` / `substances_rows.csv` unless renamed or copied) and
