@@ -18,6 +18,52 @@ Live demos: [entheogen.newpsychonaut.com](https://www.entheogen.newpsychonaut.co
 ---
 
 ## Important
+# Important!
+
+EntheoGen does **not** provide clinical medical advice.
+
+For expert harm-reduction guidance, consult a qualified medical professional.
+
+# What is EntheoGen?
+
+EntheoGen is a substance interaction guidance app focussed on intentional use of psychedelics. 
+
+The web application estimates the effects of mixing the two substances entered into the drop-down menus. 
+
+Data is personal and not stored remotely (i.e., not recorded or held by us). 
+
+EntheoGen's data model is mapped specifically to sacramental substances often used in psychedelic ceremonies, pharmaceutical medications, and commonly used consciousness-altering substances.
+
+# Why EntheoGen is different:
+
+- Ceremonial-context interaction coverage for plant-medicine and psychedelic use cases
+- Deterministic interaction rules and static app data snapshots
+- Evidence status, confidence, mechanism, and source-link metadata in the dataset
+- Human review before proposed evidence changes are treated as publication-ready
+- Local validation scripts for knowledge-base and interaction-dataset changes
+- Privacy-first app behavior: substance selections are not stored remotely by the app
+
+⸻
+
+## EntheoGen v3 — Impact Statement
+
+Transitions from a static dataset to a **strictly evidence-gated knowledge system**
+
+Enforces **human-reviewed, citation-backed claims** before any interaction is linked
+
+Introduces **deterministic validation + transparent audit pipelines** (no silent failures)
+
+Separates **mechanistic inference from verified evidence** to preserve harm-reduction integrity
+
+Establishes a foundation for **clinically and ceremonially credible interaction intelligence**
+
+[Full version release notes and more in project wiki](https://github.com/chaosste/EntheoGen/wiki).
+
+# We need YOUR entheogenic knowledge
+
+Unlike generative AI tools, EntheoGen interaction classifications remain strictly rule-based and evidence-grounded.
+
+Academic literature is still sparse in some areas of plant-medicine interaction pharmacology.
 
 EntheoGen is **educational**, not clinical advice. For harm reduction and medical decisions, consult a qualified professional.
 
@@ -42,6 +88,16 @@ EntheoGen is **educational**, not clinical advice. For harm reduction and medica
 After CSV edits, rebuild snapshots and commit JSON before you treat a branch as release-ready.
 
 ---
+# Tech Stack
+| Layer | Technology Frontend |
+| --- | --- |
+| Frontend | React + TypeScript + Vite |
+| Risk Engine | Deterministic pharmacological rule engine |
+| Dataset Pipeline | Node + TypeScript ingestion, validation, and migration scripts |
+| Verification | TypeScript, knowledge-base validation, interaction validation, adapter regression checks |
+| AI | Google Gemini API (explanatory summarization only) |
+| Design | Tailwind CSS, Lucide Icons |
+| Deployment | Vite build output; Cloudflare config in `wrangler.jsonc`; Azure workflow in `.github/workflows/azure-deploy.yml` |
 
 ## Developer quickstart
 
@@ -50,6 +106,14 @@ npm install
 npm run dataset:build-beta -- .
 npm run typecheck
 npm test
+npm run dev
+```
+
+## Verification commands
+
+Build:
+```
+npm run build
 ```
 Broader CI-style gate: npm run ci:checks (see docs/automation/QUALITY_AND_RELIABILITY.md).
 
@@ -64,6 +128,20 @@ Broader CI-style gate: npm run ci:checks (see docs/automation/QUALITY_AND_RELIAB
 | Repo layout | docs/REPO_LAYOUT.md |
 | Private student beta (ops) | docs/private-student-beta/README.md |
 | Contributor / agent rules | AGENTS.md |
+Typecheck:
+```
+npm run lint
+```
+
+Knowledge-base and interaction validation:
+```
+npm test
+```
+
+Targeted knowledge-base script checks:
+```
+npm run kb:test
+```
 
 Wiki and discussions
 [Project wiki](https://github.com/chaosste/EntheoGen/wiki) — release notes and narrative history

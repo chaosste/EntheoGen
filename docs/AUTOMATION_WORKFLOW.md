@@ -20,6 +20,7 @@ not treat it as an operational dependency.
 
 - Open scoped branches and PRs with reviewable diffs.
 - Run local verification commands such as `npm run typecheck`,
+- Run local verification commands such as `npm run lint`,
   `npm run validate:interactions:v2`, `npm run kb:validate`, and targeted
   `tsx scripts/...` checks.
 - Generate candidate claims, provisional interaction updates, reports, and
@@ -83,6 +84,10 @@ npm run typecheck
 npm run validate:interactions:v2
 npm run kb:validate
 npm run test:ui-adapter
+npm run lint
+npm run validate:interactions:v2
+npm run kb:validate
+npx tsx scripts/testUIInteractionsAdapter.ts
 ```
 
 ## Output Expectations

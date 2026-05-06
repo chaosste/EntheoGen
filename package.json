@@ -57,6 +57,8 @@
     "workspace:baseline": "tsx scripts/checkWorkspaceBaseline.ts",
     "supabase:phase1-csv-pipeline": "tsx scripts/automation/supabasePhase1CsvPipeline.ts",
     "slack:post": "tsx scripts/slack/slackPost.ts",
+    "agents:verify-knowledge-steward": "tsx scripts/verifyKnowledgeStewardContract.ts",
+    "agents:verify-safety": "tsx scripts/verifySafetyAgentContracts.ts",
     "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
