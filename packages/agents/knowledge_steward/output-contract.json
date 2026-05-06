@@ -1,0 +1,718 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://entheogen.local/agents/knowledge_steward/output-contract.json",
+  "title": "Knowledge Steward Draft Output",
+  "description": "Draft-only output contract for converting raw knowledge submissions into review-facing candidate records.",
+  "type": "object",
+  "required": [
+    "output_type",
+    "agent",
+    "role",
+    "contract_version",
+    "draft_status",
+    "boundaries",
+    "source_context",
+    "record_draft",
+    "extracted_from_source",
+    "inferred_or_suggested",
+    "uncertain_or_missing",
+    "provenance_map",
+    "validation_notes",
+    "duplicate_conflict_checks",
+    "reviewer_next_action",
+    "prohibited_assertions_check"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "output_type": {
+      "const": "knowledge_steward_draft"
+    },
+    "agent": {
+      "const": "knowledge_steward"
+    },
+    "role": {
+      "const": "draft_only"
+    },
+    "contract_version": {
+      "const": "ent-011-v1"
+    },
+    "draft_status": {
+      "const": "candidate_for_human_review"
+    },
+    "boundaries": {
+      "type": "object",
+      "required": [
+        "draft_only",
+        "human_approval_required",
+        "automation_may",
+        "humans_must_approve",
+        "prohibited"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "draft_only": {
+          "const": true
+        },
+        "human_approval_required": {
+          "const": true
+        },
+        "automation_may": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "humans_must_approve": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "prohibited": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "source_context": {
+      "type": "object",
+      "required": [
+        "input_type",
+        "source_id",
+        "source_path",
+        "submitted_at",
+        "submission_summary"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "input_type": {
+          "type": "string",
+          "enum": [
+            "knowledge_base_source",
+            "claim_candidate",
+            "interaction_update_report",
+            "other"
+          ]
+        },
+        "source_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "source_path": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "submitted_at": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "submission_summary": {
+          "type": "string"
+        }
+      }
+    },
+    "record_draft": {
+      "type": "object",
+      "required": [
+        "target_surface",
+        "operation",
+        "payload"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "target_surface": {
+          "type": "string",
+          "enum": [
+            "knowledge-base/sources",
+            "knowledge-base/extracted/claims/pending",
+            "knowledge-base/indexes",
+            "src/curation/interaction-updates.jsonl"
+          ]
+        },
+        "operation": {
+          "type": "string",
+          "enum": [
+            "create_source",
+            "create_claim_candidate",
+            "create_interaction_update_proposal",
+            "revise_existing_draft",
+            "needs_triage"
+          ]
+        },
+        "payload": {
+          "type": "object",
+          "description": "Draft payload shaped for the target surface. It must remain unapproved and review-facing."
+        }
+      }
+    },
+    "extracted_from_source": {
+      "type": "object",
+      "required": [
+        "direct_claims",
+        "entities",
+        "source_refs",
+        "quoted_evidence"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "direct_claims": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/extractedClaim"
+          }
+        },
+        "entities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/entity"
+          }
+        },
+        "source_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sourceRef"
+          }
+        },
+        "quoted_evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/quotedEvidence"
+          }
+        }
+      }
+    },
+    "inferred_or_suggested": {
+      "type": "object",
+      "required": [
+        "normalizations",
+        "candidate_pairs",
+        "mechanism_suggestions",
+        "classification_suggestions",
+        "evidence_mapping_suggestions"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "normalizations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/normalizationSuggestion"
+          }
+        },
+        "candidate_pairs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/candidatePair"
+          }
+        },
+        "mechanism_suggestions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/suggestion"
+          }
+        },
+        "classification_suggestions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/suggestion"
+          }
+        },
+        "evidence_mapping_suggestions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/suggestion"
+          }
+        }
+      }
+    },
+    "uncertain_or_missing": {
+      "type": "object",
+      "required": [
+        "missing_required_fields",
+        "uncertain_mappings",
+        "evidence_gaps",
+        "review_questions"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "missing_required_fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/fieldIssue"
+          }
+        },
+        "uncertain_mappings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/fieldIssue"
+          }
+        },
+        "evidence_gaps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidenceGap"
+          }
+        },
+        "review_questions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "provenance_map": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/provenanceMapEntry"
+      }
+    },
+    "validation_notes": {
+      "type": "object",
+      "required": [
+        "schema_alignment",
+        "controlled_vocab_alignment",
+        "traceability",
+        "verification_commands"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "schema_alignment": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "controlled_vocab_alignment": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "traceability": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "verification_commands": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "duplicate_conflict_checks": {
+      "type": "object",
+      "required": [
+        "possible_duplicates",
+        "possible_conflicts",
+        "checked_surfaces"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "possible_duplicates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/checkFinding"
+          }
+        },
+        "possible_conflicts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/checkFinding"
+          }
+        },
+        "checked_surfaces": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "knowledge-base/indexes/source_manifest.json",
+              "knowledge-base/indexes/citation_registry.json",
+              "knowledge-base/extracted/claims",
+              "src/data/interactionDatasetV2.json",
+              "src/curation/interaction-updates.jsonl"
+            ]
+          }
+        }
+      }
+    },
+    "reviewer_next_action": {
+      "type": "object",
+      "required": [
+        "action",
+        "rationale",
+        "human_approval_required"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "type": "string",
+          "enum": [
+            "request_missing_source",
+            "review_claim_candidate",
+            "review_interaction_update_proposal",
+            "add_source_then_extract",
+            "reject_as_unsupported",
+            "needs_curator_triage"
+          ]
+        },
+        "rationale": {
+          "type": "string"
+        },
+        "human_approval_required": {
+          "const": true
+        }
+      }
+    },
+    "prohibited_assertions_check": {
+      "type": "object",
+      "required": [
+        "does_not_claim_publication",
+        "does_not_claim_human_review",
+        "does_not_collapse_uncertainty",
+        "does_not_invent_evidence"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "does_not_claim_publication": {
+          "const": true
+        },
+        "does_not_claim_human_review": {
+          "const": true
+        },
+        "does_not_collapse_uncertainty": {
+          "const": true
+        },
+        "does_not_invent_evidence": {
+          "const": true
+        }
+      }
+    }
+  },
+  "$defs": {
+    "confidence": {
+      "type": "string",
+      "enum": [
+        "high",
+        "medium",
+        "low",
+        "none",
+        "not_applicable"
+      ]
+    },
+    "supportType": {
+      "type": "string",
+      "enum": [
+        "direct",
+        "indirect",
+        "mechanistic",
+        "field_observation",
+        "traditional_context",
+        "extrapolated",
+        "direct_literature",
+        "class_level_literature",
+        "mechanistic_literature",
+        "adjacent_domain_literature",
+        "provisional_gap_fill",
+        "ai_synthesis",
+        "none"
+      ]
+    },
+    "claimType": {
+      "type": "string",
+      "enum": [
+        "mechanism",
+        "interaction",
+        "risk",
+        "contraindication",
+        "guidance"
+      ]
+    },
+    "extractedClaim": {
+      "type": "object",
+      "required": [
+        "claim_text",
+        "claim_type",
+        "source_ref",
+        "quote_or_locator"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "claim_text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "claim_type": {
+          "$ref": "#/$defs/claimType"
+        },
+        "source_ref": {
+          "$ref": "#/$defs/sourceRef"
+        },
+        "quote_or_locator": {
+          "type": "string"
+        }
+      }
+    },
+    "entity": {
+      "type": "object",
+      "required": [
+        "raw_text",
+        "entity_type"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "raw_text": {
+          "type": "string"
+        },
+        "entity_type": {
+          "type": "string",
+          "enum": [
+            "substance",
+            "class",
+            "mechanism",
+            "risk",
+            "source",
+            "other"
+          ]
+        }
+      }
+    },
+    "sourceRef": {
+      "type": "object",
+      "required": [
+        "source_id",
+        "claim_support"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "source_id": {
+          "type": "string"
+        },
+        "claim_id": {
+          "type": "string"
+        },
+        "claim_support": {
+          "$ref": "#/$defs/supportType"
+        },
+        "locator": {
+          "type": "string"
+        },
+        "quote": {
+          "type": "string"
+        },
+        "requires_verification": {
+          "type": "boolean"
+        }
+      }
+    },
+    "quotedEvidence": {
+      "type": "object",
+      "required": [
+        "quote",
+        "source_ref",
+        "supports_field"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "quote": {
+          "type": "string"
+        },
+        "source_ref": {
+          "$ref": "#/$defs/sourceRef"
+        },
+        "supports_field": {
+          "type": "string"
+        }
+      }
+    },
+    "normalizationSuggestion": {
+      "type": "object",
+      "required": [
+        "raw_value",
+        "suggested_value",
+        "target_field",
+        "basis",
+        "confidence"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "raw_value": {
+          "type": "string"
+        },
+        "suggested_value": {
+          "type": "string"
+        },
+        "target_field": {
+          "type": "string"
+        },
+        "basis": {
+          "type": "string"
+        },
+        "confidence": {
+          "$ref": "#/$defs/confidence"
+        }
+      }
+    },
+    "candidatePair": {
+      "type": "object",
+      "required": [
+        "pair",
+        "basis",
+        "confidence"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "pair": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "type": "string"
+          }
+        },
+        "basis": {
+          "type": "string"
+        },
+        "confidence": {
+          "$ref": "#/$defs/confidence"
+        }
+      }
+    },
+    "suggestion": {
+      "type": "object",
+      "required": [
+        "field",
+        "suggested_value",
+        "basis",
+        "confidence",
+        "requires_human_approval"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "suggested_value": {},
+        "basis": {
+          "type": "string"
+        },
+        "confidence": {
+          "$ref": "#/$defs/confidence"
+        },
+        "requires_human_approval": {
+          "const": true
+        }
+      }
+    },
+    "fieldIssue": {
+      "type": "object",
+      "required": [
+        "field",
+        "reason",
+        "impact"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "impact": {
+          "type": "string"
+        }
+      }
+    },
+    "evidenceGap": {
+      "type": "object",
+      "required": [
+        "gap",
+        "affected_fields",
+        "reviewer_note"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "gap": {
+          "type": "string"
+        },
+        "affected_fields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "reviewer_note": {
+          "type": "string"
+        }
+      }
+    },
+    "provenanceMapEntry": {
+      "type": "object",
+      "required": [
+        "draft_field",
+        "source_locator",
+        "support_type",
+        "trace_status"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "draft_field": {
+          "type": "string"
+        },
+        "source_locator": {
+          "type": "string"
+        },
+        "support_type": {
+          "$ref": "#/$defs/supportType"
+        },
+        "trace_status": {
+          "type": "string",
+          "enum": [
+            "directly_supported",
+            "inferred_from_source",
+            "missing_or_uncertain"
+          ]
+        }
+      }
+    },
+    "checkFinding": {
+      "type": "object",
+      "required": [
+        "surface",
+        "id_or_path",
+        "reason",
+        "confidence"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "surface": {
+          "type": "string"
+        },
+        "id_or_path": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "confidence": {
+          "$ref": "#/$defs/confidence"
+        }
+      }
+    }
+  }
+}

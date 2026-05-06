@@ -2,6 +2,8 @@ import {
   interactionPairs,
   type InteractionPair as SharedInteractionPair
 } from './interactionDataset';
+import { PRIORITY_INTERACTION_RULES } from './priorityInteractionOverrides';
+import substancesSnapshot from './substances_snapshot.json' with { type: 'json' };
 
 export interface Drug {
   id: string;
@@ -9,6 +11,8 @@ export interface Drug {
   class: string;
   mechanismTag: string;
   notes: string;
+  deprecated?: boolean;
+  supersededBy?: string[];
 }
 
 export interface InteractionMetadata {
@@ -21,32 +25,79 @@ export interface InteractionMetadata {
 
 export interface InteractionEvidence {
   code: string;
+  label?: string;
   summary: string;
   confidence: string;
   sources: string;
+  clinicalEffect?: {
+    primary: string;
+    direction: string;
+    severity: string;
+  };
   mechanism?: string;
+  mechanismCategory?: MechanismCategory;
+  mechanismCategories?: MechanismCategory[];
   practicalGuidance?: string;
+  management?: {
+    recommendation: string;
+    monitoring: string[];
+  };
   timing?: string;
   evidenceGaps?: string;
   evidenceTier?: string;
   fieldNotes?: string;
+  riskAssessment?: {
+    level: 'undetermined' | 'provisional_low' | 'provisional_moderate' | 'low' | 'moderate' | 'high';
+    rationale?: string;
+  };
+  provenance?: {
+    source: 'deterministic_mapping_table' | 'heuristic_fallback' | 'self_pair' | 'decomposition' | 'mechanistic_inference';
+    confidenceTier: 'high' | 'medium' | 'low';
+    method?: string;
+    rationale?: string;
+    parentNode?: string;
+    parentNodes?: string[];
+    deprecated?: boolean;
+  };
 }
 
 export type RuleOrigin = 'self' | 'explicit' | 'fallback' | 'unknown';
 
 export type MechanismCategory =
   | 'serotonergic'
+  | 'serotonergic_toxicity'
   | 'maoi'
+  | 'maoi_potentiation'
   | 'qt_prolongation'
+  | 'qt_or_arrhythmia_risk'
   | 'sympathomimetic'
+  | 'sympathomimetic_load'
   | 'cns_depressant'
+  | 'pharmacodynamic_cns_depression'
+  | 'cardiovascular_load'
+  | 'hemodynamic_interaction'
   | 'anticholinergic'
+  | 'anticholinergic_delirium'
   | 'dopaminergic'
+  | 'dopaminergic_load'
   | 'glutamatergic'
+  | 'glutamatergic_dissociation'
+  | 'glutamate_modulation'
   | 'gabaergic'
+  | 'gabaergic_modulation'
   | 'stimulant_stack'
   | 'psychedelic_potentiation'
-  | 'cardiovascular_load'
+  | 'psychedelic_intensification'
+  | 'seizure_threshold'
+  | 'noradrenergic_suppression'
+  | 'adrenergic_rebound'
+  | 'rebound_hypertension'
+  | 'additive_hypotension'
+  | 'respiratory_depression'
+  | 'dehydration_or_electrolyte_risk'
+  | 'psychiatric_destabilization'
+  | 'ion_channel_modulation'
+  | 'operational_or_behavioral_risk'
   | 'unknown';
 
 export interface ResolvedInteraction {
@@ -96,6 +147,10 @@ export function classifyMechanismCategory(
     return 'cns_depressant';
   }
 
+  if (normalizedMechanism.includes('cns depression') || normalizedMechanism.includes('sedative')) {
+    return 'pharmacodynamic_cns_depression';
+  }
+
   if (normalizedMechanism.includes('anticholinergic')) {
     return 'anticholinergic';
   }
@@ -106,6 +161,10 @@ export function classifyMechanismCategory(
 
   if (normalizedMechanism.includes('glutamate')) {
     return 'glutamatergic';
+  }
+
+  if (normalizedMechanism.includes('nmda') || normalizedMechanism.includes('glutamate modulation')) {
+    return 'glutamate_modulation';
   }
 
   if (normalizedMechanism.includes('gaba')) {
@@ -130,242 +189,29 @@ export function classifyMechanismCategory(
     return 'cardiovascular_load';
   }
 
+  if (
+    normalizedMechanism.includes('hemodynamic') ||
+    normalizedMechanism.includes('blood pressure') ||
+    normalizedMechanism.includes('heart rate')
+  ) {
+    return 'hemodynamic_interaction';
+  }
+
+  if (normalizedMechanism.includes('alpha-2') || normalizedMechanism.includes('alpha 2')) {
+    return 'noradrenergic_suppression';
+  }
+
+  if (normalizedMechanism.includes('ion channel') || normalizedMechanism.includes('sodium-channel')) {
+    return 'ion_channel_modulation';
+  }
+
   return 'unknown';
 }
 
-export const DRUGS: Drug[] = [
-  {
-    id: 'ayahuasca',
-    name: 'Ayahuasca',
-    class: 'Ceremonial Psychedelic',
-    mechanismTag: 'MAOI + DMT',
-    notes: 'Contains harmala alkaloids; interaction profile strongly MAOI-mediated.'
-  },
-  {
-    id: 'psilocybin',
-    name: 'Psilocybin Mushrooms',
-    class: 'Ceremonial Psychedelic',
-    mechanismTag: 'Serotonergic psychedelic',
-    notes: 'Classical psychedelic; medication interactions include blunting/intensification.'
-  },
-  {
-    id: 'nn_dmt',
-    name: 'N,N-DMT',
-    class: 'Ceremonial Psychedelic',
-    mechanismTag: 'Serotonergic tryptamine',
-    notes: 'Referenced as generally lower risk with ayahuasca context than 5-MeO-DMT.'
-  },
-  {
-    id: 'five_meo_dmt',
-    name: '5-MeO-DMT',
-    class: 'Ceremonial Psychedelic',
-    mechanismTag: 'Serotonergic tryptamine',
-    notes: 'Specifically flagged as dangerous with MAOIs in supplied sources.'
-  },
-  {
-    id: 'mescaline_peyote',
-    name: 'Mescaline / Peyote',
-    class: 'Ceremonial Psychedelic',
-    mechanismTag: 'Phenethylamine psychedelic',
-    notes: 'Listed with spacing guidance relative to ayahuasca.'
-  },
-  {
-    id: 'yopo',
-    name: 'Yopo',
-    class: 'Ceremonial Psychedelic',
-    mechanismTag: '5-MeO-DMT + bufotenine containing seeds',
-    notes: 'Source notes caution due active constituents.'
-  },
-  {
-    id: 'lsd',
-    name: 'LSD',
-    class: 'Ceremonial Psychedelic',
-    mechanismTag: 'Serotonergic psychedelic',
-    notes: 'Included in lower-risk ayahuasca combination examples.'
-  },
-  {
-    id: 'salvia',
-    name: 'Salvia divinorum',
-    class: 'Ceremonial Psychedelic',
-    mechanismTag: 'Atypical dissociative/dysphoric profile',
-    notes: 'Marked distinct per request; no explicit risk ratings in provided documents.'
-  },
-  {
-    id: 'belladonna',
-    name: 'Belladonna',
-    class: 'Deliriant',
-    mechanismTag: 'Anticholinergic deliriant',
-    notes: 'Marked distinct per request; no explicit risk ratings in provided documents.'
-  },
-  {
-    id: 'brugmansia',
-    name: 'Brugmansia',
-    class: 'Deliriant',
-    mechanismTag: 'Anticholinergic deliriant',
-    notes: 'Marked distinct per request; no explicit risk ratings in provided documents.'
-  },
-  {
-    id: 'kambo',
-    name: 'Kambo',
-    class: 'Ceremonial Adjunct',
-    mechanismTag: 'Ceremonial adjunct',
-    notes: 'Caution advised around co-presentation with ayahuasca.'
-  },
-  {
-    id: 'tobacco_rape',
-    name: 'Tobacco / Rapé',
-    class: 'Ceremonial Adjunct',
-    mechanismTag: 'Nicotinic stimulant (traditional adjunct)',
-    notes: 'Generally noted as acceptable with caveats on admixtures.'
-  },
-  {
-    id: 'cannabis',
-    name: 'Cannabis',
-    class: 'Ceremonial Or Recreational',
-    mechanismTag: 'Cannabinoid',
-    notes: 'Listed in lower-risk ayahuasca combinations.'
-  },
-  {
-    id: 'alcohol',
-    name: 'Alcohol',
-    class: 'Non Ceremonial',
-    mechanismTag: 'CNS depressant',
-    notes: 'Explicitly advised against with ayahuasca in provided text.'
-  },
-  {
-    id: 'ssri',
-    name: 'SSRIs',
-    class: 'Pharmaceutical Class',
-    mechanismTag: 'Serotonin reuptake inhibition',
-    notes: 'Psilocybin chart: blunted effects; ayahuasca: serotonin syndrome risk.'
-  },
-  {
-    id: 'snri',
-    name: 'SNRIs',
-    class: 'Pharmaceutical Class',
-    mechanismTag: 'Serotonin + norepinephrine reuptake inhibition',
-    notes: 'Psilocybin chart: blunted effects; ayahuasca contraindication list includes SNRIs.'
-  },
-  {
-    id: 'tricyclic_ad',
-    name: 'Tricyclic Antidepressants',
-    class: 'Pharmaceutical Class',
-    mechanismTag: 'Mixed monoamine reuptake effects',
-    notes: 'Psilocybin chart: intensified effects; specific tricyclics listed as contraindicated with ayahuasca.'
-  },
-  {
-    id: 'maoi_pharma',
-    name: 'Pharmaceutical MAOIs',
-    class: 'Pharmaceutical Class',
-    mechanismTag: 'Monoamine oxidase inhibition',
-    notes: 'Major contraindication category around ayahuasca and serotonergic combinations.'
-  },
-  {
-    id: 'atypical_ad',
-    name: 'Atypical Antidepressants',
-    class: 'Pharmaceutical Class',
-    mechanismTag: 'Mixed serotonergic mechanisms',
-    notes: 'Buspirone, trazodone, mirtazapine in psilocybin chart mostly blunted.'
-  },
-  {
-    id: 'ndri_bupropion',
-    name: 'NDRI (Bupropion)',
-    class: 'Pharmaceutical Class',
-    mechanismTag: 'Norepinephrine + dopamine reuptake inhibition',
-    notes: 'Psilocybin chart flags reduced seizure threshold and individualized risk.'
-  },
-  {
-    id: 'amphetamine_stims',
-    name: 'Amphetamine Stimulants',
-    class: 'Pharmaceutical Or Recreational',
-    mechanismTag: 'Monoamine releasing stimulant',
-    notes: 'Explicitly high risk with MAOI context; potential hypertensive crisis/serotonin toxicity.'
-  },
-  {
-    id: 'methylphenidate',
-    name: 'Methylphenidate',
-    class: 'Pharmaceutical',
-    mechanismTag: 'Catecholaminergic stimulant',
-    notes: 'Contraindication list item with ayahuasca in source slides.'
-  },
-  {
-    id: 'cocaine',
-    name: 'Cocaine',
-    class: 'Recreational Stimulant',
-    mechanismTag: 'Monoamine reuptake inhibition',
-    notes: 'Contraindication list item with ayahuasca in source slides.'
-  },
-  {
-    id: 'mdma_2cx_dox_nbome',
-    name: 'MDMA / 2C-x / DOx / NBOMe',
-    class: 'Recreational Serotonergic',
-    mechanismTag: 'Serotonergic stimulant/psychedelic cluster',
-    notes: 'Contraindication cluster with ayahuasca in source slides.'
-  },
-  {
-    id: 'serotonergic_opioids',
-    name: 'Serotonergic Opioids (Tramadol/Methadone/Meperidine/Tapentadol)',
-    class: 'Pharmaceutical Class',
-    mechanismTag: 'Opioid + serotonergic action',
-    notes: 'Contraindication list item with ayahuasca in source slides.'
-  },
-  {
-    id: 'antipsychotics',
-    name: 'Antipsychotics',
-    class: 'Pharmaceutical Class',
-    mechanismTag: 'Dopamine/serotonin modulation',
-    notes: 'Mixed source signals; treat as elevated caution/high risk with ayahuasca.'
-  },
-  {
-    id: 'antihypertensives',
-    name: 'Antihypertensives',
-    class: 'Pharmaceutical Class',
-    mechanismTag: 'Blood pressure modulation',
-    notes: 'Mentioned as risk area and also emergency management context.'
-  },
-  {
-    id: 'benzodiazepines',
-    name: 'Benzodiazepines',
-    class: 'Pharmaceutical Class',
-    mechanismTag: 'GABAergic sedatives',
-    notes: 'Listed as generally low-risk emergency management option in supplied slides.'
-  },
-  {
-    id: 'lithium',
-    name: 'Lithium',
-    class: 'Pharmaceutical Class',
-    mechanismTag: 'Mood stabilizer / second-messenger modulation',
-    notes: 'Strong seizure signal reported in observational psychedelic co-use data.'
-  },
-  {
-    id: 'lamotrigine',
-    name: 'Lamotrigine',
-    class: 'Pharmaceutical Class',
-    mechanismTag: 'Anticonvulsant / sodium-channel modulation',
-    notes: 'Observational data suggest lower seizure concern than lithium with classic psychedelics.'
-  },
-  {
-    id: 'ketamine',
-    name: 'Ketamine',
-    class: 'Pharmaceutical Or Clinical Psychedelic',
-    mechanismTag: 'NMDA-antagonist dissociative',
-    notes: 'No formal ayahuasca interaction trials; concern is mainly confusion, sedation, and autonomic instability.'
-  },
-  {
-    id: 'clonidine_guanfacine',
-    name: 'Clonidine / Guanfacine',
-    class: 'Pharmaceutical Class',
-    mechanismTag: 'Alpha-2 agonist sympatholytic',
-    notes: 'Potential hypotension/bradycardia and timing-dependent potentiation around harmala use.'
-  },
-  {
-    id: 'beta_blockers_ccb',
-    name: 'Beta-Blockers / Rate-Controlling CCBs',
-    class: 'Pharmaceutical Class',
-    mechanismTag: 'Cardiovascular rate and pressure control',
-    notes: 'Higher concern than general antihypertensives because compensatory heart-rate responses may be blunted.'
-  },
-];
+/** Substance list from EntheoGen-Dataset-Beta-0-1 snapshot (`npm run dataset:build-beta`). */
+export const DRUGS: Drug[] = substancesSnapshot as Drug[];
+
+const DRUG_BY_ID = new Map(DRUGS.map((drug) => [drug.id, drug] as const));
 
 export const LEGEND: Record<string, InteractionMetadata> = {
   LOW: {
@@ -409,6 +255,27 @@ export const LEGEND: Record<string, InteractionMetadata> = {
     color: '#6C757D',
     description: 'No explicit classification in the current curated interaction dataset.',
     riskScale: 0
+  },
+  INFERRED: {
+    label: 'Mechanistic Inference',
+    symbol: 'INFO',
+    color: '#8F9AA7',
+    description: 'Fallback classification inferred from class-level pharmacology when no deterministic mapping is available.',
+    riskScale: 2
+  },
+  THEORETICAL: {
+    label: 'Theoretical Interaction',
+    symbol: 'INFO',
+    color: '#A7B0B8',
+    description: 'Plausible class-level interaction supported by pharmacology but not direct clinical evidence.',
+    riskScale: 2
+  },
+  DETERMINISTIC: {
+    label: 'Deterministic mapping',
+    symbol: 'WARN',
+    color: '#5A9FD4',
+    description: 'Classification from an explicit deterministic rule or mapping table.',
+    riskScale: 3
   },
   SELF: {
     label: 'Same Entity / N-A',
@@ -755,69 +622,493 @@ const CLASSIC_PSYCHEDELIC_IDS = new Set([
   'five_meo_dmt',
   'mescaline_peyote',
   'yopo',
-  'lsd',
+  'lsd'
 ]);
 
 const DELIRIANT_IDS = new Set(['belladonna', 'brugmansia']);
+const NMDA_ANTAGONIST_IDS = new Set(['ketamine']);
+const ALPHA2_AGONIST_IDS = new Set(['clonidine', 'guanfacine']);
+const SODIUM_CHANNEL_IDS = new Set(['lamotrigine']);
+const HEMODYNAMIC_IDS = new Set([
+  'antihypertensives',
+  'beta_blockers',
+  'calcium_channel_blockers',
+  'clonidine',
+  'guanfacine'
+]);
+const CNS_DEPRESSANT_IDS = new Set(['alcohol', 'benzodiazepines', 'serotonergic_opioids']);
+const STIMULANT_IDS = new Set([
+  'amphetamine_stims',
+  'methylphenidate',
+  'cocaine',
+  'mdma',
+  'two_c_x',
+  'dox',
+  'nbome_series',
+  'mdma_2cx_dox_nbome',
+  'ndri_bupropion',
+  'tobacco_rape'
+]);
+const SEROTONERGIC_IDS = new Set([
+  'ayahuasca',
+  'psilocybin',
+  'nn_dmt',
+  'five_meo_dmt',
+  'mescaline_peyote',
+  'yopo',
+  'lsd',
+  'ssri',
+  'snri',
+  'tricyclic_ad',
+  'maoi_pharma',
+  'atypical_ad',
+  'serotonergic_opioids',
+  'mdma',
+  'two_c_x',
+  'dox',
+  'nbome_series',
+  'mdma_2cx_dox_nbome'
+]);
 
-const pairKey = (a: string, b: string) => [a, b].sort().join("|");
+const pairKey = (a: string, b: string) => [a, b].sort().join('|');
 
-const getFallbackInteractionEvidence = (drug1: string, drug2: string): InteractionEvidence | null => {
+const makeTheoreticalInteraction = (
+  summary: string,
+  mechanism: string,
+  mechanismCategory: MechanismCategory,
+  mechanismCategories: MechanismCategory[],
+  confidence: 'low' | 'medium',
+  rationale: string,
+  evidenceGaps: string,
+  practicalGuidance: string,
+  fieldNotes?: string
+): InteractionEvidence => ({
+  code: 'THEORETICAL',
+  label: 'Theoretical interaction',
+  summary,
+  confidence,
+  sources: 'mechanistic_inference',
+  mechanism,
+  mechanismCategory,
+  mechanismCategories,
+  practicalGuidance,
+  evidenceGaps,
+  fieldNotes,
+  evidenceTier: 'theoretical',
+  riskAssessment: {
+    level: confidence === 'medium' ? 'provisional_moderate' : 'provisional_low',
+    rationale
+  },
+  provenance: {
+    source: 'mechanistic_inference',
+    confidenceTier: confidence,
+    method: 'rule_based_inference_v2',
+    rationale
+  }
+});
+
+const makeTheoreticalFallbackEvidence = (
+  _code: InteractionEvidence['code'],
+  summary: string,
+  confidence: 'medium' | 'low',
+  mechanism: string,
+  mechanismCategory: MechanismCategory,
+  mechanismCategories: MechanismCategory[],
+  rationale: string,
+  evidenceGaps: string,
+  practicalGuidance: string,
+  fieldNotes?: string
+): InteractionEvidence =>
+  makeTheoreticalInteraction(
+    summary,
+    mechanism,
+    mechanismCategory,
+    mechanismCategories,
+    confidence,
+    rationale,
+    evidenceGaps,
+    practicalGuidance,
+    fieldNotes
+  );
+
+const THEORETICAL_INTERACTION_RULES: Record<string, InteractionEvidence> = {
+  'beta_blockers|guanfacine': makeTheoreticalInteraction(
+    'Guanfacine plus beta-blockers is a plausible noradrenergic suppression interaction with blood-pressure and heart-rate lowering effects.',
+    'Both drugs reduce sympathetic tone and can make compensatory tachycardia or orthostatic recovery less reliable.',
+    'hemodynamic_interaction',
+    ['hemodynamic_interaction', 'noradrenergic_suppression', 'cardiovascular_load'],
+    'medium',
+    'The concern is driven by combined autonomic dampening rather than documented severe toxicity.',
+    'No direct pair-specific clinical evidence was identified.',
+    '- Watch for dizziness, fatigue, and slow pulse.\n- Avoid abrupt dose changes or double-using sedating co-medications.',
+    'Guanfacine is often somewhat less sedating than clonidine, but the class interaction still merits caution.'
+  ),
+  'calcium_channel_blockers|guanfacine': makeTheoreticalInteraction(
+    'Guanfacine plus calcium-channel blockers is a plausible hemodynamic interaction with additive hypotension concern.',
+    'Alpha-2 agonism lowers sympathetic outflow while calcium-channel blockade can reduce cardiovascular compensatory reserve.',
+    'hemodynamic_interaction',
+    ['hemodynamic_interaction', 'noradrenergic_suppression', 'cardiovascular_load'],
+    'medium',
+    'This is a class-level inference rather than direct outcome evidence.',
+    'No direct pair-specific clinical trials were identified.',
+    '- Use conservative titration and monitor orthostatic symptoms.\n- Seek medical review if syncope or marked bradycardia appears.',
+    'Different calcium-channel blockers do not behave identically; the theoretical label keeps that uncertainty explicit.'
+  ),
+  'clonidine|ketamine': makeTheoreticalInteraction(
+    'Ketamine plus clonidine is a plausible autonomic interaction that can alter sedation, blood pressure, and recovery from dissociation.',
+    'Ketamine may raise sympathetic tone while clonidine suppresses noradrenergic output, creating an unstable balance around blood pressure and alertness.',
+    'glutamate_modulation',
+    ['glutamate_modulation', 'hemodynamic_interaction', 'operational_or_behavioral_risk'],
+    'low',
+    'There is no direct ketamine plus clonidine safety dataset for this exact pairing.',
+    'No direct pair-specific clinical trial data were identified.',
+    '- Use caution with standing, driving, and additional sedatives.\n- Avoid assuming clonidine will reliably "smooth" ketamine effects.'
+  ),
+  'guanfacine|ketamine': makeTheoreticalInteraction(
+    'Ketamine plus guanfacine is a plausible autonomic interaction with uncertain net hemodynamic effect and possible sedation.',
+    'Guanfacine dampens sympathetic outflow while ketamine can transiently activate catecholamine pathways and dissociation.',
+    'glutamate_modulation',
+    ['glutamate_modulation', 'hemodynamic_interaction', 'operational_or_behavioral_risk'],
+    'low',
+    'The evidence is class-level and indirect rather than pair-specific.',
+    'No direct pair-specific clinical trial data were identified.',
+    '- Watch for dizziness, over-sedation, and impaired self-care.\n- Keep additional depressants out of the mix.'
+  ),
+  'beta_blockers|ketamine': makeTheoreticalInteraction(
+    'Ketamine plus beta-blockers is a plausible cardiovascular interaction with blunted compensatory responses and uncertain overall effect.',
+    'Beta-blockade can blunt ketamine-related tachycardia while ketamine still changes perception and sympathetic tone.',
+    'glutamate_modulation',
+    ['glutamate_modulation', 'hemodynamic_interaction', 'operational_or_behavioral_risk'],
+    'low',
+    'The pair is pharmacologically plausible but lacks direct clinical outcome data.',
+    'No direct pair-specific clinical trials were identified.',
+    '- Monitor pulse and blood pressure if used in a medical setting.\n- Avoid assuming tachycardia is the only relevant safety marker.'
+  ),
+  'calcium_channel_blockers|ketamine': makeTheoreticalInteraction(
+    'Ketamine plus calcium-channel blockers is a plausible cardiovascular interaction with blood-pressure variability and impaired compensation.',
+    'Ketamine can increase cardiovascular activation while calcium-channel blockade may limit compensatory rhythm or pressure responses.',
+    'glutamate_modulation',
+    ['glutamate_modulation', 'hemodynamic_interaction', 'operational_or_behavioral_risk'],
+    'low',
+    'The risk is theoretical and class-based rather than outcome-proven.',
+    'No direct pair-specific clinical trials were identified.',
+    '- Use caution in people with baseline bradycardia or hypotension.\n- Seek medical input before combining in unsupervised settings.'
+  ),
+  'clonidine|lamotrigine': makeTheoreticalInteraction(
+    'Lamotrigine plus clonidine is a plausible low-grade theoretical interaction centered on additive dizziness, sedation, and orthostatic effects.',
+    'Lamotrigine modulates sodium channels while clonidine suppresses sympathetic output, so the main concern is tolerability rather than a unique toxidrome.',
+    'ion_channel_modulation',
+    ['ion_channel_modulation', 'noradrenergic_suppression', 'operational_or_behavioral_risk'],
+    'low',
+    'No direct pair-specific evidence was identified.',
+    'No direct pair-specific clinical trials were identified.',
+    '- Watch for lightheadedness or excessive sleepiness.\n- Keep dose changes conservative.'
+  ),
+  'guanfacine|lamotrigine': makeTheoreticalInteraction(
+    'Lamotrigine plus guanfacine is a plausible low-grade theoretical interaction centered on tolerability and orthostatic symptoms.',
+    'Sodium-channel modulation and alpha-2 agonism can combine into a mild dizziness/sedation burden.',
+    'ion_channel_modulation',
+    ['ion_channel_modulation', 'noradrenergic_suppression', 'operational_or_behavioral_risk'],
+    'low',
+    'No direct pair-specific evidence was identified.',
+    'No direct pair-specific clinical trials were identified.',
+    '- Monitor for lightheadedness and fatigue.\n- Avoid rapid titration of either medication.'
+  ),
+  'beta_blockers|lamotrigine': makeTheoreticalInteraction(
+    'Lamotrigine plus beta-blockers is a plausible low-grade theoretical interaction with additive dizziness or fatigue.',
+    'Beta-blockade can reduce compensatory cardiac response while lamotrigine may contribute nonspecific tolerability effects in some people.',
+    'ion_channel_modulation',
+    ['ion_channel_modulation', 'hemodynamic_interaction', 'operational_or_behavioral_risk'],
+    'low',
+    'No direct pair-specific evidence was identified.',
+    'No direct pair-specific clinical trials were identified.',
+    '- Use caution if baseline blood pressure is low or pulse is slow.\n- Review any recent dose changes.'
+  ),
+  'calcium_channel_blockers|lamotrigine': makeTheoreticalInteraction(
+    'Lamotrigine plus calcium-channel blockers is a plausible low-grade theoretical interaction with dizziness and tolerability concerns.',
+    'Calcium-channel blockade can reduce compensatory cardiovascular responses while lamotrigine may add nonspecific neurologic tolerability burden.',
+    'ion_channel_modulation',
+    ['ion_channel_modulation', 'hemodynamic_interaction', 'operational_or_behavioral_risk'],
+    'low',
+    'No direct pair-specific evidence was identified.',
+    'No direct pair-specific clinical trials were identified.',
+    '- Monitor for orthostatic symptoms or unusual fatigue.\n- Keep the pair in the theoretical bucket until stronger data exist.'
+  )
+};
+
+const getDrug = (id: string) => DRUG_BY_ID.get(id);
+
+const hasMechanism = (drugId: string, needle: string) => {
+  const drug = getDrug(drugId);
+  const haystack = `${drug?.class ?? ''} ${drug?.mechanismTag ?? ''} ${drug?.notes ?? ''} ${drugId}`.toLowerCase();
+  return haystack.includes(needle);
+};
+
+const inferProvenanceConfidence = (confidence: string): 'high' | 'medium' | 'low' => {
+  if (confidence === 'high') return 'high';
+  if (confidence === 'medium') return 'medium';
+  return 'medium';
+};
+
+type RiskAssessmentLevel = NonNullable<NonNullable<InteractionEvidence['riskAssessment']>['level']>;
+
+const inferRiskAssessmentLevel = (confidence: string): RiskAssessmentLevel => {
+  if (confidence === 'high') return 'moderate';
+  if (confidence === 'medium') return 'provisional_moderate';
+  return 'provisional_low';
+};
+
+const makeDeterministicEvidence = (evidence: InteractionEvidence): InteractionEvidence => ({
+  ...evidence,
+  provenance: {
+    ...evidence.provenance,
+    source: 'deterministic_mapping_table',
+    confidenceTier: evidence.provenance?.confidenceTier ?? inferProvenanceConfidence(evidence.confidence),
+    rationale: evidence.provenance?.rationale ?? evidence.summary
+  },
+  label: LEGEND[evidence.code]?.label ?? evidence.label
+});
+
+const makeFallbackEvidence = (
+  code: InteractionEvidence['code'],
+  summary: string,
+  confidence: 'high' | 'medium' | 'low',
+  mechanism: string,
+  mechanismCategory: MechanismCategory,
+  categories: MechanismCategory[],
+  evidenceTier: string,
+  rationale: string,
+  practicalGuidance: string,
+  evidenceGaps: string,
+  fieldNotes?: string
+): InteractionEvidence => ({
+  code,
+  label: 'Mechanistic inference',
+  summary,
+  confidence,
+  sources: 'source-gap',
+  mechanism,
+  mechanismCategory,
+  mechanismCategories: categories,
+  practicalGuidance,
+  evidenceGaps,
+  evidenceTier,
+  fieldNotes,
+  riskAssessment: {
+    level: inferRiskAssessmentLevel(confidence),
+    rationale
+  },
+  provenance: {
+    source: 'heuristic_fallback',
+    confidenceTier: 'low',
+    method: 'rule_based_inference_v1',
+    rationale
+  }
+});
+
+const getFallbackInteractionEvidence = (drug1: string, drug2: string): InteractionEvidence => {
   const ids = [drug1, drug2];
   const otherClassic = ids.find((id) => CLASSIC_PSYCHEDELIC_IDS.has(id));
 
   if (ids.includes('lithium') && otherClassic) {
-    return {
-      code: 'DAN',
-      summary: 'Lithium should be treated as contraindicated with classic psychedelics because published observational data show a disproportionate seizure signal.',
-      confidence: 'medium',
-      sources: 'entheogen-interactions-research-update',
-      mechanism: `The exact mechanism is unresolved, but lithium appears to interact with classic psychedelic states in a way that meaningfully raises seizure and severe adverse-reaction concern.`,
-      practicalGuidance: `- Treat lithium plus ayahuasca, psilocybin, LSD, mescaline, DMT, or 5-MeO-DMT as a hard stop in this dataset.\n- Do not advise unsupervised lithium discontinuation merely to make psychedelic use possible.`,
-      evidenceGaps: `The evidence base is observational rather than controlled, but the signal is strong enough to warrant a contraindication.`,
-      evidenceTier: 'observational report analysis + harm-reduction consensus'
-    };
+    return makeTheoreticalFallbackEvidence(
+      'INFERRED',
+      'Lithium plus a classic psychedelic remains a serious seizure-risk concern based on observational signals and class-level neurotoxicity reasoning.',
+      'medium',
+      'Lithium appears to interact with classic psychedelic states in a way that meaningfully raises seizure and severe adverse-reaction concern.',
+      'seizure_threshold',
+      ['seizure_threshold', 'psychiatric_destabilization', 'operational_or_behavioral_risk'],
+      'Observational seizure signal and lithium pharmacology support a conservative inferred warning.',
+      '- Avoid this pairing in non-medical settings.\n- Do not advise lithium self-discontinuation without clinician supervision.',
+      'No controlled co-use data; the signal is observational and mechanistic.'
+    );
   }
 
   if (ids.includes('lamotrigine') && otherClassic) {
-    return {
-      code: 'LOW_MOD',
-      summary: 'Lamotrigine currently looks substantially lower-risk than lithium with classic psychedelics, with mostly observational evidence of minimal effect modulation.',
-      confidence: 'low',
-      sources: 'entheogen-interactions-research-update',
-      mechanism: `Lamotrigine is anticonvulsant and not strongly serotonergic, so expectations center on mild effect modulation rather than toxic synergy.`,
-      practicalGuidance: `- Relative to lithium, this is a much softer warning.\n- Still take extra care when lamotrigine is part of a bipolar treatment plan or is being changed recently.`,
-      evidenceTier: 'observational report analysis'
-    };
+    return makeTheoreticalFallbackEvidence(
+      'INFERRED',
+      'Lamotrigine with a classic psychedelic is usually a lower-severity, effect-modulation style interaction with some uncertainty around individual response.',
+      'low',
+      'Lamotrigine is anticonvulsant and not strongly serotonergic, so expectations center on mild effect modulation rather than toxic synergy.',
+      'ion_channel_modulation',
+      ['ion_channel_modulation', 'psychiatric_destabilization'],
+      'Class-level anticonvulsant pharmacology supports a cautious inferred interaction without clear acute toxicity.',
+      '- This is a softer warning than lithium.\n- Review recent dose changes and bipolar treatment context.',
+      'Evidence remains observational and thinner than for standard antidepressant categories.'
+    );
   }
 
   if (ids.some((id) => DELIRIANT_IDS.has(id)) && otherClassic) {
-    return {
-      code: 'DAN',
-      summary: 'Tropane-rich deliriants such as belladonna and Brugmansia should be treated as contraindicated with psychedelics because anticholinergic toxidrome and psychedelic disorganization are a dangerous mix.',
-      confidence: 'medium',
-      sources: 'entheogen-interactions-research-update',
-      mechanism: `Belladonna and Brugmansia contain atropine-, scopolamine-, and hyoscyamine-like alkaloids that can produce tachycardia, hyperthermia, delirium, urinary retention, arrhythmia, and profound confusion. Combining that with serotonergic psychedelic effects is a worst-case operational scenario.`,
-      practicalGuidance: `- Treat any belladonna/Brugmansia pairing with ayahuasca, psilocybin, LSD, mescaline, DMT, or yopo as an absolute contraindication.\n- Specialist ethnographic use does not generalize to modern harm-reduction settings.`,
-      evidenceGaps: `Controlled co-use studies are effectively impossible, so toxicology cases and ethnographic caution will remain the evidence base.`,
-      evidenceTier: 'toxicology case literature + ethnographic caution'
-    };
+    return makeTheoreticalFallbackEvidence(
+      'INFERRED',
+      'Tropane-rich deliriants and a classic psychedelic create a high-disorientation interaction that is best treated as unsafe.',
+      'medium',
+      'Belladonna and Brugmansia contain atropine-, scopolamine-, and hyoscyamine-like alkaloids that can produce tachycardia, hyperthermia, delirium, urinary retention, arrhythmia, and profound confusion.',
+      'anticholinergic_delirium',
+      ['anticholinergic_delirium', 'psychiatric_destabilization', 'operational_or_behavioral_risk'],
+      'The overlap is pharmacologically obvious even though direct co-use studies are not realistic.',
+      '- Treat any belladonna/Brugmansia pairing with a classic psychedelic as an absolute contraindication in harm-reduction settings.',
+      'Controlled co-use studies are effectively impossible, so toxicology cases and ethnographic caution remain the evidence base.',
+      'This is a class-level toxidrome warning rather than a receptor-precision conclusion.'
+    );
   }
 
   if (ids.includes('salvia') && otherClassic) {
-    return {
-      code: 'CAU',
-      summary: 'Salvia is non-serotonergic, but same-session use with classic psychedelics can become unsafe because disorientation, dysphoria, and accident risk stack badly.',
-      confidence: 'low',
-      sources: 'entheogen-interactions-research-update',
-      mechanism: `Salvinorin A is a kappa-opioid agonist rather than a classic serotonergic psychedelic. The overlap is at autonomic activation and severe state disruption, not receptor-level serotonin toxicity.`,
-      practicalGuidance: `- Prefer separate-day use rather than co-use.\n- In group settings, same-session salvia plus ayahuasca or psilocybin should be treated as high-disorientation and high-accident risk.`,
-      evidenceGaps: `Formal combination studies are absent, so this remains a precautionary field rule.`,
-      evidenceTier: 'mechanistic inference + salvia risk literature'
-    };
+    return makeTheoreticalFallbackEvidence(
+      'INFERRED',
+      'Salvia with a classic psychedelic is mainly an operational and psychological instability problem rather than a clean receptor-level toxicity pattern.',
+      'low',
+      'Salvinorin A is a kappa-opioid agonist rather than a classic serotonergic psychedelic.',
+      'operational_or_behavioral_risk',
+      ['operational_or_behavioral_risk', 'psychiatric_destabilization'],
+      'The overlap is state disruption and accident risk, not serotonin toxicity.',
+      '- Prefer separate-day use rather than co-use.\n- Same-session use should be treated as high-disorientation and high-accident risk.',
+      'Formal combination studies are absent, so this remains a precautionary field rule.'
+    );
   }
 
-  return null;
+  if (
+    ids.some((id) => ALPHA2_AGONIST_IDS.has(id)) &&
+    ids.some((id) => HEMODYNAMIC_IDS.has(id) || STIMULANT_IDS.has(id) || CLASSIC_PSYCHEDELIC_IDS.has(id))
+  ) {
+    return makeTheoreticalFallbackEvidence(
+      'INFERRED',
+      'Alpha-2 agonist exposure with a cardiovascularly active partner points to a provisional noradrenergic suppression / hemodynamic interaction.',
+      'medium',
+      'Alpha-2 agonists reduce sympathetic outflow and can lower heart rate and blood pressure, making compensatory responses harder to predict.',
+      'noradrenergic_suppression',
+      ['noradrenergic_suppression', 'hemodynamic_interaction', 'psychiatric_destabilization'],
+      'Class-level autonomic pharmacology supports a cautious inference.',
+      '- Avoid abrupt clonidine or guanfacine changes.\n- Monitor for dizziness, bradycardia, hypotension, or unusual sedation.',
+      'No large controlled human co-administration studies for this class pairing.'
+    );
+  }
+
+  if (
+    ids.some((id) => HEMODYNAMIC_IDS.has(id)) &&
+    ids.some((id) => CLASSIC_PSYCHEDELIC_IDS.has(id) || STIMULANT_IDS.has(id) || ALPHA2_AGONIST_IDS.has(id))
+  ) {
+    return makeTheoreticalFallbackEvidence(
+      'INFERRED',
+      'A cardiovascularly active agent with a classic psychedelic or stimulant suggests a provisional hemodynamic interaction.',
+      'low',
+      'Both drugs can shape blood pressure or pulse, so the main issue is compensatory load rather than a unique toxidrome.',
+      'hemodynamic_interaction',
+      ['hemodynamic_interaction', 'cardiovascular_load', 'psychiatric_destabilization'],
+      'Class-level cardiovascular pharmacology supports a cautious inference.',
+      '- Watch for dizziness, palpitations, syncope, or sustained tachycardia.\n- Hydration and dose caution matter more than exact label matching here.',
+      'No pair-specific hemodynamic trial data are available.'
+    );
+  }
+
+  if (
+    ids.some((id) => NMDA_ANTAGONIST_IDS.has(id)) &&
+    (ids.some((id) => CLASSIC_PSYCHEDELIC_IDS.has(id)) || ids.some((id) => SEROTONERGIC_IDS.has(id)))
+  ) {
+    return makeTheoreticalFallbackEvidence(
+      'INFERRED',
+      'An NMDA-antagonist pair with a classic psychedelic suggests glutamate modulation and dissociative synergy rather than a clearly defined toxic syndrome.',
+      'low',
+      'Ketamine-like NMDA antagonism can overlap with serotonergic psychedelic effects through glutamatergic modulation, dissociation, and altered perception.',
+      'glutamate_modulation',
+      ['glutamate_modulation', 'psychedelic_intensification', 'operational_or_behavioral_risk'],
+      'The best-supported mechanism is overlapping glutamatergic and perceptual disruption.',
+      '- Avoid overlapping peak use outside a monitored setting.\n- Protect against falls, vomiting, and impaired self-care.',
+      'Direct human combination data are sparse.'
+    );
+  }
+
+  if (ids.some((id) => SODIUM_CHANNEL_IDS.has(id)) && otherClassic) {
+    return makeTheoreticalFallbackEvidence(
+      'INFERRED',
+      'A sodium-channel modulator with a classic psychedelic points to ion-channel modulation with uncertain net effect and no clear unique syndrome.',
+      'low',
+      'Lamotrigine-like sodium-channel effects can reshape excitability and subjective response without creating a known pair-specific toxidrome.',
+      'ion_channel_modulation',
+      ['ion_channel_modulation', 'psychiatric_destabilization'],
+      'Mechanistic overlap exists, but the clinical consequence is usually individualized and indirect.',
+      '- Review indication, dose changes, and seizure history.\n- Avoid overinterpreting this as a guaranteed blunting or danger signal.',
+      'Direct interaction data remain limited.'
+    );
+  }
+
+  if (
+    ids.some((id) => hasMechanism(id, 'blood pressure') || hasMechanism(id, 'heart rate')) &&
+    ids.some((id) => hasMechanism(id, 'blood pressure') || hasMechanism(id, 'heart rate'))
+  ) {
+    return makeTheoreticalFallbackEvidence(
+      'INFERRED',
+      'Two blood-pressure / heart-rate active agents create a provisional hemodynamic interaction.',
+      'low',
+      'The overlap is primarily cardiovascular load and less about a specific neurotransmitter mechanism.',
+      'hemodynamic_interaction',
+      ['hemodynamic_interaction', 'cardiovascular_load'],
+      'Competing autonomic effects are enough to justify a provisional inference.',
+      '- Watch for dizziness, palpitations, syncope, or sustained tachycardia.\n- Hydration and dose caution matter more than exact label matching here.',
+      'No pair-specific hemodynamic trial data are available.'
+    );
+  }
+
+  if (
+    ids.some((id) => CNS_DEPRESSANT_IDS.has(id)) &&
+    ids.some((id) => CNS_DEPRESSANT_IDS.has(id) || NMDA_ANTAGONIST_IDS.has(id))
+  ) {
+    return makeTheoreticalFallbackEvidence(
+      'INFERRED',
+      'A CNS-depressant or opioid-like partner with another depressant signal suggests pharmacodynamic CNS depression with possible respiratory involvement.',
+      'medium',
+      'Sedation, slowed respiration, vomiting, and impaired self-protection can stack even when the exact chemistry differs.',
+      'pharmacodynamic_cns_depression',
+      ['pharmacodynamic_cns_depression', 'respiratory_depression', 'operational_or_behavioral_risk'],
+      'The shared depressant physiology is enough to support a moderate provisional warning.',
+      '- Avoid mixing with alcohol, benzodiazepines, or other sedatives.\n- Seek urgent care for slowed breathing, cyanosis, or unresponsiveness.',
+      'Pair-specific human data are limited.'
+    );
+  }
+
+  if (
+    ids.some((id) => STIMULANT_IDS.has(id)) &&
+    ids.some((id) => STIMULANT_IDS.has(id) || SEROTONERGIC_IDS.has(id))
+  ) {
+    return makeTheoreticalFallbackEvidence(
+      'INFERRED',
+      'Stimulant or monoamine-releasing exposure with another activating agent suggests sympathomimetic load or stimulant stacking.',
+      'low',
+      'Additive catecholaminergic and serotonergic activation can raise heart rate, blood pressure, anxiety, and overheating risk.',
+      'sympathomimetic_load',
+      ['sympathomimetic_load', 'cardiovascular_load', 'psychiatric_destabilization'],
+      'Class-level autonomic activation supports a cautious inference even without pair-specific trials.',
+      '- Avoid sleep deprivation, dehydration, and dose escalation.\n- Do not ignore chest pain, severe headache, or confusion.',
+      'Specific pair evidence is sparse outside the better-known stimulant combinations.'
+    );
+  }
+
+  if (ids.some((id) => SEROTONERGIC_IDS.has(id)) && ids.filter((id) => SEROTONERGIC_IDS.has(id)).length > 1) {
+    return makeTheoreticalFallbackEvidence(
+      'INFERRED',
+      'Two serotonergic agents create a provisional serotonergic toxicity or effect-modulation signal.',
+      'medium',
+      'Combined serotonergic tone can increase the chance of agitation, autonomic load, and serotonin-toxicity features when other drugs are present.',
+      'serotonergic_toxicity',
+      ['serotonergic_toxicity', 'psychedelic_intensification', 'psychiatric_destabilization'],
+      'The serotonergic overlap is strong enough to justify a medium-confidence heuristic.',
+      '- Avoid adding more serotonergic drugs.\n- Watch for clonus, tremor, fever, and confusion.',
+      'Direct pair-specific data are often missing even when class-level concern is strong.'
+    );
+  }
+
+  return makeFallbackEvidence(
+    'INFERRED',
+    'No deterministic mapping was available, so this pair is classified through a conservative rule-based mechanistic inference.',
+    'low',
+    'The exact mechanism is unresolved; the classification is intentionally provisional.',
+    'psychiatric_destabilization',
+    ['psychiatric_destabilization', 'operational_or_behavioral_risk'],
+    'theoretical',
+    'This is a catch-all fallback when no sharper class-level rule is available.',
+    '- Treat this as provisional and review the pair manually when higher-quality evidence appears.',
+    'No direct pair-specific evidence was loaded.'
+  );
 };
 
 export const getInteractionEvidence = (drug1: string, drug2: string): InteractionEvidence => {
@@ -833,39 +1124,43 @@ export const resolveInteraction = (drug1: string, drug2: string): ResolvedIntera
       origin: 'self',
       evidence: {
         code: 'SELF',
+        label: LEGEND.SELF.label,
         summary: 'Same entity selected; this is not an interaction pair.',
         confidence: 'n/a',
-        sources: 'n/a'
+        sources: 'n/a',
+        provenance: {
+          source: 'self_pair',
+          confidenceTier: 'low',
+          rationale: 'Self pairing is not an interaction and is preserved as a non-comparable diagonal case.'
+        }
       }
     };
   }
 
-  const explicitEvidence = DATASET_INTERACTION_RULES[canonicalPairKey] ?? INTERACTION_RULES[canonicalPairKey];
-  if (explicitEvidence) {
+  const explicitEvidence =
+    PRIORITY_INTERACTION_RULES[canonicalPairKey] ??
+    DATASET_INTERACTION_RULES[canonicalPairKey] ??
+    INTERACTION_RULES[canonicalPairKey];
+  if (explicitEvidence && explicitEvidence.code !== 'UNK' && explicitEvidence.code !== 'UNKNOWN' && explicitEvidence.sources !== 'source-gap') {
     return {
       pairKey: canonicalPairKey,
       origin: 'explicit',
-      evidence: explicitEvidence
+      evidence: makeDeterministicEvidence(explicitEvidence)
     };
   }
 
-  const fallbackEvidence = getFallbackInteractionEvidence(drug1, drug2);
-  if (fallbackEvidence) {
+  const theoreticalEvidence = THEORETICAL_INTERACTION_RULES[canonicalPairKey];
+  if (theoreticalEvidence) {
     return {
       pairKey: canonicalPairKey,
       origin: 'fallback',
-      evidence: fallbackEvidence
+      evidence: theoreticalEvidence
     };
   }
 
   return {
     pairKey: canonicalPairKey,
-    origin: 'unknown',
-    evidence: {
-      code: 'UNK',
-      summary: 'No explicit interaction classification is loaded for this pair in the current curated dataset.',
-      confidence: 'low',
-      sources: 'source-gap'
-    }
+    origin: 'fallback',
+    evidence: getFallbackInteractionEvidence(drug1, drug2)
   };
 };

@@ -28,14 +28,15 @@ import Markdown from 'react-markdown';
 import {
   DRUGS,
   LEGEND,
-  classifyMechanismCategory,
-  resolveInteraction
+  type MechanismCategory
 } from './data/drugData';
-import type { MechanismCategory, RuleOrigin } from './data/drugData';
+import { getAllUIInteractions, getUIInteraction } from './data/uiInteractions';
+import type { UIInteraction } from './data/uiInteractions';
+import ResearchModePanel from './components/ResearchModePanel';
+import { filterInteractionsForResearchMode, type ResearchModeFilters } from './data/researchMode';
 import { getInteractionExplanation, getDrugSummary } from './services/geminiService';
 import logoVine from './assets/logo-vine.png';
-import logoLeaf from './assets/logo-leaf.png';
-import logoJaguar from './assets/logo-jaguar.png';
+import referencesMd from '../knowledge-base/sources/Reference_List.md?raw';
 
 // --- Components ---
 
@@ -69,8 +70,9 @@ function SearchableSelect({
 
   const filteredDrugs = useMemo(() => {
     return DRUGS.filter(drug =>
-      drug.name.toLowerCase().includes(search.toLowerCase()) ||
-      drug.class.toLowerCase().includes(search.toLowerCase())
+      !drug.deprecated &&
+      (drug.name.toLowerCase().includes(search.toLowerCase()) ||
+        drug.class.toLowerCase().includes(search.toLowerCase()))
     );
   }, [search]);
 
@@ -179,7 +181,7 @@ function SearchableSelect({
           aria-autocomplete="list"
           aria-haspopup="listbox"
           autoComplete="off"
-        disabled={disabled}
+          disabled={disabled}
           value={inputValue}
           onFocus={() => {
             if (!isOpen) openDropdown();
@@ -252,26 +254,24 @@ function SearchableSelect({
 
 // --- Main App ---
 
-const ORIGIN_LABELS: Record<RuleOrigin, string> = {
-  self: 'Same selection',
-  explicit: 'Curated pair rule',
-  fallback: 'Fallback rule',
-  unknown: 'Source gap'
-};
-
 const MECHANISM_FAMILY_LABELS: Partial<Record<MechanismCategory, string>> = {
   serotonergic: 'Serotonergic',
   maoi: 'MAOI-mediated',
   qt_prolongation: 'QT / rhythm load',
   sympathomimetic: 'Sympathomimetic',
   cns_depressant: 'CNS depressant',
+  pharmacodynamic_cns_depression: 'Pharmacodynamic CNS depression',
   anticholinergic: 'Anticholinergic',
   dopaminergic: 'Dopaminergic',
   glutamatergic: 'Glutamatergic',
+  glutamate_modulation: 'Glutamate modulation',
   gabaergic: 'GABAergic',
   stimulant_stack: 'Stimulant stack',
   psychedelic_potentiation: 'Psychedelic potentiation',
-  cardiovascular_load: 'Cardiovascular load'
+  cardiovascular_load: 'Cardiovascular load',
+  hemodynamic_interaction: 'Hemodynamic interaction',
+  noradrenergic_suppression: 'Noradrenergic suppression',
+  ion_channel_modulation: 'Ion-channel modulation'
 };
 
 const getMechanismFamilyLabel = (
@@ -296,7 +296,15 @@ export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openSelect, setOpenSelect] = useState<'drug1' | 'drug2' | null>(null);
   const [favorites, setFavorites] = useState<{ id: string, d1: string, d2: string, code: string }[]>([]);
+  const [showReferences, setShowReferences] = useState(false);
+  const [lastSynthPairKey, setLastSynthPairKey] = useState<string>('');
+  const [researchFilters, setResearchFilters] = useState<ResearchModeFilters>({
+    showUnknownRisk: false,
+    showUnknownMechanism: false,
+    showUnknownConfidence: false
+  });
   const favoritesStorageKey = 'entheogen_favorites';
+  const currentPairKey = useMemo(() => [drug1 || '', drug2 || ''].sort().join('|'), [drug1, drug2]);
 
   // Load favorites
   useEffect(() => {
@@ -319,28 +327,35 @@ export default function App() {
 
   const resolvedInteraction = useMemo(() => {
     if (!drug1 || !drug2) return null;
-    return resolveInteraction(drug1, drug2);
+    return getUIInteraction(drug1, drug2);
   }, [drug1, drug2]);
 
-  const interactionEvidence = resolvedInteraction?.evidence ?? null;
-  const interactionOrigin = resolvedInteraction?.origin ?? null;
+  const mechanismFamilyLabel = useMemo(() => {
+    if (!resolvedInteraction || resolvedInteraction.isSelfPair) return null;
+    return getMechanismFamilyLabel(resolvedInteraction.mechanismCategory as MechanismCategory);
+  }, [resolvedInteraction]);
 
-  const mechanismCategory = useMemo(() => {
-    if (!interactionEvidence) return null;
-    return classifyMechanismCategory(interactionEvidence.mechanism);
-  }, [interactionEvidence]);
-
-  const mechanismFamilyLabel = useMemo(
-    () => getMechanismFamilyLabel(mechanismCategory),
-    [mechanismCategory]
-  );
-
-  const interactionCode = interactionEvidence?.code || null;
+  const interactionCode = resolvedInteraction?.riskLabel || null;
 
   const interaction = useMemo(() => {
     if (!interactionCode) return null;
     return LEGEND[interactionCode];
   }, [interactionCode]);
+
+  const researchModeInteractions = useMemo(
+    () => getAllUIInteractions(),
+    []
+  );
+
+  const filteredResearchInteractions = useMemo(
+    () => filterInteractionsForResearchMode(researchModeInteractions, researchFilters),
+    [researchModeInteractions, researchFilters]
+  );
+
+  const visibleResearchInteractions = useMemo(
+    () => filteredResearchInteractions.slice(0, 24),
+    [filteredResearchInteractions]
+  );
 
   const isFavorited = useMemo(() => {
     if (!drug1 || !drug2) return false;
@@ -374,16 +389,13 @@ export default function App() {
     setError(null);
     setExplanation('');
     setSummary('');
+    setLastSynthPairKey([selectedDrug1 || '', selectedDrug2 || ''].sort().join('|'));
 
     const localResolvedInteraction = selectedDrug1 && selectedDrug2
-      ? resolveInteraction(selectedDrug1, selectedDrug2)
+      ? getUIInteraction(selectedDrug1, selectedDrug2)
       : null;
-    const localEvidence = localResolvedInteraction?.evidence ?? null;
-    const localOrigin = localResolvedInteraction?.origin;
-    const localMechanismCategory = localEvidence
-      ? classifyMechanismCategory(localEvidence.mechanism)
-      : undefined;
-    const localInteractionCode = localEvidence?.code || null;
+    const localMechanismCategory = localResolvedInteraction?.mechanismCategory;
+    const localInteractionCode = localResolvedInteraction?.riskLabel || null;
     const localInteraction = localInteractionCode ? LEGEND[localInteractionCode] : null;
 
     const d1Obj = DRUGS.find(d => d.id === selectedDrug1);
@@ -393,23 +405,17 @@ export default function App() {
 
     try {
       // Evidence-grounded interaction explanation for paired selections.
-      if (selectedDrug1 && selectedDrug2 && localInteraction && localEvidence) {
+      if (selectedDrug1 && selectedDrug2 && localInteraction && localResolvedInteraction) {
         const interactionReadout = await getInteractionExplanation(
           d1Name,
           d2Name,
-          localInteraction.label,
-          localEvidence.summary,
+          localResolvedInteraction.riskDisplayLabel,
+          localResolvedInteraction.headline,
           {
-            confidence: localEvidence.confidence,
+            confidence: localResolvedInteraction.confidenceLabel,
             riskScale: localInteraction.riskScale,
-            mechanism: localEvidence.mechanism,
-            mechanismCategory: localMechanismCategory,
-            origin: localOrigin,
-            practicalGuidance: localEvidence.practicalGuidance,
-            timing: localEvidence.timing,
-            evidenceGaps: localEvidence.evidenceGaps,
-            evidenceTier: localEvidence.evidenceTier,
-            fieldNotes: localEvidence.fieldNotes
+            mechanismCategory: localMechanismCategory as MechanismCategory | undefined,
+            fieldNotes: localResolvedInteraction.notes
           }
         );
         setExplanation(interactionReadout);
@@ -420,21 +426,15 @@ export default function App() {
       const targetDrug1 = selectedDrug1 ? d1Name : d2Name;
       const targetDrug2 = (selectedDrug1 && selectedDrug2) ? d2Name : undefined;
       const profile = await getDrugSummary(targetDrug1, targetDrug2, {
-        confidence: localEvidence?.confidence,
+        confidence: localResolvedInteraction?.confidenceLabel,
         riskScale: localInteraction?.riskScale,
-        mechanism: localEvidence?.mechanism,
-        mechanismCategory: localMechanismCategory,
-        origin: localOrigin,
-        practicalGuidance: localEvidence?.practicalGuidance,
-        timing: localEvidence?.timing,
-        evidenceGaps: localEvidence?.evidenceGaps,
-        evidenceTier: localEvidence?.evidenceTier,
-        fieldNotes: localEvidence?.fieldNotes
+        mechanismCategory: localMechanismCategory as MechanismCategory | undefined,
+        fieldNotes: localResolvedInteraction?.notes
       });
       setSummary(profile);
     } catch (err) {
       console.error("Readout error:", err);
-      setError("We couldn't render the interaction readout. Please retry.");
+      setError("We couldn't build the rule-based readout. Please retry.");
     }
     setIsLoadingSummary(false);
   };
@@ -447,7 +447,10 @@ export default function App() {
     setExplanation('');
     setSummary('');
     setError(null);
+    setLastSynthPairKey('');
   };
+
+  const isReadoutStale = showResult && currentPairKey !== lastSynthPairKey;
 
   const getIcon = (symbol: string) => {
     switch (symbol) {
@@ -535,7 +538,6 @@ export default function App() {
               onOpenChange={(isOpen) =>
                 setOpenSelect((current) => (isOpen ? 'drug1' : current === 'drug1' ? null : current))
               }
-              disabled={showResult}
               placeholder="Select sacrament, substance, or medication."
             />
             <SearchableSelect
@@ -547,34 +549,32 @@ export default function App() {
               onOpenChange={(isOpen) =>
                 setOpenSelect((current) => (isOpen ? 'drug2' : current === 'drug2' ? null : current))
               }
-              disabled={showResult}
               placeholder="Select sacrament, substance, or medication."
             />
           </div>
 
           <div className="flex flex-col gap-4">
-            {!showResult ? (
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => void handleFindOut()}
-                disabled={!drug1 && !drug2}
-                className="w-full relative group overflow-hidden rounded-2xl p-[1px] disabled:opacity-50 disabled:cursor-not-allowed mt-4"
-              >
-                <span className="absolute inset-0 bg-gradient-to-r from-emerald-500/50 via-indigo-500/50 to-emerald-500/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-md"></span>
-                <div className="relative bg-white/10 hover:bg-white/15 border border-white/20 backdrop-blur-xl rounded-2xl py-5 flex items-center justify-center gap-3 transition-colors duration-300">
-                  <span className="text-lg font-bold tracking-[0.2em] text-white uppercase">Synthesize</span>
-                  <Sparkles className="w-5 h-5 text-emerald-400 group-hover:animate-pulse" />
-                </div>
-              </motion.button>
-            ) : (
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => void handleFindOut()}
+              disabled={!drug1 && !drug2}
+              className="w-full relative group overflow-hidden rounded-2xl p-[1px] disabled:opacity-50 disabled:cursor-not-allowed mt-4"
+            >
+              <span className="absolute inset-0 bg-gradient-to-r from-emerald-500/50 via-indigo-500/50 to-emerald-500/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-md"></span>
+              <div className="relative bg-white/10 hover:bg-white/15 border border-white/20 backdrop-blur-xl rounded-2xl py-5 flex items-center justify-center gap-3 transition-colors duration-300">
+                <span className="text-lg font-bold tracking-[0.2em] text-white uppercase">Synthesize</span>
+                <Sparkles className="w-5 h-5 text-emerald-400 group-hover:animate-pulse" />
+              </div>
+            </motion.button>
+            {showResult && (
               <motion.button
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={handleReset}
-                className="w-full border border-white/20 hover:border-white/40 bg-white/5 hover:bg-white/10 rounded-2xl py-5 text-sm font-bold tracking-[0.2em] text-[var(--text-muted)] hover:text-white uppercase flex items-center justify-center gap-3 transition-all mt-4 backdrop-blur-md"
+                className="w-full border border-white/20 hover:border-white/40 bg-white/5 hover:bg-white/10 rounded-2xl py-5 text-sm font-bold tracking-[0.2em] text-[var(--text-muted)] hover:text-white uppercase flex items-center justify-center gap-3 transition-all backdrop-blur-md"
               >
                 <RefreshCw className="w-4 h-4" />
                 Reset Canvas
@@ -596,6 +596,11 @@ export default function App() {
                 <div
                   className="rounded-[2rem] p-[2px] relative overflow-hidden group shadow-2xl"
                 >
+                  {isReadoutStale && (
+                    <div className="absolute z-20 top-4 left-1/2 -translate-x-1/2 rounded-full border border-amber-400/40 bg-amber-500/15 px-4 py-1.5 text-[11px] uppercase tracking-[0.14em] font-semibold text-amber-200">
+                      Pair changed. Press Synthesize to refresh this readout.
+                    </div>
+                  )}
                   {/* Glowing border effect */}
                   <div className="absolute inset-0 opacity-50 transition-opacity duration-1000 group-hover:opacity-100" style={{ background: `linear-gradient(135deg, ${interaction.color}40, transparent, ${interaction.color}40)` }}></div>
 
@@ -664,15 +669,10 @@ export default function App() {
                   </div>
 
                   <div className="relative z-10 mb-6 flex flex-wrap gap-2">
-                    {interactionEvidence?.confidence && (
+                    {resolvedInteraction?.confidenceLabel && (
                       <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--text-muted)]">
                         <ShieldAlert className="w-3.5 h-3.5 text-indigo-300" />
-                        Confidence: {interactionEvidence.confidence.toUpperCase()}
-                      </span>
-                    )}
-                    {interactionOrigin && (
-                      <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--text-muted)]">
-                        Dataset basis: {ORIGIN_LABELS[interactionOrigin]}
+                        Confidence: {resolvedInteraction.confidenceLabel.toUpperCase()}
                       </span>
                     )}
                     {mechanismFamilyLabel && (
@@ -752,6 +752,35 @@ export default function App() {
         <p className="mx-auto mt-24 max-w-xl text-center text-sm sm:text-base italic text-[var(--text-primary)]/75">
           Local browser storage is used for favourites only. Third-party hosting providers may still process network logs.
         </p>
+
+        <ResearchModePanel
+          filters={researchFilters}
+          onChange={setResearchFilters}
+        />
+
+        <section className="max-w-4xl mx-auto mt-8">
+          {visibleResearchInteractions.length === 0 ? (
+            <p className="text-center text-sm text-[var(--text-muted)] border border-white/10 rounded-2xl px-4 py-6 bg-white/5">
+              No interactions match the current research filters.
+            </p>
+          ) : (
+            <div className="grid gap-3">
+              {visibleResearchInteractions.map((item: UIInteraction) => (
+                <article
+                  key={item.id}
+                  className="rounded-xl border border-white/10 bg-white/5 px-4 py-3"
+                >
+                  <div className="text-sm font-semibold text-[var(--text-primary)]">
+                    {item.substanceA} + {item.substanceB}
+                  </div>
+                  <div className="mt-1 text-xs text-[var(--text-muted)]">
+                    Risk: {item.riskDisplayLabel} | Mechanism: {item.mechanismDisplayLabel} | Confidence: {item.confidenceLabel}
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
+        </section>
 
         <footer className="max-w-2xl mx-auto mt-32 pt-12 border-t border-white/5 text-center relative z-10">
           <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12">
@@ -875,13 +904,37 @@ export default function App() {
                 <section className="space-y-5 bg-white/5 p-6 rounded-2xl border border-white/5">
                   <div className="flex items-center gap-3 text-red-400 mb-2">
                     <ShieldAlert className="w-5 h-5" />
-                    <h3 className="text-sm font-bold uppercase tracking-[0.2em]">Important!</h3>
+                    <h3 className="text-sm font-bold uppercase tracking-[0.2em]">Important</h3>
                   </div>
                   <div className="space-y-4 text-[var(--text-muted)] text-sm leading-relaxed">
-                    <p className="font-semibold text-[var(--text-primary)]">This app is educational harm-reduction guidance, not medical advice.</p>
-                    <p>Interaction ratings are sourced from the curated ceremonial dataset and can include unknown gaps.</p>
-                    <p>Favorites are saved in your browser. Hosting, CDN, and AI providers may process technical metadata and logs.</p>
+                    <p className="font-semibold text-[var(--text-primary)]">This app provides educational harm-reduction guidance, not medical advice.</p>
+                    <p>Interaction ratings are derived from a curated, evidence-gated dataset with explicit uncertainty and known gaps.</p>
+                    <p>All claims are traceable to source material. See References for full citations.</p>
                     <p className="italic text-red-300/80">If you suspect toxicity, serotonin syndrome, or hypertensive crisis, seek urgent medical help.</p>
+                  </div>
+                </section>
+
+                <section className="space-y-6">
+                  <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--text-muted)] border-b border-white/5 pb-3">References</h3>
+                  <div className="space-y-4">
+                    <div className="px-2 text-sm text-[var(--text-muted)]">
+                      <p className="mb-2 font-semibold text-[var(--text-primary)]">Key Sources:</p>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>Malcolm (2023)</li>
+                        <li>Halman et al. (2023)</li>
+                        <li>Ruffell et al. (2020)</li>
+                      </ul>
+                    </div>
+                    <button
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        setShowReferences(true);
+                      }}
+                      className="w-full flex justify-between items-center p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors group text-left"
+                    >
+                      <span className="font-semibold text-white/90">View Full Reference List</span>
+                      <ExternalLink className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" />
+                    </button>
                   </div>
                 </section>
 
@@ -915,6 +968,49 @@ export default function App() {
                     EntheoGen v0.2 • Ceremonial Interaction Guidance
                   </p>
                 </section>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* References Modal */}
+      <AnimatePresence>
+        {showReferences && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowReferences(false)}
+              className="fixed inset-0 bg-black/60 backdrop-blur-md z-[80]"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="fixed inset-x-4 md:inset-x-auto md:w-[800px] top-[10%] bottom-[10%] max-w-full mx-auto bg-[#0a140f] border border-white/10 z-[90] shadow-2xl rounded-3xl overflow-hidden flex flex-col"
+            >
+              <div className="flex justify-between items-center p-6 border-b border-white/10 bg-black/20">
+                <h2 className="text-xl font-bold tracking-widest uppercase text-white/90">Reference List</h2>
+                <button
+                  onClick={() => setShowReferences(false)}
+                  className="p-2 hover:bg-white/10 rounded-full transition-colors text-white/80 hover:text-white"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+              <div className="p-8 overflow-y-auto custom-scrollbar flex-1">
+                <div className="markdown-body">
+                  {/* Markdown rendered directly via vite ?raw string import */}
+                  <Markdown
+                    components={{
+                      a: ({node, ...props}) => <a {...props} target="_blank" rel="noopener noreferrer" />
+                    }}
+                  >
+                    {referencesMd}
+                  </Markdown>
+                </div>
               </div>
             </motion.div>
           </>

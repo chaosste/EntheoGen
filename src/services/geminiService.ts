@@ -1,11 +1,10 @@
-import type { MechanismCategory, RuleOrigin } from '../data/drugData';
+import type { MechanismCategory } from '../data/drugData';
 
 type EvidenceContext = {
   confidence?: string;
   riskScale?: number;
   mechanism?: string;
   mechanismCategory?: MechanismCategory;
-  origin?: RuleOrigin;
   practicalGuidance?: string;
   timing?: string;
   evidenceGaps?: string;
@@ -36,26 +35,24 @@ const SPECIAL_PAIR_NOTES: Record<string, string> = {
 
 const pairLabel = (a: string, b: string) => [a, b].sort().join("|");
 
-const DATASET_BASIS_TEXT: Record<RuleOrigin, string> = {
-  self: 'same selection within the dataset, so no pairwise interaction rule is applied',
-  explicit: 'a curated pair rule in the loaded dataset',
-  fallback: 'a fallback rule inferred from the curated interaction family in the loaded dataset',
-  unknown: 'a current source gap in the loaded dataset'
-};
-
 const MECHANISM_FAMILY_TEXT: Partial<Record<MechanismCategory, string>> = {
   serotonergic: 'serotonergic interaction pattern',
   maoi: 'MAOI-mediated interaction pattern',
   qt_prolongation: 'QT / rhythm-load interaction pattern',
   sympathomimetic: 'sympathomimetic interaction pattern',
   cns_depressant: 'CNS-depressant interaction pattern',
+  pharmacodynamic_cns_depression: 'pharmacodynamic CNS-depression pattern',
   anticholinergic: 'anticholinergic interaction pattern',
   dopaminergic: 'dopaminergic interaction pattern',
   glutamatergic: 'glutamatergic interaction pattern',
+  glutamate_modulation: 'glutamate-modulation interaction pattern',
   gabaergic: 'GABAergic interaction pattern',
   stimulant_stack: 'stacked stimulant-load interaction pattern',
   psychedelic_potentiation: 'psychedelic potentiation pattern',
-  cardiovascular_load: 'cardiovascular-load interaction pattern'
+  cardiovascular_load: 'cardiovascular-load interaction pattern',
+  hemodynamic_interaction: 'hemodynamic interaction pattern',
+  noradrenergic_suppression: 'noradrenergic suppression pattern',
+  ion_channel_modulation: 'ion-channel modulation pattern'
 };
 
 export async function getInteractionExplanation(
@@ -75,9 +72,6 @@ export async function getInteractionExplanation(
   const evidenceGaps = context?.evidenceGaps;
   const evidenceTier = context?.evidenceTier;
   const fieldNotes = context?.fieldNotes;
-  const datasetBasis = context?.origin
-    ? DATASET_BASIS_TEXT[context.origin]
-    : undefined;
   const mechanismFamily = context?.mechanismCategory
     ? MECHANISM_FAMILY_TEXT[context.mechanismCategory]
     : undefined;
@@ -91,7 +85,6 @@ export async function getInteractionExplanation(
     special ? `**Specific consensus note:** ${special}` : "",
     ``,
     `**Evidence confidence:** ${confidence.toUpperCase()}`,
-    datasetBasis ? `**Dataset basis:** ${datasetBasis}.` : "",
     evidenceTier ? `**Evidence tier:** ${evidenceTier}` : "",
     mechanismFamily ? `**Mechanism family:** ${mechanismFamily}.` : "",
     mechanism ? `#### Mechanism of concern\n${mechanism}` : "",
@@ -118,9 +111,6 @@ export async function getDrugSummary(
     const fieldNotes = context?.fieldNotes;
     const evidenceGaps = context?.evidenceGaps;
     const evidenceTier = context?.evidenceTier;
-    const datasetBasis = context?.origin
-      ? DATASET_BASIS_TEXT[context.origin]
-      : undefined;
     const mechanismFamily = context?.mechanismCategory
       ? MECHANISM_FAMILY_TEXT[context.mechanismCategory]
       : undefined;
@@ -132,7 +122,6 @@ export async function getDrugSummary(
       `**Pair:** ${drug1Name} + ${drug2Name}`,
       `**Risk posture:** ${action}`,
       special ? `**Consensus note:** ${special}` : "",
-      datasetBasis ? `**Dataset basis:** ${datasetBasis}.` : "",
       evidenceTier ? `**Evidence tier:** ${evidenceTier}` : "",
       mechanismFamily ? `**Mechanism family:** ${mechanismFamily}.` : "",
       ``,
