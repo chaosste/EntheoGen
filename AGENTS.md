@@ -125,10 +125,13 @@ human approval boundaries.
   instead of leaving them in the repo.
 - Comments posted through Cursor’s Linear integration appear as the
   authenticated Linear user (OAuth); expect that attribution unless a separate
-  automation identity is wired.
-- When the user attaches an implementation plan with todos already created, do
-  not edit the plan file itself; mark existing todos in progress instead of
-  recreating them.
+  automation identity is wired. When the user attaches an implementation plan
+  with todos already created, do not edit the plan file itself; mark existing
+  todos in progress instead of recreating them.
+- For Linear MCP or Cursor Linear actions on `NEW-*` issues, confirm the session
+  is attached to the New Psychonaut org/workspace that owns those issues;
+  reconnect if the tool only sees a personal or other workspace (issue IDs
+  will not resolve).
 - Metabase / Phase 1 dashboards: exclude **self-pairs** from analysis by default
   (**`is_comparable_pair = true`** on `interactions_enriched`; self rows remain
   in the model); use
@@ -145,9 +148,8 @@ human approval boundaries.
 
 ## Learned Workspace Facts
 
-- The UI interaction adapter is centered in `src/data/uiInteractions.ts`.
-- Research Mode filtering is centralized in `src/data/researchMode.ts`.
-- A dev regression assertion script exists at
+- The UI interaction adapter is in `src/data/uiInteractions.ts`, Research Mode
+  filtering in `src/data/researchMode.ts`, and a dev regression helper at
   `scripts/testUIInteractionsAdapter.ts`.
 - Continual-learning state is tracked locally via
   `.cursor/hooks/state/continual-learning-index.json`.
@@ -159,7 +161,15 @@ human approval boundaries.
   `docs/metabase/interactions_enriched.sql` and
   `supabase/migrations/*_public_interactions_enriched_view.sql`). Some environments
   may still use `public.analytics_interactions_v2` until Phase 2 migrations add
-  `interaction_pairs_v2` and related normalized tables.
+  `interaction_pairs_v2` and related normalized tables. Supabase project
+  **`gjfwjuxnwymaqeocubuw`** (Plant medicine interactions) is the usual V3 Phase 1
+  source when syncing exports or snapshots.
+- For student-safe, Azure-compliant, or governance demos without live Supabase,
+  a **manual** PostgreSQL snapshot lives on flexible server **`sb1397datsetserver`**
+  (database **`entheogen`**, resource group **`neurophenom_group-a499`**): V3-shaped
+  **`public.substances`** and **`public.interactions`**, optional legacy-shaped
+  **`public.interaction_pairs`** view; refresh only via
+  `docs/automation/AZURE_STANDALONE_SNAPSHOT_REFRESH.md` (no auto-sync pipelines).
 - Multi-mechanism Metabase questions should explode `mechanism_categories` with
   `jsonb_array_elements_text` in native SQL.
 - Dataset Beta Docker Compose runs Metabase as `metabase_local` with Postgres
