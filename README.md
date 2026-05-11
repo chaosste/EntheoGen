@@ -1,5 +1,6 @@
 <div align="center">
 
+![DOI](https://zenodo.org/badge/1234835641.svg)
 ![Dataset](https://img.shields.io/badge/Dataset-beta--0.1-blue)
 ![Interactions](https://img.shields.io/badge/Interactions-~794-informational)
 ![Substances](https://img.shields.io/badge/Substances-~41-informational)
