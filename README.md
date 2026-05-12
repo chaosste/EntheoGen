@@ -19,7 +19,6 @@ Live demos: [New Psychonaut](https://www.entheogen.newpsychonaut.com/) · [Azure
 
 ---
 
-## Important
 # Important!
 
 EntheoGen does **not** provide clinical medical advice.
