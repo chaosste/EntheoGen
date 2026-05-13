@@ -55,6 +55,18 @@ Links:
 - GitLab MR: 
 ```
 
+## Cursor Linear MCP (New Psychonaut)
+
+If agents report **“Could not find referenced Issue”** for `NEW-*` keys, the MCP session is almost always tied to the **wrong Linear user or workspace** (for example only a personal team appears in `list_teams`, not **New Psychonaut**).
+
+**Fix (recommended):**
+
+1. In a normal browser, open [linear.app/new-psychonaut](https://linear.app/new-psychonaut) and confirm you are logged in as the member who can see **`NEW-*`** issues (often your **university / org** account, not a stray personal workspace created under another email).
+2. In **Cursor**: open **Settings → MCP** (or **Features → MCP**), find the **Linear** integration, **disconnect / sign out**, then **connect** again and complete OAuth **while the browser session from step 1 is active** (same browser profile if the flow opens a system browser).
+3. Quick check: ask the agent to use Linear `list_teams`; you should see a team whose issues use the **`NEW`** key (or the workspace name **New Psychonaut**). Then `get_issue` with `NEW-106` should resolve.
+
+**Alternative:** use a **Linear personal API key** from [Linear → Settings → API](https://linear.app/settings/api) for the **same** user that has New Psychonaut access, and configure your MCP client per Cursor’s Linear MCP docs—avoid keys for a second account that is not in the org.
+
 ## Related
 
 - [ENVIRONMENTS.md](./ENVIRONMENTS.md)

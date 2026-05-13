@@ -55,6 +55,7 @@
     "ci:checks": "npm run typecheck && npm run test:validation-alignment && npm run test:submission-intake && npm run test:suite:alignment && npm run build",
     "workspace:baseline": "tsx scripts/checkWorkspaceBaseline.ts",
     "supabase:phase1-csv-pipeline": "tsx scripts/automation/supabasePhase1CsvPipeline.ts",
+    "linear:comment": "node scripts/linearPostIssueComment.mjs",
     "slack:post": "tsx scripts/slack/slackPost.ts",
     "agents:verify-knowledge-steward": "tsx scripts/verifyKnowledgeStewardContract.ts",
     "agents:verify-safety": "tsx scripts/verifySafetyAgentContracts.ts",
