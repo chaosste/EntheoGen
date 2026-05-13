@@ -161,10 +161,12 @@ Expected outputs:
 
 - `workflow-linear alignment assertions passed`
 - `Interaction update workflow transition integration tests passed.`
-- `Workflow state machine tests passed.` and `Workflow write-path guard passed.`
+- `Workflow state machine tests passed.`
 
 Residual risks and limitations:
 
 - This document tracks current repo surfaces; role assignments and escalation routes must be updated when script mappings change.
+- The former workflow write-path guard was retired because filepath ownership is
+  process metadata, not a runtime workflow invariant.
 - Linear state names represent workflow progress, not legal/scientific authority.
 - Some escalation decisions remain context-specific and require human judgment beyond scripted validation.

@@ -204,3 +204,8 @@ human approval boundaries.
   `Dockerfile`); private repos listed in `environment.json`
   **`repositoryDependencies`** must be cloneable by the GitHub account linked to
   Cloud Agent or remote agent provisioning may fail.
+- Remote `npm ci` / `npm install` on hosts without an SSH agent (e.g. Cloudflare
+  Pages) will fail on **`git+ssh://`** GitHub deps such as `@entheogen/shared-dataset`
+  (`Permission denied (publickey)`). Prefer **`git+https://github.com/...#commit`**
+  in `package.json` and a matching **`package-lock.json`** for public repos, or
+  configure HTTPS + read token / deploy key for private repos.
