@@ -1,5 +1,10 @@
 ## Repo Guidance
 
+Before deploying from agent-made changes (Codex, Cursor, or similar), commit and
+push those changes from the local checkout to `main` first. Treat the remote repo
+as the deployment source of truth; do not deploy from unpushed local state or
+from an agent-only side channel.
+
 Work directly when the task is clear, bounded, and low-risk. Keep diffs small,
 reviewable, and reversible, and prefer the repository's existing patterns over
 new abstractions.
