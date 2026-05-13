@@ -1,6 +1,6 @@
 <div align="center">
 
-![DOI](https://zenodo.org/badge/1234835641.svg)](https://zenodo.org/records/20127294)
+[![DOI](https://zenodo.org/badge/1234835641.svg)](https://doi.org/10.5281/zenodo.20127293)
 ![Dataset](https://img.shields.io/badge/Dataset-beta--0.1-blue)
 ![Interactions](https://img.shields.io/badge/Interactions-~794-informational)
 ![Substances](https://img.shields.io/badge/Substances-~41-informational)
@@ -11,14 +11,14 @@
 
 **Evidence-grounded, deterministic interaction readouts for intentional psychedelic contexts.**
 
-Live demos: [entheogen.newpsychonaut.com](https://www.entheogen.newpsychonaut.com/) · [Azure](https://entheogen.azurewebsites.net)
+Live demos: [New Psychonaut](https://www.entheogen.newpsychonaut.com/) · [Azure](https://entheogen.azurewebsites.net)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
+
 </div>
 
 ---
 
-## Important
 # Important!
 
 EntheoGen does **not** provide clinical medical advice.
