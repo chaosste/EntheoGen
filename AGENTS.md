@@ -191,6 +191,10 @@ human approval boundaries.
 - `npm run test:suite:alignment` includes `npm run test:ui-adapter` as part of
   the alignment suite leveraged by `ci:checks`; Cursor Cloud Agent base images
   for this repo are defined under `.cursor/` (`environment.json` and
-  `Dockerfile`); private repos listed in `environment.json`
-  **`repositoryDependencies`** must be cloneable by the GitHub account linked to
-  Cloud Agent or remote agent provisioning may fail.
+  `Dockerfile`).
+- Remote `npm ci` / `npm install` on hosts without an SSH agent (e.g. Cloudflare
+  Pages) will fail on **`git+ssh://`** GitHub deps such as unused private
+  GitHub package pins (`Permission denied (publickey)`). Remove unused git
+  dependencies where possible; otherwise prefer public **`git+https://github.com/...#commit`**
+  specs, committed package artifacts, or HTTPS + token / deploy key access for
+  private repos.

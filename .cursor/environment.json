@@ -5,9 +5,6 @@
     "context": ".."
   },
   "install": "npm ci",
-  "repositoryDependencies": [
-    "github.com/chaosste/EntheoGen-Shared-Dataset"
-  ],
   "ports": [
     {
       "name": "Vite dev",
