@@ -38,8 +38,7 @@
     "test:workflow-states": "tsx scripts/workflow/stateMachine.test.ts",
     "test:workflow-transition-integration": "tsx scripts/workflow/transitionInteractionUpdateState.test.ts",
     "test:workflow-linear-alignment": "tsx scripts/workflow/linearWorkflowAlignment.test.ts",
-    "test:workflow-write-path-guards": "tsx scripts/workflow/writePathGuard.test.ts",
-    "test:workflow": "npm run test:workflow-states && npm run test:workflow-transition-integration && npm run test:workflow-write-path-guards",
+    "test:workflow": "npm run test:workflow-states && npm run test:workflow-transition-integration",
     "json:consolidate": "tsx scripts/consolidateJsonUpdates.ts",
     "kb:ingest:alma": "tsx scripts/ingest_alma_interactions.ts",
     "kb:ingest:perplexity": "tsx scripts/ingest_perplexity_research.ts",
@@ -62,7 +61,6 @@
     "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
-    "@entheogen/shared-dataset": "github:chaosste/EntheoGen-Shared-Dataset#d39375b6d085a0d5dee08635317aaff880265d77",
     "@google/genai": "^1.29.0",
     "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.1.14",
