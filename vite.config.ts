@@ -4,8 +4,6 @@ import dotenv from 'dotenv';
 import path from 'path';
 import {defineConfig, loadEnv} from 'vite';
 
-import { cloudflare } from "@cloudflare/vite-plugin";
-
 export default defineConfig(({mode}) => {
   const sharedEnv = process.env.SHARED_ENV_PATH
     ? dotenv.config({ path: process.env.SHARED_ENV_PATH }).parsed ?? {}
@@ -19,7 +17,7 @@ export default defineConfig(({mode}) => {
     '';
 
   return {
-    plugins: [react(), tailwindcss(), cloudflare()],
+    plugins: [react(), tailwindcss()],
     define: {
       'process.env.GEMINI_API_KEY': JSON.stringify(geminiApiKey),
     },

@@ -5,7 +5,6 @@ Vite + React SPA only: no dataset build scripts, KB, agents, Supabase, or CI doc
 ## Bundled data (replace from your pipeline)
 
 - `src/data/substances_snapshot.json`
-- `src/data/interactionDatasetV2.json`
 - `src/exports/interaction_pairs.json`
 
 ## Commands
@@ -17,8 +16,6 @@ npm run typecheck
 npm run build
 npm run preview
 ```
-
-Optional Cloudflare deploy: `npm run deploy` (requires Wrangler config and credentials).
 
 ## References panel
 

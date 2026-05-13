@@ -1,6 +1,4 @@
 import interactionPairsRaw from '../exports/interaction_pairs.json' with { type: 'json' };
-import interactionDatasetV2Raw from './interactionDatasetV2.json' with { type: 'json' };
-import type { InteractionDatasetV2 } from './interactionSchemaV2';
 
 export type RuleOrigin = 'self' | 'explicit' | 'fallback' | 'unknown';
 
@@ -38,4 +36,3 @@ export interface InteractionPair {
 }
 
 export const interactionPairs = interactionPairsRaw as InteractionPair[];
-export const interactionDatasetV2 = interactionDatasetV2Raw as InteractionDatasetV2;

@@ -22,8 +22,7 @@ import {
   Trash2,
   ChevronDown,
   AlertCircle
-} from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+} from './components/Icon';
 import Markdown from 'react-markdown';
 import {
   DRUGS,
@@ -39,6 +38,47 @@ import logoVine from './assets/logo-vine.png';
 
 /** References panel content (not coupled to `knowledge-base/` paths). */
 const referencesMd = '_No reference list is bundled in this build._\n';
+
+type StaticMotionProps<T> = T & {
+  initial?: unknown;
+  animate?: unknown;
+  exit?: unknown;
+  transition?: unknown;
+  whileHover?: unknown;
+  whileTap?: unknown;
+};
+
+const AnimatePresence = ({ children }: { children: React.ReactNode }) => <>{children}</>;
+
+const motion = {
+  div: ({
+    initial,
+    animate,
+    exit,
+    transition,
+    whileHover,
+    whileTap,
+    ...props
+  }: StaticMotionProps<React.HTMLAttributes<HTMLDivElement>>) => <div {...props} />,
+  button: ({
+    initial,
+    animate,
+    exit,
+    transition,
+    whileHover,
+    whileTap,
+    ...props
+  }: StaticMotionProps<React.ButtonHTMLAttributes<HTMLButtonElement>>) => <button {...props} />,
+  h1: ({
+    initial,
+    animate,
+    exit,
+    transition,
+    whileHover,
+    whileTap,
+    ...props
+  }: StaticMotionProps<React.HTMLAttributes<HTMLHeadingElement>>) => <h1 {...props} />
+};
 
 // --- Components ---
 
