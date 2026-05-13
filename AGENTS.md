@@ -1,9 +1,10 @@
 ## Repo Guidance
 
-Before deploying from agent-made changes (Codex, Cursor, or similar), commit and
-push those changes from the local checkout to `main` first. Treat the remote repo
-as the deployment source of truth; do not deploy from unpushed local state or
-from an agent-only side channel.
+Before deploying from agent-made changes (Codex, Cursor, or similar), **sync
+local `main` from `origin/main`** (fetch and merge or rebase as you usually do),
+then commit and push from that updated local checkout to `main`. Treat the remote
+repo as the deployment source of truth; do not deploy from unpushed local state
+or from an agent-only side channel.
 
 Work directly when the task is clear, bounded, and low-risk. Keep diffs small,
 reviewable, and reversible, and prefer the repository's existing patterns over
@@ -103,6 +104,13 @@ human approval boundaries.
 
 ## Learned User Preferences
 
+- **Local first:** Align with Codex “local first” — default to local edits and
+  narrow verification for small changes; avoid wide repo scans and long
+  multi-turn agent threads when a few file touches suffice (saves time and
+  metered usage).
+- **EntheoGen → deployment:** Always update local `main` from remote before
+  pushing work that will feed Cloudflare, Azure, or other remote deploys, so
+  deploys are based on current upstream, not a stale branch tip.
 - Prefer minimal, isolated patches over broad refactors.
 - Keep provenance/auth systems untouched during interaction UI/data-layer work
   unless explicitly requested.
