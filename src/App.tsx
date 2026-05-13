@@ -36,7 +36,9 @@ import ResearchModePanel from './components/ResearchModePanel';
 import { filterInteractionsForResearchMode, type ResearchModeFilters } from './data/researchMode';
 import { getInteractionExplanation, getDrugSummary } from './services/geminiService';
 import logoVine from './assets/logo-vine.png';
-import referencesMd from '../knowledge-base/sources/Reference_List.md?raw';
+
+/** References panel content (not coupled to `knowledge-base/` paths). */
+const referencesMd = '_No reference list is bundled in this build._\n';
 
 // --- Components ---
 
