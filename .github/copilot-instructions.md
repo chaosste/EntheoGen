@@ -43,6 +43,7 @@ Prefer the narrowest command that proves the change:
 ```sh
 npm run test:submission-intake
 npm run typecheck
+npm run lint
 npm run validate:interactions:v2
 npm run kb:validate
 npm test

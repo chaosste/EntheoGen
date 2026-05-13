@@ -151,3 +151,4 @@ Expected output: parser and interaction validation commands exit successfully.
 
 Known limitation: this prompt structures a proposal; it cannot establish clinical
 truth, source adequacy, or publication readiness without reviewer approval.
+truth, source adequacy, or publication readiness without reviewer approval.

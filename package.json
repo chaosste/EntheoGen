@@ -57,10 +57,11 @@
     "supabase:phase1-csv-pipeline": "tsx scripts/automation/supabasePhase1CsvPipeline.ts",
     "linear:comment": "node scripts/linearPostIssueComment.mjs",
     "slack:post": "tsx scripts/slack/slackPost.ts",
+    "agents:verify-knowledge-steward": "tsx scripts/verifyKnowledgeStewardContract.ts",
+    "agents:verify-safety": "tsx scripts/verifySafetyAgentContracts.ts",
     "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
-    "@entheogen/shared-dataset": "file:vendor/entheogen-shared-dataset-0.1.0.tgz",
     "@google/genai": "^1.29.0",
     "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.1.14",

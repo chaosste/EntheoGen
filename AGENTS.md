@@ -1,5 +1,11 @@
 ## Repo Guidance
 
+Before deploying from agent-made changes (Codex, Cursor, or similar), **sync
+local `main` from `origin/main`** (fetch and merge or rebase as you usually do),
+then commit and push from that updated local checkout to `main`. Treat the remote
+repo as the deployment source of truth; do not deploy from unpushed local state
+or from an agent-only side channel.
+
 Work directly when the task is clear, bounded, and low-risk. Keep diffs small,
 reviewable, and reversible, and prefer the repository's existing patterns over
 new abstractions.
@@ -98,6 +104,13 @@ human approval boundaries.
 
 ## Learned User Preferences
 
+- **Local first:** Align with Codex “local first” — default to local edits and
+  narrow verification for small changes; avoid wide repo scans and long
+  multi-turn agent threads when a few file touches suffice (saves time and
+  metered usage).
+- **EntheoGen → deployment:** Always update local `main` from remote before
+  pushing work that will feed Cloudflare, Azure, or other remote deploys, so
+  deploys are based on current upstream, not a stale branch tip.
 - Prefer minimal, isolated patches over broad refactors.
 - Keep provenance/auth systems untouched during interaction UI/data-layer work
   unless explicitly requested.
@@ -201,11 +214,10 @@ human approval boundaries.
 - `npm run test:suite:alignment` includes `npm run test:ui-adapter` as part of
   the alignment suite leveraged by `ci:checks`; Cursor Cloud Agent base images
   for this repo are defined under `.cursor/` (`environment.json` and
-  `Dockerfile`); private repos listed in `environment.json`
-  **`repositoryDependencies`** must be cloneable by the GitHub account linked to
-  Cloud Agent or remote agent provisioning may fail.
+  `Dockerfile`).
 - Remote `npm ci` / `npm install` on hosts without an SSH agent (e.g. Cloudflare
-  Pages) will fail on **`git+ssh://`** GitHub deps such as `@entheogen/shared-dataset`
-  (`Permission denied (publickey)`). Prefer **`git+https://github.com/...#commit`**
-  in `package.json` and a matching **`package-lock.json`** for public repos, or
-  configure HTTPS + read token / deploy key for private repos.
+  Pages) will fail on **`git+ssh://`** GitHub deps such as unused private
+  GitHub package pins (`Permission denied (publickey)`). Remove unused git
+  dependencies where possible; otherwise prefer public **`git+https://github.com/...#commit`**
+  specs, committed package artifacts, or HTTPS + token / deploy key access for
+  private repos.
